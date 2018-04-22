@@ -1,0 +1,19 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8769
+spring:
+  application:
+    name: service-router-zuul
+  zipkin:
+    base-url: http://localhost:9001
+  sleuth:
+    sampler:
+      percentage: 1.0
+zuul:
+  routes:
+    api-1:
+      path: /api-1/**
+      serviceId: service-consumer-ribbon
