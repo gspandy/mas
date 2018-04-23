@@ -17,3 +17,10 @@ zuul:
     api-1:
       path: /api-1/**
       serviceId: service-consumer-ribbon
+info:
+  app:
+    name: "@project.artifactId@"
+    encoding: '@project.build.sourceEncoding@'
+    java:
+      source: '@java.version@'
+      target: '@java.version@'

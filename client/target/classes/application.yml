@@ -1,6 +1,0 @@
-spring:
-  zipkin:
-    base-url: http://localhost:9001
-  sleuth:
-    sampler:
-      percentage: 1.0
