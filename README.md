@@ -29,7 +29,7 @@ SR：Service Release，SR1表示第1个正式版本，一般同时标注GA(Gener
 
 | 模块名 | 中间件（core） | 启动方式 | 备注 | 
 | - | - | - | - | 
-| caller (服务调用方)| 体检：spring-boot-starter-actuator<br/> 降服：spring-cloud-starter-hystrix<br/> 降服仪表盘：spring-cloud-starter-hystrix-dashboard<br/> HA(基于eureka-client-cluster)：spring-cloud-starter-eureka，spring-cloud-starter-ribbon<br/> 链路跟踪：spring-cloud-starter-zipkin| API: http://localhost:8764/hi?name=Ivan.deng<br/> 本机仪表盘: http://localhost:8764/hystrix<br/> 链路跟踪：spring-cloud-starter-zipkin| LB：硬－nginx，软－eureka|
+| caller (服务调用方)| 体检：spring-boot-starter-actuator<br/> 降服：spring-cloud-starter-hystrix<br/> 降服仪表盘：spring-cloud-starter-hystrix-dashboard<br/> HA(基于eureka-client-cluster)：spring-cloud-starter-eureka，spring-cloud-starter-ribbon<br/> 链路跟踪：spring-cloud-starter-zipkin| API: http://localhost:8764/hi?name=Ivan.deng<br/> 本机仪表盘: http://localhost:8764/hystrix | LB：硬－nginx，软－eureka|
 | router (服务路由／过滤)| 体检：spring-boot-starter-actuator<br/> 路由：spring-cloud-starter-zuul<br/> HA：spring-cloud-starter-eureka<br/> 链路跟踪：spring-cloud-starter-zipkin| http://localhost:8769/api-1/hi?name=Leeway&token=123 | HA：硬－nginx，软－eureka|
 | manager (服务注册管理中心)| 服务注册发现：spring-cloud-starter-eureka-server | http://localhost:8761/ | HA：硬－nginx| 
 | client (服务提供方)| 体检：spring-cloud-starter-actuator<br/> HA：spring-cloud-starter-eureka<br/> 链路跟踪：spring-cloud-starter-zipkin| http://localhost:8763/hi?name=Ivan | HA：软－eureka| 
