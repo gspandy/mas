@@ -44,7 +44,10 @@ git clone https://github.com/leeway-deng/mas.git
 
 ![zipkin工作图解][img-zipkin-workflow]
 
+![Letv-MAS框架设计][img-letv-mas-fw]
+
 [url-SpringCloud]: https://projects.spring.io/spring-cloud "SpringCloud"
 [url-SpringCloud-manual-E]: http://cloud.spring.io/spring-cloud-static/Edgware.SR3/index.html
 [img-zipkin-workflow]: ./docs/img/sleuth-zipkin-services.jpg "zipkin工作图解"
 [img-spring-cloud-fw-plan]: ./docs/img/spring-cloud-fw-plan.jpg "SpringCloud框架计划"
+[img-letv-mas-fw]: ./docs/img/letv-mas-fw.jpg "MAS框架设计"
