@@ -1,4 +1,4 @@
-#Built application files
+# Built application files
 *.apk
 *.ap_
 
@@ -47,7 +47,7 @@ captures/
 .project
 .settings/
 
-#some local files
+# some local files
 */.settings/
 */.DS_Store
 .DS_Store

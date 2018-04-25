@@ -4,6 +4,7 @@ server:
 eureka:
   instance:
     hostname: localhost
+    instance-id: ${spring.application.name}:${server.port}
   client:
     registerWithEureka: false
     fetchRegistry: false
