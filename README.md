@@ -30,21 +30,36 @@ SR：Service Release，SR1表示第1个正式版本，一般同时标注GA(Gener
 | 模块名 | 中间件（core） | 启动方式 | 备注 | 
 | - | - | - | - | 
 | caller (服务调用方)| 体检：spring-boot-starter-actuator<br/> 降服：spring-cloud-starter-hystrix<br/> 降服仪表盘：spring-cloud-starter-hystrix-dashboard<br/> HA(基于eureka-client-cluster)：spring-cloud-starter-eureka，spring-cloud-starter-ribbon<br/> 链路跟踪：spring-cloud-starter-zipkin| API: http://localhost:8764/hi?name=Ivan.deng<br/> 本机仪表盘: http://localhost:8764/hystrix | LB：硬－nginx，软－eureka|
-| router (服务路由／过滤)| 体检：spring-boot-starter-actuator<br/> 路由：spring-cloud-starter-zuul<br/> HA：spring-cloud-starter-eureka<br/> 链路跟踪：spring-cloud-starter-zipkin| http://localhost:8769/api-1/hi?name=Leeway&token=123 | HA：硬－nginx，软－eureka|
-| manager (服务注册管理中心)| 服务注册发现：spring-cloud-starter-eureka-server | http://localhost:8761/ | HA：硬－nginx| 
+| router (服务路由／过滤)| 体检：spring-boot-starter-actuator<br/> 路由：spring-cloud-starter-zuul<br/> HA：spring-cloud-starter-eureka<br/> 链路跟踪：spring-cloud-starter-zipkin<br/> 配置更新：spring-cloud-starter-config| API: http://localhost:8101/api-1/hi?name=Leeway&token=123<br/> 配置读取： http://localhost:8101/config | HA：硬－nginx，软－eureka|
+| manager (服务注册管理中心)| 服务注册发现：spring-cloud-starter-eureka-server | http://localhost:8011/ | HA：硬－nginx| 
 | client (服务提供方)| 体检：spring-cloud-starter-actuator<br/> HA：spring-cloud-starter-eureka<br/> 链路跟踪：spring-cloud-starter-zipkin| http://localhost:8763/hi?name=Ivan | HA：软－eureka| 
 | trace (服务链路跟踪)| 链路收集利器：zipkin-server, zipkin-autoconfigure-ui <br/> HA：spring-cloud-starter-eureka| http://localhost:9001 | HA：硬－nginx|
+| config (服务配置中心)| 配置管理：spring-cloud-config-server <br/> HA：spring-cloud-starter-eureka| http://localhost:8021/service-router-zuul/dev | HA：软－eureka|
 
 #### 获取代码
 ~~~
 git clone https://github.com/leeway-deng/mas.git
 ~~~
 
+#### 框架说明
+
+###### SpringCloud框架组成
+
 ![SpringCloud框架组成][img-spring-cloud-fw-plan]
+
+###### zipkin工作图解
 
 ![zipkin工作图解][img-zipkin-workflow]
 
+###### Letv-MAS框架设计
+
 ![Letv-MAS框架设计][img-letv-mas-fw]
+
+###### Letv-MAS部署说明
+
+| （子）系统名称 | 代码工程 | 编译 | 发布 | 部署 | 备注 |
+| - | - | - | - | - | - | 
+| 服务管理中心 | manager | maven | jk+docker | 10.58.89.189:8011 | TODO |
 
 [url-SpringCloud]: https://projects.spring.io/spring-cloud "SpringCloud"
 [url-SpringCloud-manual-E]: http://cloud.spring.io/spring-cloud-static/Edgware.SR3/index.html

@@ -1,9 +1,11 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:8011/eureka/
+
 server:
-  port: 8769
+  port: 8101
+
 spring:
   application:
     name: service-router-zuul
@@ -12,11 +14,18 @@ spring:
   sleuth:
     sampler:
       percentage: 1.0
+  cloud:
+    config:
+      uri: http://localhost:8021/
+      label: master
+      profile: dev
+
 zuul:
   routes:
     api-1:
       path: /api-1/**
       serviceId: service-consumer-ribbon
+
 info:
   app:
     name: "@project.artifactId@"

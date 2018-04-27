@@ -1,12 +1,14 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:8011/eureka/
   instance:
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
+
 server:
   port: 8763
+
 spring:
   application:
     name: service-provider

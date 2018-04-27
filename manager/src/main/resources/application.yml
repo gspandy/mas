@@ -1,5 +1,5 @@
 server:
-  port: 8761
+  port: 8011
 
 eureka:
   instance:
@@ -12,3 +12,11 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
   server:
       enableSelfPreservation: false
+
+info:
+  app:
+    name: "@project.artifactId@"
+    encoding: '@project.build.sourceEncoding@'
+    java:
+      source: '@java.version@'
+      target: '@java.version@'
