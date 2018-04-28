@@ -16,10 +16,13 @@ spring:
       percentage: 1.0
   cloud:
     config:
-      uri: http://localhost:8021/
+      # uri: http://localhost:8021/
+      discovery:
+        enabled: true #启用发现服务功能
+        service-id: config-server #指定服务名称
+      name: service-router-zuul
       label: master
       profile: dev
-
 zuul:
   routes:
     api-1:

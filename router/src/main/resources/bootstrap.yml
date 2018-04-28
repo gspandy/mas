@@ -1,3 +1,0 @@
-#spring.cloud.config.uri=http://localhost:8021/
-#spring.cloud.config.label=master
-#spring.cloud.config.profile=dev
