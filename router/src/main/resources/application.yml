@@ -1,25 +1,30 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8011/eureka/
+      defaultZone: ${EUREKA_SERVER_LIST}
+    healthcheck:
+      enabled: true
 
 server:
-  port: 8101
+  port: ${ROUTER_SERVER_PORT}
 
 spring:
   application:
     name: service-router-zuul
   zipkin:
-    base-url: http://localhost:9001
+    #base-url: http://localhost:9001
+    base-url: ${TRACE_SERVER_URL}
   sleuth:
     sampler:
       percentage: 1.0
   cloud:
     config:
+      #failFast: true #the client will halt with an Exception
       # uri: http://localhost:8021/
       discovery:
         enabled: true #启用发现服务功能
         service-id: config-server #指定服务名称
+      # eg. http://localhost:8021/{name}/{profile}/{label}
       name: service-router-zuul
       label: master
       profile: dev

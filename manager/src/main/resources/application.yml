@@ -1,5 +1,5 @@
 server:
-  port: 8011
+  port: ${EUREKA_SERVER_PORT}
 
 eureka:
   instance:
@@ -9,9 +9,10 @@ eureka:
     registerWithEureka: false
     fetchRegistry: false
     serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/${EUREKA_SERVER_LIST}
   server:
-      enableSelfPreservation: true
+    enableSelfPreservation: false
+    eviction-interval-timer-in-ms: 30000
 
 info:
   app:

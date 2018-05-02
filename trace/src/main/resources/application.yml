@@ -1,9 +1,12 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8011/eureka/
+      defaultZone: ${EUREKA_SERVER_LIST}
+    healthcheck:
+      enabled: true
+
 server:
-  port: 9001
+  port: ${TRACE_SERVER_PORT}
 spring:
   application:
     name: trace-server-zipkin

@@ -1,13 +1,15 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8011/eureka/
+      defaultZone: ${EUREKA_SERVER_LIST}
+    healthcheck:
+      enabled: true
   instance:
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
 
 server:
-  port: 8763
+  port: ${CLIENT_SERVER_PORT}
 
 spring:
   application:

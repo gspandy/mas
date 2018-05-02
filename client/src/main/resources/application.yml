@@ -1,9 +1,11 @@
 spring:
   zipkin:
-    base-url: http://localhost:9001
+    #base-url: http://localhost:9001
+    base-url: ${TRACE_SERVER_URL}
   sleuth:
     sampler:
       percentage: 1.0
+
 info:
   app:
     name: "@project.artifactId@"
