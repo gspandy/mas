@@ -25,8 +25,7 @@ FROM reg-sre.lecloud.com/test_image/letv-mas-base
 MAINTAINER dengliwei dengliwei@le.com
 
 # Expose ports
-#EXPOSE {$EUREKA_SERVER_PORT}
-EXPOSE 8010
+#EXPOSE 8010
 
 # create mw and app dir
 RUN mkdir -p /letv/app/mas/manager
@@ -40,9 +39,8 @@ VOLUME ["/letv/app/mas/manager", "/letv/logs/mas/manager"]
 WORKDIR /letv/app/mas/manager
 
 # set environmental vars
-#ENV EUREKA_SERVER_PORT={$EUREKA_SERVER_PORT}
 ENV EUREKA_SERVER_PORT=8010
-ENV EUREKA_SERVER_LIST=
+ENV EUREKA_SERVER_LIST=http://127.0.0.1:8010/eureka/
 
 # Set the default command to execute
 # when creating a new container

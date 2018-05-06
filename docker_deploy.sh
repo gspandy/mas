@@ -3,7 +3,9 @@
 
 # load envionment variables
 source /etc/profile
+docker_hub_local=true
 docker_hub_host="reg-sre.lecloud.com"
+docker_hub_path="/test_image/"
 docker_hub_username="letv_monitor"
 docker_hub_password="!@s20180205"
 log_base_path=/letv/logs/mas
@@ -40,7 +42,7 @@ done
 
 # verify parameters
 if [ -z "$image" ] || [ -z "$app" ]; then
-  echo "parameters are invalid, please try --help"
+  echo "[error]parameters are invalid, please try --help"
   exit 1
 fi
 
@@ -85,9 +87,11 @@ done
 echo "init host FS ..."
 mkdir -p /$log_base_path/$app
 
-echo "get the remote $app..."
-eval $docker_login
-eval $docker_pull
+if [ "$docker_hub_local" == "false" ]; then
+    echo "get the remote $app..."
+    eval $docker_login
+    eval $docker_pull
+fi
 
 echo "$app start..."
 eval "$app_start"
@@ -96,7 +100,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "wait for $app starting..."
-sleep 10s
+sleep 2s
 
 sleep_count=0
 while true; do

@@ -1,15 +1,32 @@
+spring:
+  application:
+    name: letv-mas-mananger
+#  profiles:
+#    active: server1
+
 server:
   port: ${EUREKA_SERVER_PORT}
 
 eureka:
   instance:
-    hostname: localhost
+#    hostname: localhost
+#    hostname: ${spring.application.name}-${server.port}
+#    hostname: ${EUREKA_SERVER_IP}
     instance-id: ${spring.application.name}:${server.port}
+#    prefer-ip-address: true
+    ip-address: ${EUREKA_SERVER_IP}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 5
+    statusPageUrl: http://${EUREKA_SERVER_IP}:${server.port}/info
+    healthCheckUrl: http://${EUREKA_SERVER_IP}:${server.port}/health
   client:
-    registerWithEureka: false
-    fetchRegistry: false
+    registerWithEureka: true
+    fetchRegistry: true
     serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/${EUREKA_SERVER_LIST}
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+      defaultZone: ${EUREKA_SERVER_LIST}
+    healthcheck:
+      enabled: true
   server:
     enableSelfPreservation: false
     eviction-interval-timer-in-ms: 30000

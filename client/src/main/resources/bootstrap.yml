@@ -5,6 +5,9 @@ eureka:
     healthcheck:
       enabled: true
   instance:
+    prefer-ip-address: true
+    ip-address: ${CLIENT_SERVER_IP}
+    instance-id: ${spring.application.name}:${server.port}
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
 
@@ -13,5 +16,5 @@ server:
 
 spring:
   application:
-    name: service-provider
+    name: letv-mas-client
 

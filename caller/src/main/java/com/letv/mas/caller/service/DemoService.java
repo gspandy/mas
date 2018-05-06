@@ -16,7 +16,7 @@ public class DemoService {
 
     @HystrixCommand(fallbackMethod = "sayError")
     public String sayHello(String name) {
-        return restTemplate.getForObject("http://SERVICE-PROVIDER/hi?name=" + name, String.class);
+        return restTemplate.getForObject("http://LETV-MAS-CLIENT/hi?name=" + name, String.class);
     }
 
     public String sayError(String name) {
