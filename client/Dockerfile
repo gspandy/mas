@@ -39,8 +39,10 @@ VOLUME ["/letv/app/mas/client", "/letv/logs/mas/client"]
 WORKDIR /letv/app/mas/client
 
 # set environmental vars
-ENV EUREKA_SERVER_PORT=8010
-ENV EUREKA_SERVER_LIST=http://127.0.0.1:8010/eureka/
+ENV TRACE_SERVER_URL=http://localhost:9001
+ENV CLIENT_SERVER_IP=127.0.0.1
+ENV CLIENT_SERVER_PORT=8901
+ENV EUREKA_SERVER_LIST=http:/localhost:8010/eureka/
 
 # Set the default command to execute
 # when creating a new container

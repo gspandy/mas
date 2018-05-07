@@ -1,4 +1,10 @@
 eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: ${ROUTER_SERVER_IP}
+    instance-id: ${spring.application.name}:${server.port}
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
   client:
     serviceUrl:
       defaultZone: ${EUREKA_SERVER_LIST}
@@ -10,7 +16,7 @@ server:
 
 spring:
   application:
-    name: service-router-zuul
+    name: letv-mas-router
   zipkin:
     #base-url: http://localhost:9001
     base-url: ${TRACE_SERVER_URL}
@@ -23,16 +29,16 @@ spring:
       # uri: http://localhost:8021/
       discovery:
         enabled: true #启用发现服务功能
-        service-id: config-server #指定服务名称
+        service-id: letv-mas-config #指定服务名称
       # eg. http://localhost:8021/{name}/{profile}/{label}
-      name: service-router-zuul
+      name: letv-mas-router
       label: master
       profile: dev
 zuul:
   routes:
     api-1:
       path: /api-1/**
-      serviceId: service-consumer-ribbon
+      serviceId: letv-mas-caller
 
 info:
   app:

@@ -100,7 +100,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "wait for $app starting..."
-sleep 2s
+sleep 1s
 
 sleep_count=0
 while true; do
@@ -113,7 +113,7 @@ while true; do
     sleep 1s
   fi
 
-  if [ $sleep_count -ge 30 ]; then
+  if [ $sleep_count -ge 60 ]; then
     echo "Failed:"$sleep_count
     break
   fi

@@ -1,4 +1,10 @@
 eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: ${CALLER_SERVER_IP}
+    instance-id: ${spring.application.name}:${server.port}
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
   client:
     serviceUrl:
       defaultZone: ${EUREKA_SERVER_LIST}
@@ -10,7 +16,7 @@ server:
 
 spring:
   application:
-    name: service-consumer-ribbon
+    name: letv-mas-caller
   zipkin:
     #base-url: http://localhost:9001
     base-url: ${TRACE_SERVER_URL}

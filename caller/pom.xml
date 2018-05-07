@@ -22,6 +22,8 @@
     <properties>
         <!-- 源文件编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Maven版本 -->
+        <maven-compiler-plugin>2.5.1</maven-compiler-plugin>
         <!-- JDK版本 -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -89,8 +91,34 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <!-- 跳过配置中环境变量定义引起的编译问题 -->
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.5.10.RELEASE</version>
+                <configuration>
+                    <!-- 可以把依赖的包都打包到生成的Jar包中 -->
+                    <mainClass>com.letv.mas.caller.ServiceRibbonApplication</mainClass>
+                    <layout>ZIP</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- 把依赖的包都打包到生成的Jar包中 -->
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

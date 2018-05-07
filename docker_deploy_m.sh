@@ -12,7 +12,7 @@ env_file=$3
 hosts_file=$4
 app_base="letv-mas-${module}"
 app="${app_base}-${port}"
-tsurl="http://localhost:${port}/health"
+tsurl="http://localhost:${port}/info"
 
 # current directory
 cur_dir=$(cd "$(dirname "${0}")"; pwd)
@@ -39,7 +39,7 @@ else
     fi
 fi
 
-docker_deploy="sh ./docker_deploy.sh --image=${docker_hub_host}${docker_hub_path}${app_base} --app=${app} --run_opts='-v /${log_base_path}/${app}:/letv/logs/mas/${module} -p ${port}:${port} -P --expose=${port} ${run_env} ${run_hosts} --restart=always' --port=${port} --turl='${tsurl}'"
+docker_deploy="sh ./docker_deploy.sh --image=${docker_hub_host}${docker_hub_path}${app_base} --app=${app} --run_opts='-v ${log_base_path}/${app}:/letv/logs/mas/${module} -p ${port}:${port} -P --expose=${port} ${run_env} ${run_hosts} --restart=always' --port=${port} --turl='${tsurl}'"
 
 echo "${docker_deploy}"
 echo "docker deploy ..."

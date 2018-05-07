@@ -34,7 +34,7 @@ SR：Service Release，SR1表示第1个正式版本，一般同时标注GA(Gener
 | manager (服务注册管理中心)| 服务注册发现：spring-cloud-starter-eureka-server | http://localhost:8011/ | HA：硬－nginx| 
 | client (服务提供方)| 体检：spring-cloud-starter-actuator<br/> HA：spring-cloud-starter-eureka<br/> 链路跟踪：spring-cloud-starter-zipkin| http://localhost:8901/hi?name=Ivan | HA：软－eureka| 
 | trace (服务链路跟踪)| 链路收集利器：zipkin-server, zipkin-autoconfigure-ui <br/> HA：spring-cloud-starter-eureka| http://localhost:9001 | HA：硬－nginx|
-| config (服务配置中心)| 配置管理：spring-cloud-config-server <br/> HA：spring-cloud-starter-eureka| http://localhost:8021/service-router-zuul/dev | HA：软－eureka|
+| config (服务配置中心)| 配置管理：spring-cloud-config-server <br/> HA：spring-cloud-starter-eureka| http://localhost:8021/letv-mas-router/dev | HA：软－eureka|
 
 #### 获取代码
 ~~~
@@ -59,12 +59,12 @@ git clone https://github.com/leeway-deng/mas.git
 
 | （子）系统名称 | 代码工程 | 编译 | 发布 | 部署 | 备注 |
 | - | - | - | - | - | - | 
-| 服务管理中心 | manager | maven2.5+  | TODO:jk+docker | localhost:8011<br/> localhost:8012 | 编译：sh ./mvn_build.sh manager<br/> 执行：EUREKA_SERVER_PORT=8011 EUREKA_SERVER_LIST= java -jar ./manager/target/manager-1.0-SNAPSHOT.jar<br> Docker镜像：sh ./docker_build.sh manager<br/> 部署：sh ./docker_deploy_ha_m.sh manager 8011 local, sh ./docker_deploy_ha_m.sh manager 8012 local|
-| 服务配置中心 | config | maven2.5+ | TODO:jk+docker | localhost:8021 | 编译：sh ./mvn_build.sh config<br/> 执行：EUREKA_SERVER_PORT=8021 EUREKA_SERVER_LIST=http://localhost:8011/eureka/ java -jar ./config/target/config-1.0-SNAPSHOT.jar<br> 部署：Docker+HA |
-| 服务路由 | router | maven2.5+ | TODO:jk+docker | localhost:8101 | 编译：sh ./mvn_build.sh router<br/> 执行：ROUTER_SERVER_PORT=8101 EUREKA_SERVER_LIST=http://localhost:8011/eureka/ TRACE_SERVER_URL=http://trace-server-zipkin/ java -jar ./router/target/router-1.0-SNAPSHOT.jar<br> 部署：Docker+HA |
-| 服务链路跟踪 | trace | maven2.5+ | TODO:jk+docker | localhost:9001 | 编译：sh ./mvn_build.sh trace<br/> 执行：TRACE_SERVER_PORT=9001 EUREKA_SERVER_LIST=http://localhost:8011/eureka/ java -jar ./trace/target/trace-1.0-SNAPSHOT.jar<br> 部署：Docker+HA |
-| 服务提供方 | client | maven2.5+ | TODO:jk+docker | localhost:8901<br/>localhost:8902 | 编译：sh ./mvn_build.sh client<br/> 执行：CLIENT_SERVER_PORT=8902 EUREKA_SERVER_LIST=http://localhost:8011/eureka/ TRACE_SERVER_URL=http://trace-server-zipkin/ java -jar ./client/target/client-1.0-SNAPSHOT.jar<br> Docker镜像：sh ./docker_build.sh client<br/> 部署：sh ./docker_deploy_ha_m.sh client 8901 local, sh ./docker_deploy_ha_m.sh client 8902 local |
-| 服务调用方 | caller | maven2.5+ | TODO:jk+docker | localhost:8764 | 编译：sh ./mvn_build.sh caller<br/> 执行：CALLER_SERVER_PORT=8764 EUREKA_SERVER_LIST=http://localhost:8011/eureka/ TRACE_SERVER_URL=http://trace-server-zipkin/ java -jar ./caller/target/caller-1.0-SNAPSHOT.jar<br> 部署：Docker+HA |
+| 服务管理中心 | manager | maven2.5+  | TODO:jk+docker | localhost:8011<br/> localhost:8012 | 编译：sh ./mvn_build.sh manager<br/> 执行：EUREKA_SERVER_IP=127.0.0.1 EUREKA_SERVER_PORT=8011 EUREKA_SERVER_LIST= java -jar ./manager/target/manager-1.0-SNAPSHOT.jar<br> Docker镜像：sh ./docker_build.sh manager<br/> 部署：sh ./docker_deploy_ha_m.sh manager 8011 local, sh ./docker_deploy_ha_m.sh manager 8012 local |
+| 服务配置中心 | config | maven2.5+ | TODO:jk+docker | localhost:8021 | 编译：sh ./mvn_build.sh config<br/> 执行：EUREKA_SERVER_IP=127.0.0.1 EUREKA_SERVER_PORT=8021 EUREKA_SERVER_LIST=http://localhost:8011/eureka/ java -jar ./config/target/config-1.0-SNAPSHOT.jar<br> Docker镜像：sh ./docker_build.sh manager<br/> 部署：sh ./docker_deploy_ha_m.sh config 8021 local |
+| 服务路由 | router | maven2.5+ | TODO:jk+docker | localhost:8101 | 编译：sh ./mvn_build.sh router<br/> 执行：ROUTER_SERVER_IP=127.0.0.1 ROUTER_SERVER_PORT=8101 EUREKA_SERVER_LIST=http://localhost:8011/eureka/ TRACE_SERVER_URL=http://letv-mas-trace/ java -jar ./router/target/router-1.0-SNAPSHOT.jar<br> Docker镜像：sh ./docker_build.sh manager<br/> 部署：sh ./docker_deploy_ha_m.sh router 8101 local |
+| 服务链路跟踪 | trace | maven2.5+ | TODO:jk+docker | localhost:9001 | 编译：sh ./mvn_build.sh trace<br/> 执行：TRACE_SERVER_IP=127.0.0.1 TRACE_SERVER_PORT=9001 EUREKA_SERVER_LIST=http://localhost:8011/eureka/ java -jar ./trace/target/trace-1.0-SNAPSHOT.jar<br> Docker镜像：sh ./docker_build.sh trace<br/> 部署：sh ./docker_deploy_ha_m.sh trace 9001 local |
+| 服务提供方 | client | maven2.5+ | TODO:jk+docker | localhost:8901<br/>localhost:8902 | 编译：sh ./mvn_build.sh client<br/> 执行：CLIENT_SERVER_IP=127.0.0.1 CLIENT_SERVER_PORT=8902 EUREKA_SERVER_LIST=http://localhost:8011/eureka/ TRACE_SERVER_URL=http://letv-mas-trace/ java -jar ./client/target/client-1.0-SNAPSHOT.jar<br> Docker镜像：sh ./docker_build.sh client<br/> 部署：sh ./docker_deploy_ha_m.sh client 8901 local, sh ./docker_deploy_ha_m.sh client 8902 local |
+| 服务调用方 | caller | maven2.5+ | TODO:jk+docker | localhost:8764 | 编译：sh ./mvn_build.sh caller<br/> 执行：CALLER_SERVER_IP=127.0.0.1 CALLER_SERVER_PORT=8764 EUREKA_SERVER_LIST=http://localhost:8011/eureka/ TRACE_SERVER_URL=http://letv-mas-trace/ java -jar ./caller/target/caller-1.0-SNAPSHOT.jar<br> Docker镜像：sh ./docker_build.sh caller<br/> 部署：sh ./docker_deploy_ha_m.sh caller 8764 local |
 
 
 [url-SpringCloud]: https://projects.spring.io/spring-cloud "SpringCloud"
