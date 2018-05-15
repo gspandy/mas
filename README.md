@@ -35,7 +35,7 @@ SR：Service Release，SR1表示第1个正式版本，一般同时标注GA(Gener
 | client (服务提供方)| 体检：spring-cloud-starter-actuator<br/> HA：spring-cloud-starter-eureka<br/> 链路跟踪：spring-cloud-starter-zipkin<br/> grpc服务端：grpc-server-spring-boot-starter| http://localhost:8901/hi?name=Ivan | HA：软－eureka| 
 | trace (服务链路跟踪)| 链路收集利器：zipkin-server, zipkin-autoconfigure-ui <br/> HA：spring-cloud-starter-eureka| http://localhost:9001 | HA：硬－nginx|
 | config (服务配置中心)| 配置管理：spring-cloud-config-server <br/> HA：spring-cloud-starter-eureka| http://localhost:8021/letv-mas-router/dev | HA：软－eureka|
-| grpc (rpc模块)| io.grpc.grpc-netty <br/> io.grpc.grpc-protobuf | 编译方式: sh ./mvn_build.sh grpc install | 其它模块调用前先执行mvn install将其添加至本地仓库|
+| grpc (rpc模块)| io.grpc.grpc-netty<br/> io.grpc.grpc-protobuf<br/> grpc-client-spring-boot-starter<br/> grpc-server-spring-boot-starter | 编译方式: sh ./mvn_build.sh grpc/demo install | 其它模块调用前先执行mvn install将其添加至本地仓库|
 
 #### 获取代码
 ~~~
