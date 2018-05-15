@@ -11,9 +11,6 @@ eureka:
     healthcheck:
       enabled: true
 
-server:
-  port: ${ROUTER_SERVER_PORT}
-
 spring:
   application:
     name: letv-mas-router
@@ -23,22 +20,19 @@ spring:
   sleuth:
     sampler:
       percentage: 1.0
-  cloud:
-    config:
-      #failFast: true #the client will halt with an Exception
-      # uri: http://localhost:8021/
-      discovery:
-        enabled: true #启用发现服务功能
-        service-id: letv-mas-config #指定服务名称
-      # eg. http://localhost:8021/{name}/{profile}/{label}
-      name: letv-mas-router
-      label: master
-      profile: dev
+
+server:
+  port: ${ROUTER_SERVER_PORT}
+
 zuul:
   routes:
     api-1:
       path: /api-1/**
       serviceId: letv-mas-caller
+
+management:
+  security:
+    enabled: false
 
 info:
   app:

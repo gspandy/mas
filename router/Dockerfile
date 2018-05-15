@@ -40,8 +40,9 @@ WORKDIR /letv/app/mas/router
 
 # set environmental vars
 ENV TRACE_SERVER_URL=http://letv-mas-trace/
-ENV CALLER_SERVER_IP=127.0.0.1
-ENV CALLER_SERVER_PORT=8101
+ENV CONFIG_SERVER_URL=http://127.0.0.1:8021/
+ENV ROUTER_SERVER_IP=127.0.0.1
+ENV ROUTER_SERVER_PORT=8101
 ENV EUREKA_SERVER_LIST=http://localhost:8010/eureka/
 
 # Set the default command to execute

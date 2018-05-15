@@ -1,4 +1,21 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_LIST}
+    registerWithEureka: true
+    fetchRegistry: true
+    healthcheck:
+      enabled: true
+  instance:
+    prefer-ip-address: true
+    ip-address: ${CLIENT_SERVER_IP}
+    instance-id: ${spring.application.name}:${server.port}
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+
 spring:
+  application:
+    name: letv-mas-client
   zipkin:
     #base-url: http://localhost:9001
     base-url: ${TRACE_SERVER_URL}

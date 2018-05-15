@@ -1,0 +1,16 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "net.devh.springboot.autoconfigure.grpc.client.GrpcChannelsProperties",
+      "name": "grpc",
+      "type": "net.devh.springboot.autoconfigure.grpc.client.GrpcChannelsProperties"
+    },
+    {
+      "sourceType": "net.devh.springboot.autoconfigure.grpc.client.GrpcChannelsProperties",
+      "name": "grpc.client",
+      "type": "java.util.Map"
+    }
+  ],
+  "properties": []
+}

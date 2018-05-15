@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by leeco on 18/4/28.
  */
 @RestController
-@RefreshScope
+//@RefreshScope
 public class DemoController {
 
     @Autowired
