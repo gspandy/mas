@@ -29,10 +29,10 @@ SR：Service Release，SR1表示第1个正式版本，一般同时标注GA(Gener
 
 | 模块名 | 中间件（core） | 启动方式 | 备注 | 
 | - | - | - | - | 
-| caller (服务调用方)| 体检：spring-boot-starter-actuator<br/> 降服：spring-cloud-starter-hystrix<br/> 降服仪表盘：spring-cloud-starter-hystrix-dashboard<br/> HA(基于eureka-client-cluster)：spring-cloud-starter-eureka，spring-cloud-starter-ribbon<br/> 链路跟踪：spring-cloud-starter-zipkin| API: http://localhost:8764/hi?name=Ivan.deng<br/> 本机仪表盘: http://localhost:8764/hystrix | LB：硬－nginx，软－eureka|
+| caller (服务调用方)| 体检：spring-boot-starter-actuator<br/> 降服：spring-cloud-starter-hystrix<br/> 降服仪表盘：spring-cloud-starter-hystrix-dashboard<br/> HA(基于eureka-client-cluster)：spring-cloud-starter-eureka，spring-cloud-starter-ribbon<br/> 链路跟踪：spring-cloud-starter-zipkin<br/> grpc客户端：grpc-client-spring-boot-starter| API: http://localhost:8764/hi?name=Ivan.deng<br/> 本机仪表盘: http://localhost:8764/hystrix<br/> rpc调用: http://localhost:8764/grpc | LB：硬－nginx，软－eureka|
 | router (服务路由／过滤)| 体检：spring-boot-starter-actuator<br/> 路由：spring-cloud-starter-zuul<br/> HA：spring-cloud-starter-eureka<br/> 链路跟踪：spring-cloud-starter-zipkin<br/> 配置更新：spring-cloud-starter-config| API: http://localhost:8101/api-1/hi?name=Leeway&token=123<br/> 配置读取： http://localhost:8101/config | HA：硬－nginx，软－eureka|
 | manager (服务注册管理中心)| 服务注册发现：spring-cloud-starter-eureka-server | http://localhost:8011/ | HA：硬－nginx| 
-| client (服务提供方)| 体检：spring-cloud-starter-actuator<br/> HA：spring-cloud-starter-eureka<br/> 链路跟踪：spring-cloud-starter-zipkin| http://localhost:8901/hi?name=Ivan | HA：软－eureka| 
+| client (服务提供方)| 体检：spring-cloud-starter-actuator<br/> HA：spring-cloud-starter-eureka<br/> 链路跟踪：spring-cloud-starter-zipkin<br/> grpc服务端：grpc-server-spring-boot-starter| http://localhost:8901/hi?name=Ivan | HA：软－eureka| 
 | trace (服务链路跟踪)| 链路收集利器：zipkin-server, zipkin-autoconfigure-ui <br/> HA：spring-cloud-starter-eureka| http://localhost:9001 | HA：硬－nginx|
 | config (服务配置中心)| 配置管理：spring-cloud-config-server <br/> HA：spring-cloud-starter-eureka| http://localhost:8021/letv-mas-router/dev | HA：软－eureka|
 | grpc (rpc模块)| io.grpc.grpc-netty <br/> io.grpc.grpc-protobuf | 编译方式: sh ./mvn_build.sh grpc install | 其它模块调用前先执行mvn install将其添加至本地仓库|
