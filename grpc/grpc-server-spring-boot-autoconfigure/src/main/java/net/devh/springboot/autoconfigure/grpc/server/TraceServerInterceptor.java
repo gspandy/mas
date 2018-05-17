@@ -34,7 +34,9 @@ public class TraceServerInterceptor implements ServerInterceptor {
     @Override
     public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(final ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
         final Span span = spanExtractor.joinTrace(headers);
-        tracer.continueSpan(span);
+        if (null != span) {
+            tracer.continueSpan(span);
+        }
         return next.startCall(new ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(call) {
 
             private Span gRPCSpan;

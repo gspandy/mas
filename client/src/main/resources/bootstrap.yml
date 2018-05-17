@@ -1,11 +1,12 @@
 server:
-  port: 0
+  port: ${CLIENT_SERVER_PORT}
 #  http2:
 #    enabled: true
 
 grpc:
   server:
-      port: ${CLIENT_SERVER_PORT}
+      address: ${CLIENT_SERVER_IP}
+      port: ${CLIENT_SERVER_GRPC_PORT}
 
 spring:
   application:

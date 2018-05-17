@@ -1,5 +1,6 @@
 package net.devh.springboot.autoconfigure.grpc.client;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -23,6 +24,7 @@ import io.grpc.util.RoundRobinLoadBalancerFactory;
 @Configuration
 @EnableConfigurationProperties
 @ConditionalOnClass({GrpcChannelFactory.class})
+@Slf4j
 public class GrpcClientAutoConfiguration {
 
     @ConditionalOnMissingBean
@@ -96,6 +98,7 @@ public class GrpcClientAutoConfiguration {
             public Object postProcessAfterInitialization(Object bean,
                 String beanName)
                 throws BeansException {
+                // log.error("postProcessAfterInitialization(): beanName=" + beanName);
                 if (bean instanceof Tracer) {
                     this.registry.addClientInterceptors(new TraceClientInterceptor((Tracer) bean, new MetadataInjector()));
                 }

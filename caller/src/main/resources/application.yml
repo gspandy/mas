@@ -1,0 +1,59 @@
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: ${CALLER_SERVER_IP}
+    instance-id: ${spring.application.name}:${server.port}
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+    statusPageUrl: http://${CALLER_SERVER_IP}:${server.port}/info
+    healthCheckUrl: http://${CALLER_SERVER_IP}:${server.port}/health
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_LIST}
+    healthcheck:
+      enabled: true
+
+spring:
+  application:
+    name: letv-mas-caller
+#  cloud:
+#    config:
+#      #failFast: true #the client will halt with an Exception
+#      enabled: false
+##      uri: ${CONFIG_SERVER_URL}
+#      discovery:
+#        enabled: true #启用发现服务功能
+#        service-id: letv-mas-config #指定服务名称
+#      # eg. http://localhost:8021/{name}/{profile}/{label}
+#      name: letv-mas-caller
+#      label: master
+#      profile: dev
+#      retry:
+#        max-attempts: 6 # 配置重试次数，默认为6
+#        multiplier: 1.1 # 间隔乘数，默认1.1
+#        initial-interval: 1000 # 初始重试间隔时间，默认1000ms
+#        max-interval: 2000 # 最大间隔时间，默认2000ms
+  zipkin:
+    #base-url: http://localhost:9001
+    base-url: ${TRACE_SERVER_URL}
+  sleuth:
+    sampler:
+      percentage: 1.0
+
+server:
+  port: ${CALLER_SERVER_PORT}
+
+info:
+  app:
+    name: "@project.artifactId@"
+    encoding: '@project.build.sourceEncoding@'
+    java:
+      source: '@java.version@'
+      target: '@java.version@'
+
+logging:
+  level:
+    com.netflix.discovery: 'OFF'
+    org.springframework.cloud: 'DEBUG'
