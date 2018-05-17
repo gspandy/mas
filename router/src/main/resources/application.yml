@@ -6,6 +6,7 @@ eureka:
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
   client:
+    registry-fetch-interval-seconds: 5
     serviceUrl:
       defaultZone: ${EUREKA_SERVER_LIST}
     healthcheck:

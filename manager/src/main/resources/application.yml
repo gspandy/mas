@@ -15,8 +15,8 @@ eureka:
     instance-id: ${spring.application.name}:${server.port}
 #    prefer-ip-address: true
     ip-address: ${EUREKA_SERVER_IP}
+    lease-expiration-duration-in-seconds: 10
     lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 5
     statusPageUrl: http://${EUREKA_SERVER_IP}:${server.port}/info
     healthCheckUrl: http://${EUREKA_SERVER_IP}:${server.port}/health
   client:
@@ -25,11 +25,12 @@ eureka:
     serviceUrl:
 #      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
       defaultZone: ${EUREKA_SERVER_LIST}
+    registry-fetch-interval-seconds: 5
     healthcheck:
       enabled: true
   server:
-    enableSelfPreservation: false
-    eviction-interval-timer-in-ms: 30000
+    enableSelfPreservation: true
+    eviction-interval-timer-in-ms: 5000
 
 info:
   app:
