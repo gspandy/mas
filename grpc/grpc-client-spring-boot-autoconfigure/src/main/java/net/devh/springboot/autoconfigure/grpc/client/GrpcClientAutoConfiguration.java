@@ -2,6 +2,7 @@ package net.devh.springboot.autoconfigure.grpc.client;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -98,8 +99,8 @@ public class GrpcClientAutoConfiguration {
             public Object postProcessAfterInitialization(Object bean,
                 String beanName)
                 throws BeansException {
-                // log.error("postProcessAfterInitialization(): beanName=" + beanName);
                 if (bean instanceof Tracer) {
+//                    log.error("postProcessAfterInitialization(): beanName=" + beanName);
                     this.registry.addClientInterceptors(new TraceClientInterceptor((Tracer) bean, new MetadataInjector()));
                 }
                 return bean;
