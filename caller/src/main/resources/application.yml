@@ -57,3 +57,7 @@ logging:
   level:
     com.netflix.discovery: 'OFF'
     org.springframework.cloud: 'DEBUG'
+
+management:
+  security:
+    enabled: false
