@@ -16,7 +16,7 @@ public class RouterConfigDto implements Serializable {
     // 对应git配置文件里的keys
 
     @Value("${eureka.client.serviceUrl.defaultZone}")
-    private String managerZone="";
+    private String managerZone = "";
 
     public String getManagerZone() {
         return managerZone;
