@@ -1,8 +1,25 @@
 spring:
   application:
     name: letv-mas-mananger
-#  profiles:
-#    active: server1
+  profiles:
+    active: dev
+  cloud:
+    config:
+      #failFast: true #the client will halt with an Exception
+      enabled: true
+#      uri: ${CONFIG_SERVER_URL}
+      discovery:
+        enabled: true #启用发现服务功能
+        service-id: letv-mas-config #指定服务名称
+      # eg. http://localhost:8021/{name}/{profile}/{label}
+      name: letv-mas-mananger
+      label: master
+      profile: dev
+      retry:
+        max-attempts: 6 # 配置重试次数，默认为6
+        multiplier: 1.1 # 间隔乘数，默认1.1
+        initial-interval: 1000 # 初始重试间隔时间，默认1000ms
+        max-interval: 2000 # 最大间隔时间，默认2000ms
 
 server:
   port: ${EUREKA_SERVER_PORT}
@@ -31,11 +48,3 @@ eureka:
   server:
     enableSelfPreservation: true
     eviction-interval-timer-in-ms: 5000
-
-info:
-  app:
-    name: "@project.artifactId@"
-    encoding: '@project.build.sourceEncoding@'
-    java:
-      source: '@java.version@'
-      target: '@java.version@'

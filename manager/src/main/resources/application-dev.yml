@@ -1,0 +1,16 @@
+info:
+  app:
+    name: "@project.artifactId@"
+    encoding: '@project.build.sourceEncoding@'
+    java:
+      source: '@java.version@'
+      target: '@java.version@'
+
+management:
+  security:
+    enabled: false
+
+endpoints:
+  refresh:
+    enabled: true
+    sensitive: false
