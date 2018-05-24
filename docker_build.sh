@@ -3,11 +3,11 @@
 
 # load envionment variables
 source /etc/profile
-docker_hub_local=true
+docker_hub_local=false
 docker_hub_host="reg-sre.lecloud.com"
 docker_hub_path="/test_image/"
 docker_hub_username="letv_monitor"
-docker_hub_password="!@s20180205"
+docker_hub_password="!@s20180509"
 module_prefix="letv-mas-"
 module=$1
 

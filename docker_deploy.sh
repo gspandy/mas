@@ -3,7 +3,7 @@
 
 # load envionment variables
 source /etc/profile
-docker_hub_local=true
+docker_hub_local=false
 docker_hub_host="reg-sre.lecloud.com"
 docker_hub_path="/test_image/"
 docker_hub_username="letv_monitor"
@@ -119,4 +119,5 @@ while true; do
   fi
 done
 
+docker images | grep '<none>' | awk '{print $3 }' | xargs docker rmi;
 echo "Succeed"

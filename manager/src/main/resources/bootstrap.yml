@@ -6,10 +6,10 @@ spring:
   cloud:
     config:
       #failFast: true #the client will halt with an Exception
-      enabled: true
+      enabled: false
 #      uri: ${CONFIG_SERVER_URL}
       discovery:
-        enabled: true #启用发现服务功能
+        enabled: false #启用发现服务功能
         service-id: letv-mas-config #指定服务名称
       # eg. http://localhost:8021/{name}/{profile}/{label}
       name: letv-mas-mananger
@@ -30,7 +30,7 @@ eureka:
 #    hostname: ${spring.application.name}-${server.port}
 #    hostname: ${EUREKA_SERVER_IP}
     instance-id: ${spring.application.name}:${server.port}
-#    prefer-ip-address: true
+    prefer-ip-address: true
     ip-address: ${EUREKA_SERVER_IP}
     lease-expiration-duration-in-seconds: 10
     lease-renewal-interval-in-seconds: 5

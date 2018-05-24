@@ -21,6 +21,13 @@ run_env=""
 if [ -z "$env_file" ]; then
     run_env=""
 else
+    if [ -f "${env_file}" ]; then
+        host_ip=$(ifconfig eth0 | grep 'inet ' | sed s/^.*addr://g | sed s/Bcast.*$//g)
+        if [ -z "$host_ip" ]; then
+            host_ip="127.0.0.1"
+        fi
+        sed -i "s/{$SERVER-IP}/${host_ip}/g" "${env_file}"
+    fi
     run_env="--env-file=${env_file}"
 fi
 

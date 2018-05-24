@@ -27,3 +27,7 @@ else
    yum reinstall docker-io -y;
    service docker start;
 fi
+
+if [ -f "/var/run/docker.sock" ]; then
+   chmod a+rw /var/run/docker.sock
+fi
