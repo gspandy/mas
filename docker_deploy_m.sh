@@ -27,6 +27,7 @@ else
             host_ip="127.0.0.1"
         fi
         sed -i "s/{$SERVER-IP}/${host_ip}/g" "${env_file}"
+        sed -i "s/{$SERVER-PORT}/${port}/g" "${env_file}"
     fi
     run_env="--env-file=${env_file}"
 fi
