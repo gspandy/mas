@@ -92,15 +92,18 @@ function focusItemInNavBar() {
         var subItem = null;
         for (var i = 0; i < links.length; i++) {//遍历menu中的链接地址
             subItem = $(links[i]).children(".treeview-menu");
+            $(links[i]).removeClass("active"); // 父节点去选中
             if (subItem.length > 0) {
                 subItem = subItem.children("li a");
-                $.each(subItem, function (index, node) {
-                    if (node.href.indexOf(url) != -1) {
-                        (subItem.eq(index)).parent("li").addClass("active"); // 当前子节点选中
+                console.log(subItem);
+                for (var j = 0; j < subItem.length; j++) {//遍历subItem
+                    if (subItem[j].href.indexOf(url) != -1) {
+                        console.log($(subItem[j]).parent());
+                        $(subItem[j]).parent().addClass("active"); // 当前子节点选中
                         $(links[i]).addClass("active"); // 当前父节点选中
                         return false; //break
                     }
-                });
+                }
             } else {
                 subItem = $(links[i]).children("a").first();
                 if (subItem.length > 0) {

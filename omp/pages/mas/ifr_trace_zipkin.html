@@ -1,0 +1,21 @@
+<aside class="right-side">
+    <!-- Main content -->
+    <section class="content">
+        <iframe src="http://trace.mas.letv.cn/" id="iframe-trace-zipkin" width="100%" scrolling="auto"
+                frameborder="0" style="border: 0px"/>
+    </section>
+    <!-- /.content -->
+</aside><!-- /.right-side -->
+
+<script type="text/javascript">
+    function changeFrameHeight() {
+        var ifm = document.getElementById("iframe-trace-zipkin");
+        ifm.height = document.documentElement.clientHeight - 56;
+    }
+
+    window.onresize = function () {
+        changeFrameHeight();
+    }
+
+    changeFrameHeight();
+</script>s
