@@ -3,13 +3,12 @@ package com.letv.mas.client.config;
 import com.jayway.jsonpath.JsonPath;
 import com.letv.mas.client.EurekaClientApplication;
 import net.minidev.json.JSONArray;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Map;
@@ -17,16 +16,13 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * 单机客户端版本一致性单元测试
+ *
  * Created by David.Liu on 2018/6/26.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = EurekaClientApplication.class, properties = {"spring.profiles.active:prod"}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ClientConfigVersionTests {
-
-    private static final String BASE_DIR = System.getProperty("user.dir") + "/src/test/java/com/letv/mas/client/config/";
-
-    @Autowired
-    private TestRestTemplate restTemplate;
+@SpringBootTest(classes = EurekaClientApplication.class, properties = {"spring.profiles.active:configprod", "local.server.port:18882"}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class ClientConfigVersionTests extends ClientConfigBaseTests {
 
     @LocalServerPort
     private int basePort;
@@ -54,7 +50,7 @@ public class ClientConfigVersionTests {
     }
 
     /**
-     * 客户端使用的git版本一致性测试
+     * 单机客户端使用的git版本一致性测试
      * 启动容器->测试版本一致->git仓库更新版本->测试版本不一致->bus/refresh刷新->测试版本一致->清理环境
      */
     @Test
@@ -63,16 +59,19 @@ public class ClientConfigVersionTests {
         cloneAndHandleGitRepo();
 
         assertThat(clientVersion()).isNotEqualTo(configVersion());
-        restTemplate.postForObject( "http://10.112.33.0/bus/refresh", null, Object.class);
+        postBusRefresh();
 
-        Thread.sleep(500);
+        Thread.sleep(DEFAULT_TIME);
         assertThat(clientVersion()).isEqualTo(configVersion());
+    }
 
+    @After
+    public void after() {
         clearTempGitRepo();
     }
 
     /**
-     * 客户端使用的git版本一致性测试
+     * 单机客户端使用的git版本一致性测试
      * 启动容器->测试版本一致->git仓库更新版本->测试版本不一致->refresh刷新->测试版本一致->清理环境
      */
     @Test
@@ -83,29 +82,13 @@ public class ClientConfigVersionTests {
         assertThat(clientVersion()).isNotEqualTo(configVersion());
         restTemplate.postForObject( baseUrl + "/refresh", null, Object.class);
 
-        Thread.sleep(200);
+        Thread.sleep(DEFAULT_TIME / 10);
         assertThat(clientVersion()).isEqualTo(configVersion());
-
-        clearTempGitRepo();
-    }
-
-    private void cloneAndHandleGitRepo() {
-        CommandHandler.exec(new String[]{"/bin/sh", "-c", "sh gitrepo_handle.sh"}, BASE_DIR);
-    }
-
-    private void clearTempGitRepo() {
-        CommandHandler.exec(new String[]{"/bin/sh", "-c", "rm -rf config"}, BASE_DIR);
     }
 
     private String clientVersion() {
         Map envMap = restTemplate.getForObject(baseUrl + "env", Map.class);
         return ((Map<String, String>)envMap.get("configService:configClient")).get("config.client.version");
     }
-
-    private String configVersion() {
-        Map configMap = restTemplate.getForObject( "http://10.112.33.0/letv-mas-client/dev/master", Map.class);
-        return (String)configMap.get("version");
-    }
-
 
 }

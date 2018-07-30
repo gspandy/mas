@@ -1,0 +1,125 @@
+spring:
+  application:
+    name: letv-mas-manager
+    dir: /letv/app/mas/manager
+
+server:
+  transport: https
+  port: ${EUREKA_SERVER_PORT:8011}
+  ssl:
+    enabled: true
+    # 开启客户端双向认证，浏览器如需访问需要在服务端引入对应的证书，且jerseyClient存在bad certification issue!!!
+#    client-auth: need
+    # 服务端认证信息(公私钥)的存储文件
+    key-store: classpath:${spring.application.name}-server.jks
+    key-store-password: admin20180605
+    key-store-type: JKS
+    # 含有客户端证书和公钥的存储文件
+    trust-store: classpath:${spring.application.name}-server.jks
+    trust-store-password: admin20180605
+    trust-store-type: JKS
+    key-alias: ${spring.application.name}-server
+
+eureka:
+  environment: ${spring.profiles.active}
+  instance:
+#    hostname: localhost
+#    hostname: ${spring.application.name}-${server.port}
+    # 全网服务实例唯一标识
+    instance-id: ${EUREKA_SERVER_IP:127.0.0.1}:${server.port}
+    # 服务实例的meta数据键值对集合，可由注册中心进行服务实例间传递
+    metadata-map:
+      # [HA-P配置]-当前服务实例的zone
+      zone: ${EUREKA_SERVER_ZONE:tz-1}
+    # 开启ip，默认为false＝》hostname
+    prefer-ip-address: true
+    ip-address: ${EUREKA_SERVER_IP:127.0.0.1}
+    # 关闭非SSL端口，以免冲突
+    non-secure-port-enabled: false
+    # 开启eureka服务端实例安全端口
+    secure-port-enabled: true
+    secure-port: ${server.port}
+    # [服务续约]-心跳检查之服务失效时间，默认为90s，这个配置一般为lease-renewal-interval-in-seconds的三倍！
+    lease-expiration-duration-in-seconds: 30
+    # [服务续约]-服务续约任务调用的间隔时间，默认为30s
+    lease-renewal-interval-in-seconds: 10
+    # [服务监控]-当前实例的服务信息地址
+    status-page-url: https://${EUREKA_SERVER_IP:127.0.0.1}:${server.port}/info
+    # [服务监控]-当前实例的服务健康状态地址
+    health-check-url: https://${EUREKA_SERVER_IP:127.0.0.1}:${server.port}/health
+    home-page-url: https://${EUREKA_SERVER_IP:127.0.0.1}:${server.port}
+  client:
+    # 开启eureka客户端安全端口
+    secure-port-enabled: true
+    # [HA-P配置]-当前服务实例的region
+    region: ${EUREKA_SERVER_REGION:cn-bj}
+    # [HA-P配置]-开启当前服务实例优先发现同zone的注册中心，默认为true
+    prefer-same-zone-eureka: true
+    # [服务注册]-允许当前服务实例注册，默认为true
+    register-with-eureka: true
+    # [服务续约]-允许当前服务实例获取注册信息，默认为true
+    fetch-registry: true
+    # [HA配置]-可用zone内注册中心地址列表
+    service-url:
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+      # [HA配置]-默认zone内注册中心地址列表
+      defaultZone: ${EUREKA_SERVER_LIST:https://${security.user.name}:${security.user.password}@127.0.0.1:8011/eureka}
+    # [服务续约]-当前服务实例更新注册服务缓存清单的更新间隔时间，默认为30s，一般和lease-renewal-interval-in-seconds保持一致！
+    registry-fetch-interval-seconds: 10
+    # [服务监控]-开启健康检查，只能在application.yml中设置！
+    healthcheck:
+      enabled: true
+    # 注册时会try3个注册地址，3 不能改变，均失败后，后台定时会继续注册，retryableClientQuarantineRefreshPercentage源码为0.66，这个是尝试注册的比例。
+    # 调整为1，继续注册时会跳过之前注册失败的地址。
+    # 详见源码RetryableEurekaHttpClient.getHostCandidates
+    transport:
+      retryable-client-quarantine-refresh-percentage: 1
+  server:
+    # 允许自我保护模式，默认开启，保证注册中心出现网络分区故障时不再删除服务注册表信息
+    enable-self-preservation: true
+    # 检查失效服务的间隔时间，默认为0ms-不删除实例，
+#    eviction-interval-timer-in-ms: 5000
+    # 刷新readCacheMap的时间，默认为0ms-不缓存，client读取的是readCacheMap，这个时间决定多久会把readWriteCacheMap的缓存更新到readCacheMap中
+    #response-cache-update-interval-ms: 3000
+#    缓存readWriteCacheMap失效时间，默认为180s，这个只有在这个时间过去后缓存才会失效，失效前不会更新，过期后从registry重新读取注册服务信息，registry为ConcurrentHashMap
+    # 如启用了eviction，可忽略这个配置
+#    response-cache-auto-expiration-in-seconds: 90
+
+info:
+  app:
+    name: "@project.artifactId@"
+    encoding: '@project.build.sourceEncoding@'
+    java:
+      source: '@java.version@'
+      target: '@java.version@'
+
+security:
+  # 要求SSL安全认证
+  require-ssl: true
+  basic:
+    # 启用基本身份认证
+    enabled: true
+  user:
+    name: letvMasManager
+    password: admin20180605
+    role: USER
+
+management:
+  # 管理端点路径，默认为/
+#  context-path: /admin
+#  server:
+    # 管理端口，默认为服务HTTP端口
+#    port: ${server.port}
+  security:
+    enabled: true
+#    role: TODO
+
+endpoints:
+  refresh:
+    enabled: true
+    # 安全验证
+    sensitive: false
+  shutdown:
+    enabled: true
+    # 安全验证
+    sensitive: false

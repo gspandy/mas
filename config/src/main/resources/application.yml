@@ -1,0 +1,52 @@
+server:
+  port: ${CONFIG_SERVER_PORT:8021}
+
+spring:
+  application:
+    name: letv-mas-config
+    # 配置了该项，访问/bus/refresh?destination=应用名:spring.application.index，如果未指定spring.application.index默认使用「应用名:server.port」
+    index: ${CONFIG_SERVER_IP:127.0.0.1}
+  cloud:
+    config:
+      server:
+        git:
+          # 基于http协议的单仓库，每一个应用创建一个目录，每个目录下创建配置文件
+          uri: ${GIT_URI:http://legitlab.letv.cn/letv-tv-mas/config.git}
+          search-paths: '{application}'
+          # 配置的Git仓库基于http协议的，必须配置用户名和密码
+          username: ${GIT_USERNAME:config_server}
+          password: ${GIT_PASSWORD:letv.0606}
+          # 本地仓库目录设定
+          basedir: /letv/app/mas/config/repos
+          # 本地仓库如果有脏数据，则会强制拉取（默认是false）
+          force-pull: true
+          # 配置中心启动后从Git仓库下载，如果uri配置中使用了{application}作为仓库名，这里要使用默认值false，否则启动报错.
+          clone-on-start: false
+
+management:
+  security:
+    enabled: false
+
+# 用户认证，客户端应用接入时加入安全认证配置
+security:
+  user:
+    name: config
+    password: config2018
+  basic:
+    enabled: true
+
+logging:
+  level:
+    root: info
+    org.springframework.cloud: info
+    org.springframework.boot: info
+  # Docker启动时建议将/letv/mas/config挂载到宿主机对应目录.
+  file: /letv/logs/mas/config/${spring.application.name}-${CONFIG_SERVER_PORT:${server.port}}.log
+
+info:
+  app:
+    name: "@project.artifactId@"
+    encoding: '@project.build.sourceEncoding@'
+    java:
+      source: '@java.version@'
+      target: '@java.version@'

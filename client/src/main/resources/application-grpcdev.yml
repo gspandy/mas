@@ -1,0 +1,5 @@
+grpc:
+  server:
+    enable: true
+    address: ${CLIENT_SERVER_IP:127.0.0.1}
+    port: ${CLIENT_SERVER_GRPC_PORT:8911}

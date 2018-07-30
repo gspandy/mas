@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          zk-nodes: ${ZK_NODES:zk2101i.test.db.lecloud.com:2101/kafka/kafka9101}
+          brokers: ${KAFKA_BROKERS:k9101i.test.db.lecloud.com:9101}
+          requiredAcks: -1
+          configuration:
+            security:
+              protocol: SASL_PLAINTEXT
+            sasl:
+              mechanism: PLAIN
+          jaas:
+            loginModule: org.apache.kafka.common.security.plain.PlainLoginModule
+            options:
+              username: tvvideo
+              password: tvvideo-secret
+    # 开启跟踪事件消息（默认是false）
+    bus:
+      trace:
+        enabled: true
+      # 自定义topic主题
+      destination: tvvideo.springcloud.config

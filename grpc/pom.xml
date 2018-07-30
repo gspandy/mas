@@ -60,11 +60,46 @@
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <showWarnings>true</showWarnings>
                     <!-- 跳过配置中环境变量定义引起的编译问题 -->
-                    <!--<skip>true</skip>-->
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>levp-release</id>
+            <name>Levp Release</name>
+            <url>http://maven.letv.cn/nexus/content/repositories/levp-release/</url>
+        </repository>
+        <repository>
+            <id>letv</id>
+            <name>Letv Public</name>
+            <url>http://maven.letv.cn/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>letv</id>
+            <name>Letv Public</name>
+            <url>http://maven.letv.cn/nexus/content/groups/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+        <repository>
+            <id>levp-release</id>
+            <name>levp Release</name>
+            <url>http://maven.letv.cn/nexus/content/repositories/levp-release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>levp-snapshot</id>
+            <name>levp snapshot</name>
+            <url>http://maven.letv.cn/nexus/content/repositories/levp-snapshot/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

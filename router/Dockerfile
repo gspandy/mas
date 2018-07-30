@@ -31,7 +31,6 @@ MAINTAINER dengliwei dengliwei@le.com
 RUN mkdir -p /letv/app/mas/router
 # create the dir linking with external volume!!!
 RUN mkdir -p /letv/logs/mas/router
-COPY ./target/router-1.0-SNAPSHOT.jar /letv/app/mas/router/
 
 # create the dir linking with external volume
 VOLUME ["/letv/app/mas/router", "/letv/logs/mas/router"]
@@ -44,7 +43,10 @@ ENV CONFIG_SERVER_URL=http://127.0.0.1:8021/
 ENV ROUTER_SERVER_IP=127.0.0.1
 ENV ROUTER_SERVER_PORT=8101
 ENV EUREKA_SERVER_LIST=http://localhost:8010/eureka/
+ENV JAVA_OPTS=
 
 # Set the default command to execute
 # when creating a new container
-CMD [ "/bin/bash", "-c", "java -jar /letv/app/mas/router/router-1.0-SNAPSHOT.jar" ]
+CMD [ "/bin/bash", "-c", "java $JAVA_OPTS -jar /letv/app/mas/router-1.0-SNAPSHOT.jar" ]
+
+COPY ./target/router-1.0-SNAPSHOT.jar /letv/app/mas/

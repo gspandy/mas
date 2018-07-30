@@ -1,0 +1,21 @@
+# Note: kafka&zk&eureka.. 相关配置放到了GIT仓库application-{profile}.yml中
+spring:
+  cloud:
+    config:
+      # boostrap.yml配置优先于启动参数变量--spring.profiles.active
+      profile: ${spring.profiles.active:${CLIENT_PROFILE:prod}}
+      label: master
+      # 访问配置中心，用户安全认证
+      username: config
+      password: config2018
+      # 通过Eureka注册中心获取配置
+      discovery:
+        service-id: ${CLIENT_SERVICE_ID:letv-mas-config}
+        # 默认是false
+        enabled: true
+
+# eureka用于发现配置中心
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_LIST:http://letvMasManager:admin20180605@10.112.34.124:8015/eureka,http://letvMasManager:admin20180605@10.112.34.127:8015/eureka,http://letvMasManager:admin20180605@10.129.29.86:8015/eureka,http://letvMasManager:admin20180605@10.129.29.90:8015/eureka}

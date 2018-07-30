@@ -1,0 +1,97 @@
+hystrix:
+  command:
+#    default:
+#      circuitBreaker:
+#        requestVolumeThreshold: '20'
+#        sleepWindowInMilliseconds: '5000'
+#        errorThresholdPercentage: '50'
+#      metrics:
+#        rollingStats:
+#          timeInMilliseconds: '10000'
+#          numBuckets: '10'
+#        rollingPercentile:
+#          enabled: 'false'
+#          timeInMilliseconds: '60000'
+#          numBuckets: '6'
+#          bucketSize: '100'
+#      execution:
+#        isolation:
+#          strategy:
+#            thread:
+#              timeoutInMilliseconds: '100000'
+#              interruptOnTimeout: 'true'
+    getResWithDelay:
+      circuitBreaker:
+        requestVolumeThreshold: '2'
+        sleepWindowInMilliseconds: '5000'
+        errorThresholdPercentage: '50'
+      metrics:
+        rollingStats:
+          timeInMilliseconds: '10000'
+          numBuckets: '10'
+        rollingPercentile:
+          enabled: 'false'
+          timeInMilliseconds: '10000'
+          numBuckets: '10'
+          bucketSize: '100'
+      execution:
+        isolation:
+          strategy: 'THREAD'
+          thread:
+            timeoutInMilliseconds: '100'
+            interruptOnTimeout: 'true'
+    getResIsoByThread:
+      circuitBreaker:
+        requestVolumeThreshold: '2'
+        sleepWindowInMilliseconds: '5000'
+        errorThresholdPercentage: '50'
+      metrics:
+        rollingStats:
+          timeInMilliseconds: '10000'
+          numBuckets: '10'
+        rollingPercentile:
+          enabled: 'false'
+          timeInMilliseconds: '10000'
+          numBuckets: '10'
+          bucketSize: '100'
+      execution:
+        isolation:
+          strategy: 'THREAD'
+          thread:
+            timeoutInMilliseconds: '100'
+            interruptOnTimeout: 'true'
+    getResIsoBySemaphore:
+      circuitBreaker:
+        requestVolumeThreshold: '2'
+        sleepWindowInMilliseconds: '5000'
+        errorThresholdPercentage: '50'
+      metrics:
+        rollingStats:
+          timeInMilliseconds: '10000'
+          numBuckets: '10'
+        rollingPercentile:
+          enabled: 'false'
+          timeInMilliseconds: '10000'
+          numBuckets: '10'
+          bucketSize: '100'
+      execution:
+        isolation:
+          strategy: 'SEMAPHORE'
+          thread:
+            timeoutInMilliseconds: '100'
+            interruptOnTimeout: 'true'
+  threadpool:
+    getResWithDelay:
+      coreSize: '50'
+
+spring:
+  cloud:
+    bus:
+      enabled: false
+  sleuth:
+    enabled: false
+  zipkin:
+    enabled: false
+eureka:
+  client:
+    enabled: false

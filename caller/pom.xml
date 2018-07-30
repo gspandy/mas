@@ -30,6 +30,7 @@
         <!-- 插件版本 -->
         <org.slf4j>1.6.6</org.slf4j>
         <log4j>1.2.17</log4j>
+        <fastjson>1.2.47</fastjson>
         <grpc.stater.version>1.0-SNAPSHOT</grpc.stater.version>
     </properties>
 
@@ -52,6 +53,11 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-kafka</artifactId>
         </dependency>
 
         <dependency>
@@ -123,6 +129,19 @@
             <version>21.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.letv.mas</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <!--<scope>system</scope>-->
+            <!--<systemPath>${project.basedir}/../common/target/common-1.0-SNAPSHOT.jar</systemPath>-->
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -179,6 +198,27 @@
             <url>https://repo.spring.io/libs-milestone</url>
             <snapshots>
                 <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>levp-release</id>
+            <name>Levp Release</name>
+            <url>http://maven.letv.cn/nexus/content/repositories/levp-release/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>levp-snapshot</id>
+            <name>levp snapshot</name>
+            <url>http://maven.letv.cn/nexus/content/repositories/levp-snapshot/</url>
+            <snapshots>
+                <enabled>true</enabled>
             </snapshots>
         </repository>
     </repositories>

@@ -3,11 +3,12 @@
 
 # load envionment variables
 source /etc/profile
-docker_hub_local=false
+docker_hub_local=true
 docker_hub_host="reg-sre.lecloud.com"
 docker_hub_path="/test_image/"
 docker_hub_username="letv_monitor"
-docker_hub_password=""
+docker_hub_password="!@s20180509"
+app_base_path=/letv/app/mas
 log_base_path=/letv/logs/mas
 
 # current directory
@@ -85,7 +86,8 @@ while true; do
 done
 
 echo "init host FS ..."
-mkdir -p /$log_base_path/$app
+mkdir -p $log_base_path/$app
+mkdir -p $app_base_path/$app
 
 if [ "$docker_hub_local" == "false" ]; then
     echo "get the remote $app..."

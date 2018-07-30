@@ -31,7 +31,6 @@ MAINTAINER dengliwei dengliwei@le.com
 RUN mkdir -p /letv/app/mas/config
 # create the dir linking with external volume!!!
 RUN mkdir -p /letv/logs/mas/config
-COPY ./target/config-1.0-SNAPSHOT.jar /letv/app/mas/config/
 
 # create the dir linking with external volume
 VOLUME ["/letv/app/mas/config", "/letv/logs/mas/config"]
@@ -39,10 +38,12 @@ VOLUME ["/letv/app/mas/config", "/letv/logs/mas/config"]
 WORKDIR /letv/app/mas/config
 
 # set environmental vars
-ENV CONFIG_SERVER_IP=127.0.0.1
-ENV CONFIG_SERVER_PORT=8021
-ENV EUREKA_SERVER_LIST=http://localhost:8010/eureka/
+#ENV CONFIG_SERVER_IP=127.0.0.1
+#ENV CONFIG_SERVER_PORT=8021
+#ENV EUREKA_SERVER_LIST=http://localhost:8010/eureka/
 
 # Set the default command to execute
 # when creating a new container
-CMD [ "/bin/bash", "-c", "java -jar /letv/app/mas/config/config-1.0-SNAPSHOT.jar" ]
+CMD [ "/bin/bash", "-c", "java -jar /letv/app/mas/config-1.0-SNAPSHOT.jar" ]
+
+COPY ./target/config-1.0-SNAPSHOT.jar /letv/app/mas/

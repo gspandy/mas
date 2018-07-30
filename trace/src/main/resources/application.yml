@@ -1,21 +1,3 @@
-eureka:
-  instance:
-    prefer-ip-address: true
-    ip-address: ${TRACE_SERVER_IP}
-    instance-id: ${spring.application.name}:${server.port}
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 2
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_SERVER_LIST}
-    healthcheck:
-      enabled: true
-
-server:
-  port: ${TRACE_SERVER_PORT}
-spring:
-  application:
-    name: letv-mas-trace
 info:
   app:
     name: "@project.artifactId@"

@@ -31,7 +31,6 @@ MAINTAINER dengliwei dengliwei@le.com
 RUN mkdir -p /letv/app/mas/client
 # create the dir linking with external volume!!!
 RUN mkdir -p /letv/logs/mas/client
-COPY ./target/client-1.0-SNAPSHOT.jar /letv/app/mas/client/
 
 # create the dir linking with external volume
 VOLUME ["/letv/app/mas/client", "/letv/logs/mas/client"]
@@ -39,11 +38,14 @@ VOLUME ["/letv/app/mas/client", "/letv/logs/mas/client"]
 WORKDIR /letv/app/mas/client
 
 # set environmental vars
-ENV TRACE_SERVER_URL=http://localhost:9001
-ENV CLIENT_SERVER_IP=127.0.0.1
-ENV CLIENT_SERVER_PORT=8901
-ENV EUREKA_SERVER_LIST=http:/localhost:8010/eureka/
+#ENV TRACE_SERVER_URL=http://localhost:9001
+#ENV CLIENT_SERVER_IP=127.0.0.1
+#ENV CLIENT_SERVER_PORT=8901
+#ENV EUREKA_SERVER_LIST=http:/localhost:8010/eureka/
+ENV JAVA_OPTS=
 
 # Set the default command to execute
 # when creating a new container
-CMD [ "/bin/bash", "-c", "java -jar /letv/app/mas/client/client-1.0-SNAPSHOT.jar" ]
+CMD [ "/bin/bash", "-c", "java $JAVA_OPTS -jar /letv/app/mas/client-1.0-SNAPSHOT.jar" ]
+
+COPY ./target/client-1.0-SNAPSHOT.jar /letv/app/mas/

@@ -1,0 +1,27 @@
+# Host Database
+#
+# localhost is used to configure the loopback interface
+# when the system is booting.  Do not change this entry.
+##
+127.0.0.1 localhost macbook-pro david-MacPro.local
+255.255.255.255	broadcasthost
+#::1             localhost 
+
+220.181.117.225 letv.rizhiyi.com
+
+#10.176.28.179 ibuy.letv.com ibuy.le.com
+#10.185.92.144 yuanxian.letv.com
+
+#10.135.28.132 ipay.letv.com ipay.le.com
+#10.112.34.196 js.letvcdn.com
+#10.112.34.196 css.letvcdn.com
+
+#123.59.125.141 ipay.le.com ipay.letv.com
+#10.58.95.10 ipay.letv.com ipay.le.com
+
+#10.176.28.179 ibuy.le.com
+#123.59.125.142 ipay.le.com ipay.letv.com
+#123.59.125.141 ipay.le.com ipay.letv.com
+#10.135.28.132 ipay.letv.com ipay.le.com
+10.1.1.1 legitlab.letv.cn
+10.1.1.1 legitlab.letv.cn

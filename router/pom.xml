@@ -15,54 +15,79 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.10.RELEASE</version>
+        <version>1.5.13.RELEASE</version>
         <relativePath/>
     </parent>
 
     <properties>
-        <!-- 源文件编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Maven版本 -->
-        <maven-compiler-plugin>2.5.1</maven-compiler-plugin>
-        <!-- JDK版本 -->
+        <maven.compiler.plugin>2.5.1</maven.compiler.plugin>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <!-- 插件版本 -->
         <org.slf4j>1.6.6</org.slf4j>
         <log4j>1.2.17</log4j>
+        <fastjson>1.2.47</fastjson>
+        <mas.common>1.0-SNAPSHOT</mas.common>
+        <spring.cloud>Edgware.SR3</spring.cloud>
+        <spring.boot>1.5.13.RELEASE</spring.boot>
     </properties>
 
     <dependencies>
         <dependency>
+            <groupId>com.letv.mas</groupId>
+            <artifactId>common</artifactId>
+            <version>${mas.common}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zuul</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-kafka</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!--sleuth & zipkin-->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-zipkin</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -83,28 +108,24 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin}</version>
+                <version>${maven.compiler.plugin}</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
-                    <!-- 跳过配置中环境变量定义引起的编译问题 -->
+                    <showWarnings>true</showWarnings>
                     <skip>true</skip>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.5.10.RELEASE</version>
+                <version>${spring.boot}</version>
                 <configuration>
-                    <!-- 可以把依赖的包都打包到生成的Jar包中 -->
                     <mainClass>com.letv.mas.router.ServiceZuulApplication</mainClass>
-                    <layout>ZIP</layout>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
-                            <!-- 把依赖的包都打包到生成的Jar包中 -->
                             <goal>repackage</goal>
                         </goals>
                     </execution>
@@ -115,12 +136,22 @@
 
     <repositories>
         <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/libs-milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <id>levp-release</id>
+            <name>Levp Release</name>
+            <url>http://maven.letv.cn/nexus/content/repositories/levp-release/</url>
+        </repository>
+        <repository>
+            <id>letv</id>
+            <name>Letv Public</name>
+            <url>http://maven.letv.cn/nexus/content/groups/public/</url>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>letv</id>
+            <name>Letv Public</name>
+            <url>http://maven.letv.cn/nexus/content/groups/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>

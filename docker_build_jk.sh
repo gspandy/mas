@@ -32,6 +32,8 @@ for arg in "$@"; do
       limited_nodes=$value;;
     --remote_deploy_script)
       remote_deploy_script=$value;;
+    --remote_deploy_script_opts)
+      remote_deploy_script_opts=$value;;
     --remote_deploy_script_dir)
       remote_deploy_script_dir=$value;;
     --help)
@@ -46,11 +48,70 @@ for arg in "$@"; do
       echo "--node_group="
       echo "--limited_nodes= this will clean the variable --node_group"
       echo "--remote_deploy_script="
+      echo "--remote_deploy_script_opts="
       echo "--remote_deploy_script_dir="
       echo "--help"
       exit 0;;
   esac
 done
+
+function exec_script() {
+  node=$1
+  if [ -n "$node" ]; then
+    #case1  region:zone:ip:port
+    #case2 ip:port
+    node_region=""
+    node_zone=""
+    node_ip=""
+    node_port=$webserver_port
+    node_jmx_port=""
+    arr=(${node//:/ });
+    arr_len=${#arr[@]}
+
+    #echo $arr_len
+    #for i in ${arr[@]}
+    #do
+    #  echo $i
+    #done
+
+    if [ $arr_len == 1 ]; then
+      node_ip=${arr[0]}
+    elif [ $arr_len == 2 ]; then
+      node_ip=${arr[0]}
+      node_port=${arr[1]}
+    elif [ $arr_len == 4 ]; then
+      node_region=${arr[0]}
+      node_zone=${arr[1]}
+      node_ip=${arr[2]}
+      node_port=${arr[3]}
+    elif [ $arr_len == 5 ]; then
+      node_region=${arr[0]}
+      node_zone=${arr[1]}
+      node_ip=${arr[2]}
+      node_port=${arr[3]}
+      node_jmx_port=${arr[4]}
+    else
+      return
+    fi
+
+    echo "node_region=${node_region},node_zone=${node_zone},node_ip=${node_ip},node_port=${node_port},node_jmx_port=${node_jmx_port}"
+
+    if [ "$node_ip" == "127.0.0.1" ]; then
+      echo "[DEPLOY] begin to install on the node $node..."
+      sh $remote_deploy_script
+    else
+      echo "[DEPLOY] scp package file $package_file to the node $node..."
+      ssh leworker@$node_ip "[ -d ${remote_deploy_script_dir} ] && echo done || mkdir -p ${remote_deploy_script_dir}"
+      scp -r $cur_dir/$package_name leworker@$node_ip:$remote_deploy_script_dir
+      echo "[DEPLOY] begin to install on the node $node...$remote_deploy_script"
+      if [ -z "$remote_deploy_script_opts" ]; then
+        ssh leworker@$node_ip "chmod -R a+x ${remote_deploy_script};sh ${remote_deploy_script} --module=${project_name} --port=${node_port} --profile=${project_profile} --zone=${node_zone} --region=${node_region} --jmxport=${node_jmx_port}"
+      else
+        ssh leworker@$node_ip "chmod -R a+x ${remote_deploy_script};sh ${remote_deploy_script} ${remote_deploy_script_opts}"
+      fi
+    fi
+  fi
+}
 
 # verify parameters
 if [ -z "$package_file" ] && [ -z "$node_group" ] && [ -z "$limited_nodes" ]; then
@@ -89,39 +150,34 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "[DEPLOY] begin to build the package file $package_file..."
-package_dockerfile="${cur_dir}/${package_name}/Dockerfile"
+if [ -z "$project_path" ]; then
+  project_path="${package_name}"
+fi
+package_dockerfile="${cur_dir}/${package_name}/${project_path}/Dockerfile"
 if [ -f "$package_dockerfile" ]; then
+  docker images | grep '<none>' | awk '{print $3 }' | xargs docker rmi;
   sh $cur_dir/$package_name/docker_build.sh $project_name
   find $cur_dir/$package_name -name "*.jar" | xargs rm -rf
+else
+  exit 2
 fi
 
 echo "[DEPLOY] begin to deploy the package file $package_file to the nodes $limited_nodes..."
 if [ -z "$remote_deploy_script_dir" ]; then
   remote_deploy_script_dir="/letv/deploy/docker"
 fi
-if [ -z "$project_path" ]; then
-  project_path="${package_name}"
-fi
-
 if [ -z "$remote_deploy_script" ]; then
-  remote_deploy_script="docker_deploy_m.sh"
+  remote_deploy_script="docker_deploy_ha_m.sh"
 fi
-remote_deploy_script="${remote_deploy_script_dir}/${remote_deploy_script}"
+if [ -z "$remote_deploy_script_opts" ]; then
+  remote_deploy_script_opts=""
+fi
+remote_deploy_script="${remote_deploy_script_dir}/${package_name}/${remote_deploy_script}"
 for node in $limited_nodes; do
-  if [ "$node" == "127.0.0.1" ]; then
-    echo "[DEPLOY] begin to install on the node $node..."
-    sh $remote_deploy_script
-  else
-    echo "[DEPLOY] scp package file $package_file to the node $node..."
-    ssh leworker@$node "[ -d ${remote_deploy_script_dir} ] && echo done || mkdir -p ${remote_deploy_script_dir}"
-    scp $cur_dir/$package_name leworker@$node:$remote_deploy_script_dir
-    echo "[DEPLOY] begin to install on the node $node...$remote_deploy_script"
-    ssh leworker@$node "chmod -R a+x ${remote_deploy_script};sh ${remote_deploy_script} ${project_name} ${webserver_port} ${project_profile}"
-  fi
+  exec_script $node
   if [ $? -ne 0 ]; then
     exit 1
   fi
 done
 
-docker images | grep '<none>' | awk '{print $3 }' | xargs docker rmi;
 echo "[DEPLOY] all the nodes are completely deployed"

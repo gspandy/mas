@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: 'letv-mas-router'
+  profiles:
+    active: ${CLIENT_PROFILE:prod}
+  cloud:
+    config:
+      enabled: 'true'
+      profile: ${spring.profiles.active}
+      label: 'master'
+      username: 'config'
+      password: 'config2018'
+      discovery:
+        service-id: 'letv-mas-config'
+        enabled: true
+      watcher:
+        enabled: 'true'
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_LIST}
+
+info:
+  app:
+    name: '@project.artifactId@'
+    encoding: '@project.build.sourceEncoding@'
+    java:
+      source: '@java.version@'
+      target: '@java.version@'

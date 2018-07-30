@@ -20,6 +20,7 @@ import io.netty.channel.Channel;
 @Configuration
 @EnableConfigurationProperties
 @ConditionalOnClass({Server.class, GrpcServerFactory.class})
+@ConditionalOnProperty(value = "grpc.server.enabled", havingValue = "true", matchIfMissing = false)
 public class GrpcServerAutoConfiguration {
 
     @ConditionalOnMissingBean
@@ -64,7 +65,7 @@ public class GrpcServerAutoConfiguration {
     }
 
     @Configuration
-    @ConditionalOnProperty(value = "spring.sleuth.scheduled.enabled", matchIfMissing = true)
+    @ConditionalOnProperty(value = "spring.sleuth.enabled", havingValue = "true", matchIfMissing = false)
     @ConditionalOnClass(Tracer.class)
     protected static class TraceServerAutoConfiguration {
 

@@ -15,4 +15,8 @@ if [ -z "$cmd" ]; then
     cmd="package"
 fi
 
-mvn -B -f $module/pom.xml clean $cmd
+mvn -B -e -f $module/pom.xml clean $cmd
+#mvn -B -e -U -f $module/pom.xml clean $cmd
+
+#mvn -B -f common/pom.xml clean deploy
+#mvn -B -f grpc/pom.xml clean deploy

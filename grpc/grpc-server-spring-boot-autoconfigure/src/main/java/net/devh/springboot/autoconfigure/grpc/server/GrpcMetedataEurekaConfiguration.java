@@ -4,6 +4,7 @@ import com.netflix.appinfo.EurekaInstanceConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +18,7 @@ import javax.annotation.PostConstruct;
 @Configuration
 @EnableConfigurationProperties
 @ConditionalOnBean(EurekaInstanceConfig.class)
+@ConditionalOnProperty(value = "grpc.server.enabled", havingValue = "true", matchIfMissing = false)
 public class GrpcMetedataEurekaConfiguration {
 
     @Autowired

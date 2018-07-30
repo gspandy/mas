@@ -1,0 +1,181 @@
+spring:
+  cloud:
+    stream:
+      # 自定义开关
+      enabled: true
+      # 消费者实例数量，当使用kafka时可设置，默认为1
+#      instance-count: 2
+      # 消费者实例索引，从0开始，最大值为-1，当使用kafka和分区实例时使用
+#      instance-index: 0
+      kafka:
+        binder:
+          # brokers列表
+          brokers: ${KAFKA_BROKERS:k9101i.test.db.lecloud.com:9101}
+          # zookeeper列表
+          zk-nodes: ${ZK_NODES:zk2101i.test.db.lecloud.com:2101/kafka/kafka9101}
+          configuration:
+            security:
+              protocol: SASL_PLAINTEXT
+            sasl:
+              mechanism: PLAIN
+          jaas:
+            loginModule: org.apache.kafka.common.security.plain.PlainLoginModule
+            options:
+              username: tvvideo
+              password: tvvideo-secret
+          # 生产者确认，0、1、-1，默认为1。
+          # 0为不确认，1为leader单确认，-1为同步副本确认。-1的情况下消息可靠性更高。
+          required-acks: -1
+          # 是否自动创建topic，默认为true。
+          # 设为false的情况下，依赖手动配置broker相关topic配置，如果topic不存在binder则无法启动。
+          auto-create-topics: true
+          # autoCreateTopics=true时生效，ISR同步副本数量，数值越高消息可靠性越高。
+          replication-factor: 2
+          # 当需要的时候是否自动创建分区，默认false。
+          # 当配置为false时，如果topic期望的分区数量大于topic配置的数量时，binder无法启动。
+          auto-add-partitions: true
+          # 消费者所需socket缓冲区大小
+          socket-buffer-size: 2097152
+      # 指定中间件
+      default-binder: kafka
+      # 多种binder配置
+      binders:
+        mas-biz-kafka-test:
+          type: kafka
+          enviroment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      # brokers列表
+                      brokers: ${KAFKA_BROKERS:k9101i.test.db.lecloud.com:9101}
+                      # zookeeper列表
+                      zk-nodes: ${ZK_NODES:zk2101i.test.db.lecloud.com:2101/kafka/kafka9101}
+                      configuration:
+                        security:
+                          protocol: SASL_PLAINTEXT
+                        sasl:
+                          mechanism: PLAIN
+                      jaas:
+                        loginModule: org.apache.kafka.common.security.plain.PlainLoginModule
+                        options:
+                          username: tvvideo
+                          password: tvvideo-secret
+                      # 生产者确认，0、1、-1，默认为1。
+                      # 0为不确认，1为leader单确认，-1为同步副本确认。-1的情况下消息可靠性更高。
+                      required-acks: -1
+                      # 是否自动创建topic，默认为true。
+                      # 设为false的情况下，依赖手动配置broker相关topic配置，如果topic不存在binder则无法启动。
+                      auto-create-topics: true
+                      # autoCreateTopics=true时生效，ISR同步副本数量，数值越高消息可靠性越高。
+                      replication-factor: 2
+                      # 当需要的时候是否自动创建分区，默认false。
+                      # 当配置为false时，如果topic期望的分区数量大于topic配置的数量时，binder无法启动。
+                      auto-add-partitions: true
+                      # 消费者所需socket缓冲区大小
+                      socket-buffer-size: 2097152
+        mas-biz-kafka-prod:
+          type: kafka
+          enviroment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      # brokers列表
+                      brokers: ${KAFKA_BROKERS:k9001i.bjxy.db.lecloud.com:9001}
+                      # zookeeper列表
+                      zk-nodes: ${ZK_NODES:zk2001i.bjxy.db.lecloud.com:2001/kafka/kafka9001}
+                      configuration:
+                        security:
+                          protocol: SASL_PLAINTEXT
+                        sasl:
+                          mechanism: PLAIN
+                      jaas:
+                        loginModule: org.apache.kafka.common.security.plain.PlainLoginModule
+                        options:
+                          username: tvvideo
+                          password: tvvideo-secret
+                      # 生产者确认，0、1、-1，默认为1。
+                      # 0为不确认，1为leader单确认，-1为同步副本确认。-1的情况下消息可靠性更高。
+                      required-acks: -1
+                      # 是否自动创建topic，默认为true。
+                      # 设为false的情况下，依赖手动配置broker相关topic配置，如果topic不存在binder则无法启动。
+                      auto-create-topics: true
+                      # autoCreateTopics=true时生效，ISR同步副本数量，数值越高消息可靠性越高。
+                      replication-factor: 2
+                      # 当需要的时候是否自动创建分区，默认false。
+                      # 当配置为false时，如果topic期望的分区数量大于topic配置的数量时，binder无法启动。
+                      auto-add-partitions: true
+                      # 消费者所需socket缓冲区大小
+                      socket-buffer-size: 2097152
+      bindings:
+        # ［业务广播］发送通道名
+        mas-biz-broadcast-output:
+          # 指定该绑定使用的binder，多个binder时使用
+          binder: mas-biz-kafka-test
+          # 指定的topic
+          destination: mas.biz.broadcast
+          # 设定通道消息数据格式
+#          content-type: application/json
+          producer:
+            # 默认为embededHeaders，来支持头部解析，如不需要可raw来禁用提高效率！
+            header-mode: raw
+            # 生产者批量发送消息缓冲大小，默认16384bytes
+            buffer-size: 16384
+            # 生产者是否是同步发送，默认false
+            sync: false
+            # 生产者发送前等待时间，可以让更多的消息进入缓冲区。
+            # 默认为0，在上一个消息发送的同时进行缓冲。该值可以优化吞吐量，稍微增加延迟。
+            batch-timeout: 0
+            # 数据分区数量
+            partition-count: 2
+            # 数据分区key表达式,根据表达式获取分区key，和partitionKeyExtractorClass任选一个
+#            partition-key-expression: payload.type
+            # 数据分区key生成类
+            partition-keyE-extractor-class: com.letv.mas.client.stream.strategy.PartitionKeyExtractor
+            # 分区选择表达式，和分区选择类都没有配置的情况下，默认分区选择策略为hashCode(key) % partitionCount，其中key为数据分区key
+            # 该配置可以基于分区key，配置相应的表达式
+#            partition-selector-expression: 1 % 1
+            # 配置简单分区选择类，将所有消息发送到同一个分区
+#            partition-selector-class: com.letv.mas.client.stream.strategy.PartitionSelector
+        # ［业务广播］接收通道名
+        mas-biz-broadcast-input:
+          # 指定该绑定使用的binder，多个binder时使用
+          binder: mas-biz-kafka-test
+          # 指定的topic
+          destination: mas.biz.broadcast
+          # 设置接收通道消费组，保证同组内消息只有一个实例接收处理
+          group: mas-biz-group
+          # 设定通道消息数据格式
+#          content-type: application/json
+          consumer:
+            # 默认为embededHeaders，来支持头部解析，如不需要可raw来禁用提高效率！
+            header-mode: raw
+            # 消费组自动平衡，默认开启。开启时，消息会在消费者实例中自动平衡。
+            auto-rebalance-enabled: true
+            # 开启消费分区，开启时，指定从一个分区生产者接收消息
+            partitioned: true
+            # 消费并发度，开启多个消费线程，默认为1
+            concurrency: 1
+            # 是否自动提交offset信息，设置为false的时候需要手动确认信息，kafka binder会将ackmode设置为manual
+            auto-commit-offset: true
+            # 前提auto-commit-offset=true，如果为false表示出错时不自动提交offset，否则忽略错误走自动提交，默认和enable-dlq同值
+            auto-commit-on-error: false
+            # 如果为true，将出错的消息发送到error.<destination>.<group>的主题中去
+            enable-dlq: false
+            # 连接重试时间间隔，默认5000毫秒
+            recovery-interval: 5000
+            # 新消费组起始offset：earliest和latest。
+            start-offset: earliest
+            # 是否重置offset，默认false。重头消费一遍消息时可以配置为true。
+            reset-offset: false
+            # 尝试重新处理入站消息的次数，默认为3次
+            max-attempts: 3
+            # 退避算法初始重试间隔，默认1000毫秒
+            back-off-initial-interval: 1000
+            # 退避算法最大重试间隔，默认10000毫秒
+            back-off-max-interval: 10000
+            # 退避算法重试时间间隔乘数，默认为2.0
+            back-off-multiplier: 2.0

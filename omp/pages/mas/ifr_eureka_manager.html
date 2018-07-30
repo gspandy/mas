@@ -1,0 +1,21 @@
+<aside class="right-side">
+    <!-- Main content -->
+    <section class="content">
+        <iframe src="http://10.129.29.90:8015/" id="iframe-eureka-manager" width="100%" scrolling="auto"
+                frameborder="0" style="border: 0px"/>
+    </section>
+    <!-- /.content -->
+</aside><!-- /.right-side -->
+
+<script type="text/javascript">
+    function changeFrameHeight() {
+        var ifm = document.getElementById("iframe-eureka-manager");
+        ifm.height = document.documentElement.clientHeight - 56;
+    }
+
+    window.onresize = function () {
+        changeFrameHeight();
+    }
+
+    changeFrameHeight();
+</script>s

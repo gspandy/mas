@@ -28,6 +28,8 @@ public class GrpcServerProperties {
      */
     private int maxMessageSize;
 
+    private Boolean enabled = false;
+
     /**
      * Security options for transport security. Defaults to disabled. 
      */

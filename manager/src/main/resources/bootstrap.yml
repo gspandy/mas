@@ -1,50 +1,60 @@
 spring:
   application:
-    name: letv-mas-mananger
+    name: letv-mas-manager
+    index: ${EUREKA_SERVER_IP:127.0.0.1}
   profiles:
-    active: dev
+    active: ${EUREKA_SERVER_PROFILE:dev}
   cloud:
     config:
       #failFast: true #the client will halt with an Exception
       enabled: false
-#      uri: ${CONFIG_SERVER_URL}
+      uri: ${CONFIG_SERVER_DOMAIN:http://config.mas.letv.cn/}
       discovery:
         enabled: false #启用发现服务功能
         service-id: letv-mas-config #指定服务名称
       # eg. http://localhost:8021/{name}/{profile}/{label}
-      name: letv-mas-mananger
       label: master
-      profile: dev
+      # 访问配置中心，用户安全认证
+      username: config
+      password: config2018
+      profile: ${spring.profiles.active}
       retry:
         max-attempts: 6 # 配置重试次数，默认为6
         multiplier: 1.1 # 间隔乘数，默认1.1
         initial-interval: 1000 # 初始重试间隔时间，默认1000ms
         max-interval: 2000 # 最大间隔时间，默认2000ms
-
-server:
-  port: ${EUREKA_SERVER_PORT}
-
-eureka:
-  instance:
-#    hostname: localhost
-#    hostname: ${spring.application.name}-${server.port}
-#    hostname: ${EUREKA_SERVER_IP}
-    instance-id: ${spring.application.name}:${server.port}
-    prefer-ip-address: true
-    ip-address: ${EUREKA_SERVER_IP}
-    lease-expiration-duration-in-seconds: 10
-    lease-renewal-interval-in-seconds: 5
-    statusPageUrl: http://${EUREKA_SERVER_IP}:${server.port}/info
-    healthCheckUrl: http://${EUREKA_SERVER_IP}:${server.port}/health
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
-    serviceUrl:
+      # 激活定时任务，当GIT版本发生变更后加载最新配置上下文
+      watcher:
+        enabled: false
+    bus:
+      enabled: false
+# eureka用于发现配置中心
+#eureka:
+  #client:
+    # [HA-P配置]-当前服务实例的region
+    #region: ${EUREKA_SERVER_REGION:cn-bj}
+    # [HA-P配置]-开启当前服务实例优先发现同zone的注册中心，默认为true
+    #prefer-same-zone-eureka: true
+    # [服务注册]-允许当前服务实例注册，默认为true
+    #register-with-eureka: true
+    # [服务续约]-允许当前服务实例获取注册信息，默认为true
+    #fetch-registry: true
+    # [HA配置]-可用zone内注册中心地址列表
+    #service-url:
 #      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
-      defaultZone: ${EUREKA_SERVER_LIST}
-    registry-fetch-interval-seconds: 5
-    healthcheck:
-      enabled: true
-  server:
-    enableSelfPreservation: true
-    eviction-interval-timer-in-ms: 5000
+      # [HA配置]-默认zone内注册中心地址列表
+      #defaultZone: ${EUREKA_SERVER_LIST:http://letvMasManager:admin20180605@10.129.29.90:8015/eureka}
+    # [服务续约]-当前服务实例更新注册服务缓存清单的更新间隔时间，默认为30s，一般和lease-renewal-interval-in-seconds保持一致！
+    #registry-fetch-interval-seconds: 10
+    # [服务监控]-开启健康检查，只能在application.yml中设置！
+    #healthcheck:
+      #enabled: true
+    # 注册时会try3个注册地址，3 不能改变，均失败后，后台定时会继续注册，retryableClientQuarantineRefreshPercentage源码为0.66，这个是尝试注册的比例。
+    # 调整为1，继续注册时会跳过之前注册失败的地址。
+    # 详见源码RetryableEurekaHttpClient.getHostCandidates
+    #transport:
+      #retryable-client-quarantine-refresh-percentage: 1
+    #从config里取eureka-server-lists的定时任务的时间 秒（5*60）
+    #eureka-service-url-poll-interval-seconds: 10（bus发出refrush后会重新new client,非eureka原本机制，springcloud实现）
+    #定时从config取instance的ip hostname lease-expiration-duration-in-seconds lease-renewal-interval-in-seconds 信息的时间秒 默认为30秒，发现不一样时执行注册
+    #instance-info-replication-interval-seconds: 10（bus发出refrush后会重新new client,非eureka原本机制，springcloud实现）

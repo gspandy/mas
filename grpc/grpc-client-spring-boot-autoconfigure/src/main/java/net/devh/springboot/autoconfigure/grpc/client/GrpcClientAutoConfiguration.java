@@ -26,6 +26,7 @@ import io.grpc.util.RoundRobinLoadBalancerFactory;
 @EnableConfigurationProperties
 @ConditionalOnClass({GrpcChannelFactory.class})
 @Slf4j
+@ConditionalOnProperty(value = "grpc.client.enabled", havingValue = "true", matchIfMissing = false)
 public class GrpcClientAutoConfiguration {
 
     @ConditionalOnMissingBean

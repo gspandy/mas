@@ -1,0 +1,125 @@
+spring:
+  application:
+    name: 'letv-mas-router'
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: 'true'
+
+server:
+  port: ${ROUTER_SERVER_PORT}
+
+security:
+  basic:
+    enabled: 'false'
+
+eureka:
+  instance:
+    instance-id: ${ROUTER_SERVER_IP}:${ROUTER_SERVER_PORT}
+    metadata-map:
+      zone: ${ROUTER_SERVER_ZONE}
+    prefer-ip-address: 'true'
+    ip-address: ${ROUTER_SERVER_IP}
+    lease-expiration-duration-in-seconds: '30'
+    lease-renewal-interval-in-seconds: '10'
+    status-page-url: 'http://${ROUTER_SERVER_IP}:${ROUTER_SERVER_PORT}/info'
+    health-check-url: 'http://${ROUTER_SERVER_IP}:${ROUTER_SERVER_PORT}/health'
+  client:
+    region: ${ROUTER_SERVER_REGION}
+    register-with-eureka: 'true'
+    prefer-same-zone-eureka: 'true'
+    fetch-registry: 'true'
+    registry-fetch-interval-seconds: '1'
+    service-url:
+      defaultZone: ${EUREKA_SERVER_LIST}
+    healthcheck:
+      enabled: 'true'
+    transport:
+      retryable-client-quarantine-refresh-percentage: '1'
+
+zuul:
+  host:
+    max-total-connections: '200'
+    max-per-route-connections: '50'
+  ignored-services: '*'
+  ribbon-isolation-strategy: 'THREAD'
+  thread-pool:
+    use-separate-thread-pools: 'true'
+    thread-pool-key-prefix: 'zuul-pool-'
+  routes:
+    r-letv-mas-caller:
+      service-id: 'letv-mas-caller'
+      path: '/letv-mas-caller/**'
+      strip-prefix: 'true'
+      retryable: 'true'
+
+    r-service-provider:
+      service-id: 'service-provider'
+      path: '/service-provider/**'
+      strip-prefix: 'true'
+      retryable: 'true'
+
+ribbon:
+  okhttp:
+    enabled: 'true'
+  ConnectTimeout: '100'
+  ReadTimeout: '100'
+  OkToRetryOnAllOperations: 'true'
+  MaxAutoRetries: '1'
+  MaxAutoRetriesNextServer: '1'
+
+letv-mas-caller:
+  ConnectTimeout: '100'
+  ReadTimeout: '100'
+  NFLoadBalancerRuleClassName: 'com.letv.mas.common.ribbon.MetadataWeightedRule'
+  OkToRetryOnAllOperations: 'true'
+  MaxAutoRetries: '2'
+  MaxAutoRetriesNextServer: '1'
+
+service-provider:
+  ribbon:
+    ConnectTimeout: '100'
+    ReadTimeout: '200'
+    NFLoadBalancerRuleClassName: 'com.letv.mas.common.ribbon.MetadataWeightedRule'
+    OkToRetryOnAllOperations: 'true'
+    MaxAutoRetries: '1'
+    MaxAutoRetriesNextServer: '2'
+
+hystrix:
+  command:
+    service-provider:
+      circuitBreaker:
+        requestVolumeThreshold: '2'
+        sleepWindowInMilliseconds: '5000'
+        errorThresholdPercentage: '50'
+      metrics:
+        rollingStats:
+          timeInMilliseconds: '10000'
+          numBuckets: '10'
+        rollingPercentile:
+          enabled: 'false'
+          timeInMilliseconds: '60000'
+          numBuckets: '6'
+          bucketSize: '100'
+      execution:
+        isolation:
+          strategy:
+            thread:
+              timeoutInMilliseconds: '100000'
+              interruptOnTimeout: 'true'
+  threadpool:
+    zuulservice-provider:
+      coreSize: '50'
+
+logging:
+  level:
+    root: 'info'
+  file: '/letv/logs/mas/router/${spring.application.name}-${eureka.instance.instance-id}.log'
+
+info:
+  app:
+    name: '@project.artifactId@'
+    encoding: '@project.build.sourceEncoding@'
+    java:
+      source: '@java.version@'
+      target: '@java.version@'

@@ -1,0 +1,45 @@
+server:
+  port: ${TRACE_SERVER_PORT:10000}
+  application:
+    name: letv-mas-trace
+#配置kafka
+spring:
+  application:
+    name: letv-mas-trace
+    index: ${TRACE_SERVER_IP:127.0.0.1}
+  profiles:
+    active: ${TRACE_PROFILE:default}
+  sleuth:
+    enabled: false
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_DOMAIN:http://config.mas.letv.cn/}
+      failFast: true #the client will halt with an Exception
+      enabled: true
+      # boostrap.yml配置优先于启动参数变量--spring.profiles.active
+      profile: ${spring.profiles.active:${TRACE_PROFILE:prod}}
+      label: master
+      # 访问配置中心，用户安全认证
+      username: config
+      password: config2018
+      # 激活定时任务，当GIT版本发生变更后加载最新配置上下文
+      watcher:
+        enabled: true
+security:
+  user:
+    name: config
+    password: config2018
+  basic:
+    enabled: false
+# eureka用于发现配置中心
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_LIST:http://letvMasManager:admin20180605@10.112.34.124:8015/eureka,http://letvMasManager:admin20180605@10.112.34.127:8015/eureka,http://letvMasManager:admin20180605@10.129.29.86:8015/eureka,http://letvMasManager:admin20180605@10.129.29.90:8015/eureka}
+management:
+  security:
+    enabled: false
+logging:
+  level:
+    root: 'info'
+  file: /letv/logs/mas/trace/${spring.application.name}-${TRACE_SERVER_PORT:${server.port}}.log

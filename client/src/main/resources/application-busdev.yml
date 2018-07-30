@@ -1,0 +1,5 @@
+spring:
+  cloud:
+    bus:
+      # 是否启用bus
+      enabled: false

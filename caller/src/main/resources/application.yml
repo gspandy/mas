@@ -1,20 +1,3 @@
-eureka:
-  instance:
-    prefer-ip-address: true
-    ip-address: ${CALLER_SERVER_IP}
-    instance-id: ${spring.application.name}:${server.port}
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 2
-    statusPageUrl: http://${CALLER_SERVER_IP}:${server.port}/info
-    healthCheckUrl: http://${CALLER_SERVER_IP}:${server.port}/health
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
-    serviceUrl:
-      defaultZone: ${EUREKA_SERVER_LIST}
-    healthcheck:
-      enabled: true
-
 spring:
   application:
     name: letv-mas-caller
@@ -36,14 +19,52 @@ spring:
 #        initial-interval: 1000 # 初始重试间隔时间，默认1000ms
 #        max-interval: 2000 # 最大间隔时间，默认2000ms
   zipkin:
-    #base-url: http://localhost:9001
-    base-url: ${TRACE_SERVER_URL}
+    base-url: ${TRACE_SERVER_URL:http://127.0.0.1:9001}
   sleuth:
     sampler:
       percentage: 1.0
 
 server:
   port: ${CALLER_SERVER_PORT}
+
+eureka:
+  instance:
+    # 全网服务实例唯一标识
+    instance-id: ${CALLER_SERVER_IP:127.0.0.1}:${server.port}
+    # 服务实例的meta数据键值对集合，可由注册中心进行服务实例间传递
+    metadata-map:
+      # [HA-P配置]-当前服务实例的zone
+      zone: ${EUREKA_SERVER_ZONE:tz-1}
+    # 开启ip，默认为false＝》hostname
+    prefer-ip-address: true
+    ip-address: ${CALLER_SERVER_IP:127.0.0.1}
+    # [服务续约]-心跳检查之服务失效时间，默认为90s，这个配置一般为lease-renewal-interval-in-seconds的三倍！
+    lease-expiration-duration-in-seconds: 30
+    # [服务续约]-服务续约任务调用的间隔时间，默认为30s
+    lease-renewal-interval-in-seconds: 10
+    # [服务监控]-当前实例的服务信息地址
+    status-page-url: http://${CALLER_SERVER_IP:127.0.0.1}:${server.port}/info
+    # [服务监控]-当前实例的服务健康状态地址
+    health-check-url: http://${CALLER_SERVER_IP:127.0.0.1}:${server.port}/health
+  client:
+    # [HA-P配置]-当前服务实例的region
+    region: ${EUREKA_SERVER_REGION:cn-bj}
+    # [HA-P配置]-开启当前服务实例优先发现同zone的注册中心，默认为true
+    prefer-same-zone-eureka: true
+    # [服务注册]-允许当前服务实例注册，默认为true
+    register-with-eureka: true
+    # [服务续约]-允许当前服务实例获取注册信息，默认为true
+    fetch-registry: true
+    # [HA配置]-可用zone内注册中心地址列表
+    service-url:
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+      # [HA配置]-默认zone内注册中心地址列表
+      defaultZone: ${EUREKA_SERVER_LIST:http://127.0.0.1:8011/eureka}
+    # [服务续约]-当前服务实例更新注册服务缓存清单的更新间隔时间，默认为30s，一般和lease-renewal-interval-in-seconds保持一致！
+    registry-fetch-interval-seconds: 10
+    # [服务监控]-开启健康检查，只能在application.yml中设置！
+    healthcheck:
+      enabled: true
 
 info:
   app:
@@ -55,8 +76,10 @@ info:
 
 logging:
   level:
-    com.netflix.discovery: 'OFF'
-    org.springframework.cloud: 'DEBUG'
+    root: info
+    org.apache.kafka: error
+    org.apache.kafka.clients: error
+    org.apache.kafka.common: error
 
 management:
   security:

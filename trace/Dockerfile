@@ -31,18 +31,18 @@ MAINTAINER dengliwei dengliwei@le.com
 RUN mkdir -p /letv/app/mas/trace
 # create the dir linking with external volume!!!
 RUN mkdir -p /letv/logs/mas/trace
-COPY ./target/trace-1.0-SNAPSHOT.jar /letv/app/mas/trace/
 
 # create the dir linking with external volume
 VOLUME ["/letv/app/mas/trace", "/letv/logs/mas/trace"]
-
 WORKDIR /letv/app/mas/trace
 
 # set environmental vars
-ENV TRACE_SERVER_IP=127.0.0.1
-ENV TRACE_SERVER_PORT=9001
-ENV EUREKA_SERVER_LIST=http://localhost:8010/eureka/
+#ENV TRACE_SERVER_IP=127.0.0.1
+#ENV TRACE_SERVER_PORT=9001
+#ENV EUREKA_SERVER_LIST=http://localhost:8010/eureka/
 
 # Set the default command to execute
 # when creating a new container
-CMD [ "/bin/bash", "-c", "java -jar /letv/app/mas/trace/trace-1.0-SNAPSHOT.jar" ]
+CMD [ "/bin/bash", "-c", "java -jar -Djava.security.auth.login.config=/letv/app/mas/kafka_client_jaas.conf /letv/app/mas/trace-1.0-SNAPSHOT.jar" ]
+COPY ./target/trace-1.0-SNAPSHOT.jar /letv/app/mas/
+ADD http://j.itv.letv.cn/kafka_client_jaas.conf /letv/app/mas/

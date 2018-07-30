@@ -1,0 +1,7 @@
+# encrypt 必须配置在bootstrap.yml文件中
+encrypt:
+  key: encrypt2018
+
+spring:
+  profiles:
+    active: ${CONFIG_PROFILE:dev}

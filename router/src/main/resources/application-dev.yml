@@ -1,0 +1,175 @@
+spring:
+  application:
+    name: 'letv-mas-router'
+    index: ${ROUTER_SERVER_REGION}:${ROUTER_SERVER_ZONE}:${ROUTER_SERVER_IP}:${ROUTER_SERVER_PORT}
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: 'true'
+    stream:
+      binders:
+        binderkafka1:
+          type: kafka
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      zkNodes: ${ZK_NODES}
+                      brokers: ${KAFKA_BROKERS}
+                      requiredAcks: -1
+                      autoCreateTopics: true
+                      autoAddPartitions: true
+                      socketBufferSize: 2097152
+                      configuration:
+                        security:
+                          protocol: SASL_PLAINTEXT
+                        sasl:
+                          mechanism: PLAIN
+                      jaas:
+                        loginModule: org.apache.kafka.common.security.plain.PlainLoginModule
+                        options:
+                          username: tvvideo
+                          password: tvvideo-secret
+    bus:
+      enabled: true
+      destination: tvvideo.springcloud.config
+      trace:
+        enabled: false
+      refresh:
+        enabled: true
+      env:
+        enabled: true
+  zipkin:
+    kafka:
+      topic: 'tvvideo.springcloud.trace'
+    sender:
+      type: 'kafka'
+  sleuth:
+    enabled: 'true'
+    sampler:
+      percentage: 1.0
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKERS}
+    producer:
+      bootstrap-servers: ${KAFKA_BROKERS}
+      retries: '1'
+    client-id: 'localhost'
+    properties:
+      security.protocol: SASL_PLAINTEXT
+      sasl.mechanism: PLAIN
+
+server:
+  port: ${ROUTER_SERVER_PORT}
+
+security:
+  basic:
+    enabled: 'false'
+
+eureka:
+  instance:
+    instance-id: ${ROUTER_SERVER_IP}:${ROUTER_SERVER_PORT}
+    metadata-map:
+      zone: ${ROUTER_SERVER_ZONE}
+    prefer-ip-address: 'true'
+    ip-address: ${ROUTER_SERVER_IP}
+    lease-expiration-duration-in-seconds: '30'
+    lease-renewal-interval-in-seconds: '10'
+    status-page-url: 'http://${ROUTER_SERVER_IP}:${ROUTER_SERVER_PORT}/info'
+    health-check-url: 'http://${ROUTER_SERVER_IP}:${ROUTER_SERVER_PORT}/health'
+  client:
+    region: ${ROUTER_SERVER_REGION}
+    register-with-eureka: 'true'
+    prefer-same-zone-eureka: 'true'
+    fetch-registry: 'true'
+    registry-fetch-interval-seconds: '1'
+    service-url:
+      defaultZone: ${EUREKA_SERVER_LIST}
+    healthcheck:
+      enabled: 'true'
+    transport:
+      retryable-client-quarantine-refresh-percentage: '1'
+
+zuul:
+  debug:
+    request: 'true'
+  host:
+    max-total-connections: '200'
+    max-per-route-connections: '50'
+  ignored-services: '*'
+  ribbon-isolation-strategy: 'THREAD'
+  thread-pool:
+    use-separate-thread-pools: 'true'
+    thread-pool-key-prefix: 'zuul-pool-'
+  routes:
+    r-letv-mas-caller:
+      service-id: 'letv-mas-caller'
+      path: '/letv-mas-caller/**'
+      strip-prefix: 'true'
+      retryable: 'true'
+
+    r-letv-mas-client:
+      service-id: 'letv-mas-client'
+      path: '/letv-mas-client/**'
+      strip-prefix: 'true'
+      retryable: 'true'
+
+ribbon:
+  okhttp:
+    enabled: 'true'
+  ConnectTimeout: '100'
+  ReadTimeout: '100'
+  OkToRetryOnAllOperations: 'true'
+  MaxAutoRetries: '1'
+  MaxAutoRetriesNextServer: '1'
+
+letv-mas-caller:
+  ribbon:
+    retryableStatusCodes: ['500','502']
+    ConnectTimeout: '100'
+    ReadTimeout: '200'
+    NFLoadBalancerRuleClassName: 'com.letv.mas.common.ribbon.MetadataWeightedRule'
+    OkToRetryOnAllOperations: 'true'
+    MaxAutoRetries: '2'
+    MaxAutoRetriesNextServer: '1'
+
+letv-mas-client:
+  ribbon:
+    retryableStatusCodes: ['500','502']
+    ConnectTimeout: '100'
+    ReadTimeout: '200'
+    NFLoadBalancerRuleClassName: 'com.letv.mas.common.ribbon.MetadataWeightedRule'
+    OkToRetryOnAllOperations: 'true'
+    MaxAutoRetries: '1'
+    MaxAutoRetriesNextServer: '2'
+
+hystrix:
+  command:
+    service-provider:
+      circuitBreaker:
+        requestVolumeThreshold: '20'
+        sleepWindowInMilliseconds: '5000'
+        errorThresholdPercentage: '50'
+      metrics:
+        rollingStats:
+          timeInMilliseconds: '10000'
+          numBuckets: '10'
+        rollingPercentile:
+          enabled: 'false'
+          timeInMilliseconds: '60000'
+          numBuckets: '6'
+          bucketSize: '100'
+      execution:
+        isolation:
+          strategy:
+            thread:
+              timeoutInMilliseconds: '100000'
+              interruptOnTimeout: 'true'
+  threadpool:
+    zuulservice-provider:
+      coreSize: '50'
+
+logging:
+  level:
+    root: 'info'

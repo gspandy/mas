@@ -1,0 +1,35 @@
+spring:
+  zipkin:
+    enabled: false
+  sleuth:
+    enabled: false
+    scheduled:
+      enabled: false
+  cloud:
+    bus:
+      enabled: false
+info:
+  app:
+    name: "@project.artifactId@"
+    encoding: '@project.build.sourceEncoding@'
+    java:
+      source: '@java.version@'
+      target: '@java.version@'
+
+security:
+  basic:
+    enabled: false
+
+management:
+  security:
+    enabled: false
+
+endpoints:
+  refresh:
+    enabled: false
+    # 安全验证
+    sensitive: false
+  shutdown:
+    enabled: false
+    # 安全验证
+    sensitive: false

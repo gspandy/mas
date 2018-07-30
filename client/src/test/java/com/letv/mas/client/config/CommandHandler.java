@@ -45,8 +45,14 @@ public class CommandHandler {
 
     public static void main(String[] args) throws InterruptedException {
         String baseDir = System.getProperty("user.dir") + "/client/src/test/java/com/letv/mas/client/config/";
-        String[] cmd = new String[]{"/bin/sh", "-c", "rm -rf " + baseDir + "config"};
-        exec(cmd, baseDir);
+//        String[] cmd = new String[]{"/bin/sh", "-c", "sudo sh -c \"echo '10.1.1.1 legitlab.letv.cn' >> /etc/hosts\" "};
+//        exec(cmd);
+//        String[] cmd1 = new String[]{"/bin/sh", "-c","sudo sh -c \"touch /etc/temp\";sudo sh -c \"sed '$ d' /etc/hosts > /etc/temp\";sudo sh -c \"cat /etc/temp > /etc/hosts\""};
+//        exec(cmd1, baseDir);
+
+        String[] cmd1 = new String[]{"/bin/sh", "-c"," ping legitlab.letv.cn -c 3"};
+        String result = exec(cmd1, baseDir);
+        System.out.println(result.contains("Request timeout"));
     }
 
 }
