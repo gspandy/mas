@@ -70,7 +70,14 @@ $(function () {
     $("body").append(demo);
     $("body").append(demo_settings);
 
+    // 侧边栏菜单项选中
     focusItemInNavBar();
+
+    // 内嵌iframe高宽自适应
+    window.onresize = function () {
+        changeIFrameHeight();
+    }
+    changeIFrameHeight();
 });
 
 function change_layout() {
@@ -90,30 +97,34 @@ function focusItemInNavBar() {
     console.log("[mas.focusItemInNavBar]: url=" + url);
     if (url) {// 如果有取到，则进行匹配，否则默认首页（即index所指向的那个）
         var subItem = null;
-        for (var i = 0; i < links.length; i++) {//遍历menu中的链接地址
+        for (var i = 0; i < links.length; i++) {// 遍历menu中的链接地址
             subItem = $(links[i]).children(".treeview-menu");
-            $(links[i]).removeClass("active"); // 父节点去选中
             if (subItem.length > 0) {
-                subItem = subItem.children("li a");
-                console.log(subItem);
-                for (var j = 0; j < subItem.length; j++) {//遍历subItem
-                    if (subItem[j].href.indexOf(url) != -1) {
-                        console.log($(subItem[j]).parent());
-                        $(subItem[j]).parent().addClass("active"); // 当前子节点选中
-                        $(links[i]).addClass("active"); // 当前父节点选中
-                        return false; //break
+                subItem = subItem.children("li");
+                for (var j = 0; j < subItem.length; j++) {// 遍历subItem
+                    $(subItem[j]).removeClass("active"); // 节点去选中
+                    if ($(subItem[j]).children("a:last-child")[0].href &&
+                        $(subItem[j]).children("a:last-child")[0].href.indexOf(url) != -1) {
+                        console.log($(subItem[j]).children("a:last-child")[0].href);
+                        $(subItem[j]).addClass("active").siblings().removeClass('active'); // 当前子节点选中
+                        $(links[i]).addClass("active").siblings().removeClass('active'); // 当前父节点选中
                     }
                 }
             } else {
                 subItem = $(links[i]).children("a").first();
                 if (subItem.length > 0) {
                     if (subItem[0].href.indexOf(url) != -1) {
-                        $(links[i]).addClass("active"); // 当前父节点选中
-                        break;
+                        $(links[i]).addClass("active").siblings().removeClass('active'); // 当前父节点选中
                     }
                 }
             }
         }
         $(".sidebar .treeview").length > 0 && $(".sidebar .treeview").tree();
     }
+}
+
+
+function changeIFrameHeight() {
+    var ifm = document.getElementById("iframe-cross-domain");
+    ifm.height = document.documentElement.clientHeight - 56;
 }

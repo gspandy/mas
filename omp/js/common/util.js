@@ -8,9 +8,9 @@ var utils = {
         if (url.indexOf("http") != 0) {
             var host = window.location.protocol + "//" + window.location.host;
 
-            if (window.location.port) {
-                host += ":" + window.location.port;
-            }
+//            if (window.location.port) {
+//                host += ":" + window.location.port;
+//            }
 
             if (url.indexOf("/") > 0) {
                 url = host + "/" + url;
