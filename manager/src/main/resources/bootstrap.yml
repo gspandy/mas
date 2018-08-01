@@ -3,11 +3,11 @@ spring:
     name: letv-mas-manager
     index: ${EUREKA_SERVER_IP:127.0.0.1}
   profiles:
-    active: ${EUREKA_SERVER_PROFILE:dev}
+    active: ${EUREKA_SERVER_PROFILE:prod}
   cloud:
     config:
       #failFast: true #the client will halt with an Exception
-      enabled: false
+      enabled: true
       uri: ${CONFIG_SERVER_DOMAIN:http://config.mas.letv.cn/}
       discovery:
         enabled: false #启用发现服务功能
@@ -25,9 +25,10 @@ spring:
         max-interval: 2000 # 最大间隔时间，默认2000ms
       # 激活定时任务，当GIT版本发生变更后加载最新配置上下文
       watcher:
-        enabled: false
-    bus:
-      enabled: false
+        enabled: true
+eureka:
+  dashboard:
+    path: '/oldDashboard'
 # eureka用于发现配置中心
 #eureka:
   #client:

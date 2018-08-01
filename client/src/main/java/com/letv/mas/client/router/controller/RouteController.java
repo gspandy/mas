@@ -49,11 +49,21 @@ public class RouteController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/endpoint/resource")
-    public ResponseEntity<String> getResourceWithFixedDelay(@RequestParam(value = "fixed_delay_ms", required = false, defaultValue = "0") long fixed_delay_ms) throws InterruptedException {
-        if (fixed_delay_ms > 0L) {
-            Thread.sleep(fixed_delay_ms);
+    public ResponseEntity<String> getResourceWithFixedDelay(@RequestParam(value = "fixed_delay_ms", required = false,
+            defaultValue = "0") long fixed_delay_ms, @RequestParam(value = "p", required = false, defaultValue = "0")
+                                                                    int p) throws InterruptedException {
+        StringBuilder logs = new StringBuilder("RESOURCE REQ, FIXED_DELAY_MS={}, P={}");
+        WeightedCollection<Boolean> collection = new WeightedCollection<>(RANDOM);
+        collection.add(p, true);
+        collection.add(100 - p, false);
+        if (collection.next()) {
+            if (fixed_delay_ms > 0L) {
+                Thread.sleep(fixed_delay_ms);
+                logs.append(" ,DELAY HITS");
+            }
         }
-        return ResponseEntity.status(HttpStatus.OK).body(String.valueOf(fixed_delay_ms));
+        LOG.info(logs.toString(), fixed_delay_ms, p);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     class WeightedCollection<E> {

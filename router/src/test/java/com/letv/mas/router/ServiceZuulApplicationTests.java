@@ -50,24 +50,24 @@ public class ServiceZuulApplicationTests {
 
     @Test
     public void endpointFaultTolerantTest() throws IOException {
-        int sigleHealthyCnt = 0;
-        int sigleFaultCnt = 0;
+        int singleHealthyCnt = 0;
+        int singleFaultCnt = 0;
         final int faultProbability = 10;
         Request singleRequest = new Request.Builder().post(RequestBody.create(MediaType.parse("application/json"), "")).url(String.format(SINGLE_ENDPOINT_FAULT_URL_FORMAT, faultProbability)).build();
         for (int i = 0; i < SAMPLE_AMOUNT; i++) {
             int rspCode = mClient.newCall(singleRequest).execute().code();
             switch (rspCode) {
                 case 200:
-                    sigleHealthyCnt++;
+                    singleHealthyCnt++;
                     break;
                 case 500:
-                    sigleFaultCnt++;
+                    singleFaultCnt++;
                     break;
             }
         }
-        float singleFaultPercentage = ((float) sigleFaultCnt) / SAMPLE_AMOUNT;
+        float singleFaultPercentage = ((float) singleFaultCnt) / SAMPLE_AMOUNT;
         int expectSingleFaultPercentage = Math.round(singleFaultPercentage * 100);
-        LOG.info("SINGLE-ENDPOINT-TEST, HEALTHY-CNT={}, FAULT-CNT={}, FAULT-PERCENTAGE={}, ", sigleHealthyCnt, sigleFaultCnt, singleFaultPercentage);
+        LOG.info("SINGLE-ENDPOINT-TEST, HEALTHY-CNT={}, FAULT-CNT={}, FAULT-PERCENTAGE={}, ", singleHealthyCnt, singleFaultCnt, singleFaultPercentage);
         Assert.assertEquals(faultProbability, expectSingleFaultPercentage, 2);
 
         Integer routerHealthyCnt = 0;
@@ -90,7 +90,7 @@ public class ServiceZuulApplicationTests {
     }
 
     @Test
-    public void endpointHighAvailableTest() {
+    public void endpointTimeoutTolerantTest() {
 
     }
 
@@ -119,7 +119,7 @@ public class ServiceZuulApplicationTests {
     }
 
     static void collectDistributionMap(int sampleNum, Map<Endpoint, Integer> cnts) throws IOException {
-        for (int i = 0; i < SAMPLE_AMOUNT; i++) {
+        for (int i = 0; i < sampleNum; i++) {
             Response response = mClient.newCall(new Request.Builder().get().url(ENDPOINT_INFO_URL).build()).execute();
             Endpoint endpoint = JSON.parseObject(response.body().bytes(), Endpoint.class);
             Integer cnt = cnts.get(endpoint);

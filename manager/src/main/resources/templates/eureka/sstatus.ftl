@@ -74,13 +74,20 @@
             <td>
                 <p>
                         <#if instance.zone??>
-                          ${instance.zone}-
+                            <font color=red size=+1>${instance.zone}</font> &nbsp;&nbsp;
                         </#if>
                         <#if instance.isHref>
                         <a href="${instance.url}" target="_blank">${instance.id}</a>
                         <#else>
                             ${instance.id}
-                        </#if><#if instance_has_next></#if>&nbsp;&nbsp;<button class="div" onclick="busRefresh('${app.name}','${instance.profiles}','${instance.index}')">刷</button>
+                        </#if><#if instance_has_next></#if>
+                    <#if instance.weight??>
+                        <#if instance.weight?length gt 0>
+                            <font color=red size=+1>(${instance.weight})</font>
+                        </#if>
+                    </#if>
+                    &nbsp;&nbsp;<button class="div" onclick="busRefresh('${app.name}','${instance.profiles}','${instance.index}')">刷</button>&nbsp;&nbsp;<button class="div" onclick="pause('${app.name}','${instance.id}')">摘</button>&nbsp;&nbsp;<button class="div" onclick="resume('${app.name}','${instance.id}')">挂</button>
+                    &nbsp;<input placeholder="weight" maxlength="4" size="6" id="${instance.id}"/> <button class="div" onclick="updateWeight('${app.name}','${instance.id}')">改</button>
                 </p>
             </td>
         </tr>
@@ -211,6 +218,115 @@
                     } else {
                         alert("请求失败！");
                     }
+                },
+                error: function (data) {
+                    alert("请求失败！");
+                }
+
+            });
+        }
+    }
+    function pause(app,id){
+
+        var r=confirm("确定要摘掉 app："+app+" id："+id+" 吗？")
+
+        if (r==true)
+        {
+            if(!app){
+                alert("参数（app）不能为空")
+                return;
+            }
+            if(!id){
+                alert("参数（id）不能为空")
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/pause",
+                data:{
+                    "app":app,
+                    "id":id
+                },
+                success: function (data) {
+                    if(data){
+                        alert("请求成功！");
+                        window.location.reload();
+                    }else{
+                        alert("请求失败！");
+                    }
+                },
+                error: function (data) {
+                    alert("请求失败！");
+                }
+
+            });
+        }
+    }
+    function resume(app,id){
+
+        var r=confirm("确定要挂上 app："+app+" id："+id+" 吗？")
+
+        if (r==true)
+        {
+            if(!app){
+                alert("参数（app）不能为空")
+                return;
+            }
+            if(!id){
+                alert("参数（id）不能为空")
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/resume",
+                data:{
+                    "app":app,
+                    "id":id
+                },
+                success: function (data) {
+                    if(data){
+                        alert("请求成功！");
+                        window.location.reload();
+                    }else{
+                        alert("请求失败！");
+                    }
+                },
+                error: function (data) {
+                    alert("请求失败！");
+                }
+
+            });
+        }
+    }
+    function updateWeight(app,id) {
+        var weightInput = document.getElementById(id);
+        var weight = weightInput.value;
+        var r = confirm("确定要修改 app：" + app + " id：" + id + " 的权重为" + weight + " 吗？")
+
+        if (r == true) {
+            if (!app) {
+                alert("参数（app）不能为空")
+                return;
+            }
+            if (!id) {
+                alert("参数（id）不能为空")
+                return;
+            }
+            if (!weight) {
+                alert("参数（weight）不能为空")
+                return;
+            }
+            if (isNaN(weight)){
+                alert("参数（weight）必须是数字")
+                return;
+            }
+            var url = '/eureka/apps/' + app + '/' + id
+                    + '/metadata?weight=' + weight;
+            $.ajax({
+                type: "PUT",
+                url: url,
+                success: function (data) {
+                    window.location.reload();
                 },
                 error: function (data) {
                     alert("请求失败！");

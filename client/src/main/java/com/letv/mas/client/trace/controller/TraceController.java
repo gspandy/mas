@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/trace")
-@ConditionalOnProperty(value = "spring.sleuth.enabled", havingValue = "true", matchIfMissing = false)
+//@ConditionalOnProperty(value = "spring.sleuth.enabled", havingValue = "true", matchIfMissing = false)
 public class TraceController {
     @Autowired
     private TraceService traceService;
@@ -94,4 +94,15 @@ public class TraceController {
         return b;
     }
 
+    /**
+     * 测试丢消息
+     * @param name 测试标记
+     * @param depth  深度
+     * @return
+     */
+    @RequestMapping("/custom/miss/trace")
+    public String missTrace(@RequestParam String name,@RequestParam Integer depth) {
+        String b =traceService.missTrace(name,depth);
+        return b;
+    }
 }

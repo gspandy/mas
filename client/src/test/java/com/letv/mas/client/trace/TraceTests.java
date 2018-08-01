@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(SpringRunner.class)
 @ComponentScan(basePackages = {"com.letv.mas.common.config", "com.letv.mas.client", "com.letv.mas.common.bus"})
-@SpringBootTest(classes = EurekaClientApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,properties = {"spring.profiles.active:traceprod","local.server.port:8888"})
+@SpringBootTest(classes = EurekaClientApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,properties = {"spring.profiles.active:traceprod","local.server.port:8888","eureka.client.registry-fetch-interval-seconds:1"})
 public class TraceTests {
     private static final Logger log = LoggerFactory.getLogger(TraceTests.class);
 
@@ -102,6 +102,15 @@ public class TraceTests {
     @Test
     public void testApi4createSpan() {
         Boolean result = this.restTemplate.getForObject(this.baseUrl + "trace/custom/createSpan?name=createSpan", Boolean.class);
+        assertThat(result != null).isEqualTo(true);
+    }
+    /**
+     * 调试链消息丢失,功能测试类
+     * 测测试丢消息需要独立压力测试.
+     */
+    @Test
+    public void testApi4MissTrace() {
+        String result = this.restTemplate.getForObject(this.baseUrl + "trace/custom/miss/trace?depth=3&name=testApi4MissTrace1", String.class);
         assertThat(result != null).isEqualTo(true);
     }
 }

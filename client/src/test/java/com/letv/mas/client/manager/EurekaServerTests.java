@@ -514,7 +514,7 @@ public class EurekaServerTests {
         logger.info(" testUpdateConfigForEureka test single----- ");
         updateConfig();
 
-        refreshEureka("letv-mas-manager:prod:10.129.29.90");
+        refreshEureka("letv-mas-manager:prod:10.129.29.90:8015");
 
         boolean dx_2_result = checkIsUpdateForSingleEureka(SJS_2_ZONE, CONFIG_NEW_STR);
         assertThat(dx_2_result).isEqualTo(true);

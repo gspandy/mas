@@ -3,7 +3,6 @@ package com.letv.mas.client.trace.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.cloud.sleuth.annotation.ContinueSpan;
@@ -19,7 +18,7 @@ import java.util.Map;
  * Created by wangsk on 2018/7/5.
  */
 @Service
-@ConditionalOnProperty(value = "spring.sleuth.enabled", havingValue = "true", matchIfMissing = false)
+//@ConditionalOnProperty(value = "spring.sleuth.enabled", havingValue = "true", matchIfMissing = false)
 public class TraceService {
     private final Logger log = LoggerFactory.getLogger(TraceService.class);
     /**
@@ -46,6 +45,7 @@ public class TraceService {
      * @return
      */
     @NewSpan
+    @ContinueSpan(log="createSpan")
     public boolean   createSpan(@SpanTag(key="name") String name){
         if(tracer!=null) {
             tracer.getCurrentSpan().logEvent("createSpan start");
@@ -73,7 +73,7 @@ public class TraceService {
         }
         return  true;
     }
-    //@Autowired
+    @Autowired
     Tracer tracer;
     /**
      * <a href="https://github.com/opentracing/opentracing-go/blob/master/ext/tags.go">As
@@ -258,5 +258,16 @@ public class TraceService {
         String result = restTemplate.getForObject("http://letv-mas-client-trace/trace/custom/invokeDepth?depth="+(--depth),String.class);
         return result;
     }
-
+    public String missTrace(String name,Integer depth){
+        if(name==null||"".equals(name)){
+            name="default";
+        }
+        tracer.addTag("tag_name",name);
+        if(depth<=0) {
+            return "true";
+        }
+        log.info("depth:"+depth+",name="+name);
+        String result = restTemplate.getForObject("http://letv-mas-client-trace/trace/custom/miss/trace?depth="+(--depth)+"&name="+name,String.class);
+        return result;
+    }
 }

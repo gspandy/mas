@@ -1,6 +1,7 @@
 spring:
   application:
     name: letv-mas-manager
+    index: ${eureka.instance.instance-id}
   #zipkin:
       #base-url: ${TRACE_SERVER_URL:http://127.0.0.1:9001}
   #sleuth:
@@ -40,6 +41,10 @@ eureka:
     metadata-map:
       # [HA-P配置]-当前服务实例的zone
       zone: ${EUREKA_SERVER_ZONE:tz-1}
+      #config bus refresh index
+      index: ${spring.application.index:127.0.0.1}
+      #config bus refresh profiles
+      profiles: ${spring.profiles.active}
     # 开启ip，默认为false＝》hostname
     prefer-ip-address: true
     ip-address: ${EUREKA_SERVER_IP:127.0.0.1}
@@ -61,9 +66,12 @@ eureka:
     # [服务续约]-允许当前服务实例获取注册信息，默认为true
     fetch-registry: true
     # [HA配置]-可用zone内注册中心地址列表
+    availability-zones:
+      cn-bj: ${eureka.instance.metadata-map.zone},sjs-1,dx-1
     service-url:
-#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
-      # [HA配置]-默认zone内注册中心地址列表
+      #sjs-1: http://letvMasManager:admin20180605@10.129.29.86:8015/eureka,http://letvMasManager:admin20180605@10.129.29.90:8015/eureka
+      #dx-1: http://letvMasManager:admin20180605@10.112.34.124:8015/eureka,http://letvMasManager:admin20180605@10.112.34.127:8015/eureka
+      #defaultZone: ''
       defaultZone: ${EUREKA_SERVER_LIST:http://letvMasManager:admin20180605@10.129.29.90:8015/eureka}
     # [服务续约]-当前服务实例更新注册服务缓存清单的更新间隔时间，默认为30s，一般和lease-renewal-interval-in-seconds保持一致！
     registry-fetch-interval-seconds: 10
@@ -142,3 +150,5 @@ logging:
   level:
     root: 'info'
   file: /letv/logs/mas/manager/manager.log
+  max-size: '100M'
+  max-history: 3

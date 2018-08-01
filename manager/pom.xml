@@ -41,6 +41,11 @@
             <artifactId>spring-cloud-starter-eureka</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+
         <!--test-->
         <!--refer: https://docs.spring.io/spring-boot/docs/1.5.10.RELEASE/reference/htmlsingle/#boot-features-testing-->
         <dependency>
@@ -132,6 +137,8 @@
                         <goals>
                             <!-- 把依赖的包都打包到生成的Jar包中 -->
                             <goal>repackage</goal>
+                            <!-- 如果要访问info接口想获取maven中的属性内容 -->
+                            <goal>build-info</goal>
                         </goals>
                     </execution>
                 </executions>
