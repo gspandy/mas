@@ -44,6 +44,18 @@ public class DashboardController {
         } catch (Exception e) {
             statusInfo = StatusInfo.Builder.newBuilder().isHealthy(false).build();
         }
+        /*Runtime runtime = Runtime.getRuntime();
+        int maxMemory = (int) (runtime.maxMemory() / 1048576);
+        statusInfo.getGeneralStats().put("total-avail-memory",String.valueOf(maxMemory) + "mb");
+        int totalMem = (int) (runtime.totalMemory() / 1048576);
+        int freeMem = (int) (runtime.freeMemory() / 1048576);
+        int usedPercent = (int) (((float) totalMem - freeMem) / (maxMemory) * 100.0);
+        statusInfo.getGeneralStats().put("current-memory-usage",
+                String.valueOf(totalMem - freeMem) + "mb" + " ("
+                        + usedPercent + "%)");*/
+        Runtime runtime = Runtime.getRuntime();
+        int maxMemory = (int) (runtime.maxMemory() / 1048576);
+        statusInfo.getGeneralStats().put("max-memory",String.valueOf(maxMemory) + "mb");
         model.put("statusInfo", statusInfo);
         populateInstanceInfo(model, statusInfo);
         filterReplicas(model, statusInfo);

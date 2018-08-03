@@ -3,6 +3,7 @@ package com.letv.mas.caller.stream.service.listener;
 import com.letv.mas.common.bus.CustomApplicationEvent;
 import com.letv.mas.common.stream.model.binding.MessageConfirmSource;
 import com.letv.mas.common.stream.model.dto.ConfirmMessage;
+import com.letv.mas.common.trace.MessageTrace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,9 @@ public class BusEventListener {
         this.context = context;
     }
 
+    @MessageTrace(spanName = "CustomBusEventSpan", tagName = "bus", eventName = "Received Custom Bus Event", msg = "${event.message}")
     @EventListener
-    private void pubListener(CustomApplicationEvent event) {
+    public void pubListener(CustomApplicationEvent event) {
         logger.info("Caller Bus Listener Received Message:" + event.getMessage() +
                 " Application ID:" + context.getId());
 

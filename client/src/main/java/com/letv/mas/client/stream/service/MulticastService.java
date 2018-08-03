@@ -2,6 +2,7 @@ package com.letv.mas.client.stream.service;
 
 import com.letv.mas.common.stream.model.binding.MulticastSource;
 import com.letv.mas.common.stream.model.dto.StreamMessage;
+import com.letv.mas.common.trace.MessageTrace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * 组播消息发送服务类
@@ -36,9 +36,10 @@ public class MulticastService {
      *
      * @param msg
      */
-    public void send(String msg) {
+    @MessageTrace(spanName = "MulticastMessageSpan", tagName = "multicast", eventName = "Multicast Message", msgId = "${msgId}", msg = "${msg}")
+    public void send(String msgId, String msg) {
         StreamMessage streamMessage = new StreamMessage();
-        streamMessage.setId(UUID.randomUUID().toString().replace("-", ""));
+        streamMessage.setId(msgId);
         streamMessage.setFrom("MulticastService");
         streamMessage.setDate(new Date());
         streamMessage.setType(1);

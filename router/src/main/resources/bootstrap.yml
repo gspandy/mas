@@ -1,30 +1,29 @@
 spring:
   application:
-    name: 'letv-mas-router'
+    name: letv-mas-router
+    index: ${CLIENT_SERVER_IP:127.0.0.1}:${server.port}
   profiles:
-    active: ${CLIENT_PROFILE:prod}
+    active: ${CLIENT_PROFILE:default}
+    #include: busdev,streamdev
   cloud:
     config:
-      enabled: 'true'
-      profile: ${spring.profiles.active}
-      label: 'master'
-      username: 'config'
-      password: 'config2018'
-      discovery:
-        service-id: 'letv-mas-config'
-        enabled: true
+      uri: ${CONFIG_SERVER_DOMAIN:http://config.mas.letv.cn/}
+      failFast: true #the client will halt with an Exception
+      enabled: true
+      # boostrap.yml配置优先于启动参数变量--spring.profiles.active
+      profile: ${spring.profiles.active:${CLIENT_PROFILE:default}}
+      label: master
+      # 访问配置中心，用户安全认证
+      username: config
+      password: config2018
+      # 激活定时任务，当GIT版本发生变更后加载最新配置上下文
       watcher:
-        enabled: 'true'
+        enabled: true
 
-eureka:
-  client:
-    service-url:
-      defaultZone: ${EUREKA_SERVER_LIST}
+logging:
+  level:
+    root: info
+    org.apache.kafka: error
+    org.apache.kafka.clients: error
+    org.apache.kafka.common: error
 
-info:
-  app:
-    name: '@project.artifactId@'
-    encoding: '@project.build.sourceEncoding@'
-    java:
-      source: '@java.version@'
-      target: '@java.version@'

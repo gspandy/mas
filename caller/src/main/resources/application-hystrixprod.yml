@@ -1,25 +1,46 @@
+spring:
+  application:
+    name: letv-mas-caller-hystrixprod
+  cloud:
+    bus:
+      enabled: false
+  sleuth:
+    enabled: false
+  zipkin:
+    enabled: false
+
+server:
+  port: ${CALLER_SERVER_PORT}
+
+security:
+  basic:
+    enabled: 'false'
+
+eureka:
+  instance:
+    instance-id: ${CALLER_SERVER_IP}:${CALLER_SERVER_PORT}
+    metadata-map:
+      zone: ${CALLER_SERVER_ZONE}
+    prefer-ip-address: 'true'
+    ip-address: ${CALLER_SERVER_IP}
+    lease-expiration-duration-in-seconds: '30'
+    lease-renewal-interval-in-seconds: '10'
+    status-page-url: 'http://${CALLER_SERVER_IP}:${CALLER_SERVER_PORT}/info'
+    health-check-url: 'http://${CALLER_SERVER_IP}:${CALLER_SERVER_PORT}/health'
+  client:
+    region: ${CLIENT_SERVER_REGION}
+    register-with-eureka: 'true'
+    prefer-same-zone-eureka: 'true'
+    fetch-registry: 'true'
+    registry-fetch-interval-seconds: '1'
+    service-url:
+      defaultZone: ${EUREKA_SERVER_LIST}
+    healthcheck:
+      enabled: 'true'
+    transport:
+      retryable-client-quarantine-refresh-percentage: '1'
 hystrix:
   command:
-#    default:
-#      circuitBreaker:
-#        requestVolumeThreshold: '20'
-#        sleepWindowInMilliseconds: '5000'
-#        errorThresholdPercentage: '50'
-#      metrics:
-#        rollingStats:
-#          timeInMilliseconds: '10000'
-#          numBuckets: '10'
-#        rollingPercentile:
-#          enabled: 'false'
-#          timeInMilliseconds: '60000'
-#          numBuckets: '6'
-#          bucketSize: '100'
-#      execution:
-#        isolation:
-#          strategy:
-#            thread:
-#              timeoutInMilliseconds: '100000'
-#              interruptOnTimeout: 'true'
     getResWithDelay:
       circuitBreaker:
         requestVolumeThreshold: '2'
@@ -83,15 +104,3 @@ hystrix:
   threadpool:
     getResWithDelay:
       coreSize: '50'
-
-spring:
-  cloud:
-    bus:
-      enabled: false
-  sleuth:
-    enabled: false
-  zipkin:
-    enabled: false
-eureka:
-  client:
-    enabled: false

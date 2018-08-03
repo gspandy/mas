@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 /**
  * 点播通信控制器
  * <p>
@@ -26,7 +28,8 @@ public class PointcastController {
 
     @RequestMapping("/msg")
     public String pointcastMsg(@RequestParam(required = true) String content, @RequestParam(required = true) int partition) {
-        pointcastService.send(content, partition);
+        String msgId = UUID.randomUUID().toString().replace("-", "");
+        pointcastService.send(msgId, content, partition);
         return "Pointcasting Message:" + content + " Partition:" + partition;
     }
 }

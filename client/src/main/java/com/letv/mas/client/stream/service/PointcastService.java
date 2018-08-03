@@ -1,8 +1,8 @@
 package com.letv.mas.client.stream.service;
 
-import com.letv.mas.common.stream.model.binding.PartitionSource;
 import com.letv.mas.common.stream.model.binding.PointcastSource;
 import com.letv.mas.common.stream.model.dto.StreamMessage;
+import com.letv.mas.common.trace.MessageTrace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * 点播消息服务类
@@ -38,9 +37,10 @@ public class PointcastService {
      *
      * @param msg
      */
-    public void send(String msg, int partition) {
+    @MessageTrace(spanName = "PointcastMessageSpan", tagName = "pointcast", eventName = "Pointcast Message", msgId = "${msgId}", msg = "${msg}")
+    public void send(String msgId, String msg, int partition) {
         StreamMessage streamMessage = new StreamMessage();
-        streamMessage.setId(UUID.randomUUID().toString().replace("-", ""));
+        streamMessage.setId(msgId);
         streamMessage.setFrom("PointcastService");
         streamMessage.setDate(new Date());
         streamMessage.setType(4);

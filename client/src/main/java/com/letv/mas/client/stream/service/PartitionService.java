@@ -2,6 +2,7 @@ package com.letv.mas.client.stream.service;
 
 import com.letv.mas.common.stream.model.binding.PartitionSource;
 import com.letv.mas.common.stream.model.dto.StreamMessage;
+import com.letv.mas.common.trace.MessageTrace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +40,10 @@ public class PartitionService {
      *
      * @param msg
      */
-    public void send(String msg, int type) {
+    @MessageTrace(spanName = "PartitionMessageSpan", tagName = "partition", eventName = "Partition Message", msgId = "${msgId}", msg = "${msg}")
+    public void send(String msgId, String msg, int type) {
         StreamMessage streamMessage = new StreamMessage();
-        streamMessage.setId(UUID.randomUUID().toString().replace("-", ""));
+        streamMessage.setId(msgId);
         streamMessage.setFrom("PartitionService");
         streamMessage.setDate(new Date());
         streamMessage.setType(type);

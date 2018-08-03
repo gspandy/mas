@@ -4,6 +4,7 @@ import com.letv.mas.common.stream.model.binding.MessageConfirmSource;
 import com.letv.mas.common.stream.model.binding.PointcastSink;
 import com.letv.mas.common.stream.model.dto.ConfirmMessage;
 import com.letv.mas.common.stream.model.dto.StreamMessage;
+import com.letv.mas.common.trace.MessageTrace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,7 @@ public class PointcastListener {
 
     @ConditionalOnProperty(value = "spring.cloud.stream.bindings.pointcast_input.destination",  matchIfMissing = false)
     @StreamListener(PointcastSink.INPUT)
+    @MessageTrace(spanName = "PointcastMessageSpan", tagName = "pointcast", eventName = "Received Pointcast Message", msgId = "${payload.id}", msg = "${payload.content}")
     public void receive(StreamMessage payload) {
         StringBuilder sb = new StringBuilder();
         sb.append("===============================");

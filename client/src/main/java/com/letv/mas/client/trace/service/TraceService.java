@@ -3,6 +3,7 @@ package com.letv.mas.client.trace.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.cloud.sleuth.annotation.ContinueSpan;
@@ -18,7 +19,7 @@ import java.util.Map;
  * Created by wangsk on 2018/7/5.
  */
 @Service
-//@ConditionalOnProperty(value = "spring.sleuth.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(value = "spring.sleuth.enabled", havingValue = "true", matchIfMissing = false)
 public class TraceService {
     private final Logger log = LoggerFactory.getLogger(TraceService.class);
     /**

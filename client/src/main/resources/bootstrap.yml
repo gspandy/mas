@@ -2,7 +2,7 @@
 spring:
   application:
     name: letv-mas-client
-    index: ${CLIENT_SERVER_IP:127.0.0.1}
+    index: ${CLIENT_SERVER_IP:127.0.0.1}:${server.port}
   profiles:
     active: ${CLIENT_PROFILE:default}
     #include: busdev,streamdev

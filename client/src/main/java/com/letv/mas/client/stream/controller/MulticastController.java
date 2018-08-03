@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 /**
  * 组播消息控制器
  * <p>
@@ -21,7 +23,8 @@ public class MulticastController {
 
     @RequestMapping("/msg")
     public String multicastMsg(@RequestParam(required = true) String content) {
-        multicastService.send(content);
+        String msgId = UUID.randomUUID().toString().replace("-", "");
+        multicastService.send(msgId, content);
         return "Multicasting Message:" + content;
     }
 }

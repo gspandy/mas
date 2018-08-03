@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/trace")
-//@ConditionalOnProperty(value = "spring.sleuth.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(value = "spring.sleuth.enabled", havingValue = "true", matchIfMissing = false)
 public class TraceController {
     @Autowired
     private TraceService traceService;

@@ -8,6 +8,7 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -17,7 +18,8 @@ import org.springframework.web.client.RestTemplate;
 @EnableEurekaClient
 @EnableHystrix
 @EnableHystrixDashboard
-@ComponentScan(basePackages = {"com.letv.mas.caller", "com.letv.mas.common.bus"})
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+@ComponentScan(basePackages = {"com.letv.mas.caller", "com.letv.mas.common.bus","com.letv.mas.common.trace"})
 public class ServiceRibbonApplication {
 
     @Bean

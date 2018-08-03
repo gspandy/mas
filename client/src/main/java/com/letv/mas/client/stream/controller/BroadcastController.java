@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 /**
  * 广播消息控制器
  * <p>
@@ -22,7 +24,8 @@ public class BroadcastController {
 
     @RequestMapping("/msg")
     public String broadcastMsg(@RequestParam(required = true) String content) {
-        broadcastService.send(content);
+        String msgId = UUID.randomUUID().toString().replace("-", "");
+        broadcastService.send(msgId, content);
         return "Broadcasting Message:" + content;
     }
 }

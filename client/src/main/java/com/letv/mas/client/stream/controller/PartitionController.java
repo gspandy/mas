@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 /**
  * 消息分区控制器
  * <p>
@@ -23,7 +25,8 @@ public class PartitionController {
 
     @RequestMapping("/msg")
     public String partitionMsg(@RequestParam(required = true) String content, @RequestParam(required = true) int type) {
-        partitionService.send(content, type);
+        String msgId = UUID.randomUUID().toString().replace("-", "");
+        partitionService.send(msgId, content, type);
         return "Partitioning Message:" + content + " Type:" + type;
     }
 }
