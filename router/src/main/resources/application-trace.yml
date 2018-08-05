@@ -1,0 +1,10 @@
+spring:
+  zipkin:
+    kafka:
+      topic: tvvideo.springcloud.trace
+    sender:
+      type: kafka
+  sleuth:
+    enabled: true
+    sampler:
+      percentage: 1.0

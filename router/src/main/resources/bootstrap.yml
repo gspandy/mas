@@ -4,7 +4,7 @@ spring:
     index: ${CLIENT_SERVER_IP:127.0.0.1}:${server.port}
   profiles:
     active: ${CLIENT_PROFILE:default}
-    #include: busdev,streamdev
+    include: stream,config,zuul,trace
   cloud:
     config:
       uri: ${CONFIG_SERVER_DOMAIN:http://config.mas.letv.cn/}

@@ -1,0 +1,21 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          zkNodes: ${ZK_NODES:zk2101i.test.db.lecloud.com:2101/kafka/kafka9101}
+          brokers: ${KAFKA_BROKERS:k9101i.test.db.lecloud.com:9101}
+          # 生产者确认，0、1、-1，默认为1。0为不确认，1为leader单确认，-1为同步副本确认。-1的情况下消息可靠性更高。
+          requiredAcks: -1
+          # 是否自动创建topic，默认为true。设为false的情况下，依赖手动配置broker相关topic>配置，如果topic不存在binder则无法启动。
+          autoCreateTopics: false
+          configuration:
+            security:
+              protocol: SASL_PLAINTEXT
+            sasl:
+              mechanism: PLAIN
+          jaas:
+            loginModule: org.apache.kafka.common.security.plain.PlainLoginModule
+            options:
+              username: tvvideo
+              password: tvvideo-secret
