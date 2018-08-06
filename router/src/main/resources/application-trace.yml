@@ -8,3 +8,10 @@ spring:
     enabled: true
     sampler:
       percentage: 1.0
+  kafka:
+    bootstrap-servers: ${ZIPKIN_BROKERS:k9001i.bjxy.db.lecloud.com:9001}
+    producer:
+      retries: 0
+    properties:
+      security.protocol: SASL_PLAINTEXT
+      sasl.mechanism: PLAIN

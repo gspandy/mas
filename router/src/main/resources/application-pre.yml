@@ -16,7 +16,12 @@ server:
 
 security:
   basic:
+    # 启用基本身份认证
     enabled: false
+  user:
+    name: letvMasRouter
+    password: admin20180806
+    role: USER
 
 management:
   security:
@@ -77,6 +82,7 @@ endpoints:
     # 安全验证
     sensitive: false
   shutdown:
+    # curl -d "" http://letvMasRouter:admin20180806@127.0.0.1:9000/shutdown
     enabled: true
     # 安全验证
-    sensitive: false
+    sensitive: true
