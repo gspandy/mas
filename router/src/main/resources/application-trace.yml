@@ -1,5 +1,6 @@
 spring:
   zipkin:
+    enabled: ${ROUTER_ZIPKIN_ENABLED:true}
     kafka:
       topic: tvvideo.springcloud.trace
     sender:
@@ -12,6 +13,8 @@ spring:
     bootstrap-servers: ${ZIPKIN_BROKERS:k9001i.bjxy.db.lecloud.com:9001}
     producer:
       retries: 0
+      # 生产者确认：0为不确认，1为leader单确认，-1为同步副本确认。-1的情况下消息可靠性更高。
+      acks: 0
     properties:
       security.protocol: SASL_PLAINTEXT
       sasl.mechanism: PLAIN

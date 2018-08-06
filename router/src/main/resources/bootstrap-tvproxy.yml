@@ -4,7 +4,7 @@ spring:
     index: ${ROUTER_SERVER_IP:127.0.0.1}:${ROUTER_SERVER_PORT}
   profiles:
     active: ${ROUTER_SERVER_PROFILE:default}
-    include: pre,stream,config,zuul,trace
+    include: pre,config,zuul,trace
   cloud:
     config:
       uri: ${CONFIG_SERVER_DOMAIN:http://config.mas.letv.cn/}
