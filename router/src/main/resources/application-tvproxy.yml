@@ -44,7 +44,7 @@ eureka:
       #config bus refresh index
       index: ${spring.application.index:127.0.0.1}
       #config bus refresh profiles
-      profiles: ${spring.profiles.include}
+      profiles: ${spring.profiles.include},${spring.profiles.active}
     # 开启ip，默认为false＝》hostname
     prefer-ip-address: true
     ip-address: ${ROUTER_SERVER_IP:127.0.0.1}
