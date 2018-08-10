@@ -6,8 +6,9 @@ source /etc/profile
 docker_hub_local=true
 docker_hub_host="reg-sre.lecloud.com"
 docker_hub_path="/test_image/"
+docker_hub_email="letv_monitor@le.com"
 docker_hub_username="letv_monitor"
-docker_hub_password="!@s20180509"
+docker_hub_password="!@s20180809"
 app_base_path=/letv/app/mas
 log_base_path=/letv/logs/mas
 
@@ -55,7 +56,7 @@ if [ -z "$run_opts" ]; then
   run_opts=""
 fi
 
-docker_login="docker login --username=\"${docker_hub_username}\" --password=\"${docker_hub_password}\" ${docker_hub_host}"
+docker_login="docker login --email=\'${docker_hub_email}\' --username=\'${docker_hub_username}\' --password=\'${docker_hub_password}\' ${docker_hub_host}"
 docker_pull="docker pull $image"
 app_start="docker run -it -d $run_opts --name $app $image"
 app_stop="if docker stop $app; then docker rm $app; fi"
@@ -92,7 +93,9 @@ mkdir -p $app_base_path/$app
 if [ "$docker_hub_local" == "false" ]; then
     echo "get the remote $app..."
     eval $docker_login
-    eval $docker_pull
+    if [ $? -eq 0 ]; then
+        eval $docker_pull
+    fi
 fi
 
 echo "$app start..."

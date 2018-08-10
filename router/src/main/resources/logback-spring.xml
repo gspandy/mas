@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <contextName>Logback for letv-mas-router</contextName>
+    <springProperty scope="context" name="logPath" source="logout.path" defaultValue="/letv/logs/mas/router"/>
+    <springProperty scope="context" name="logLevel" source="logout.level" defaultValue="INFO"/>
+    <springProperty scope="context" name="logCapacity" source="logout.capacity" defaultValue="30GB"/>
+
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %level [%class:%line] %logger{80} - %m%n</pattern>
+        </encoder>
+        <target>System.out</target>
+    </appender>
+
+    <appender name="SYSTEM_ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/springboot.log</file>
+        <!-- 按照每天生成日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logPath}/springboot.log.%d{yyyy-MM-dd}.zip</FileNamePattern>
+            <!--日志文件保留天数 -->
+            <MaxHistory>7</MaxHistory>
+            <!-- 日志总保存量大小 -->
+            <totalSizeCap>2GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %level [%class:%line] %logger{25} - %m%n</pattern>
+        </encoder>
+        <!-- 追加方式记录日志 -->
+        <append>true</append>
+        <!-- 只打印{level}日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>${logLevel}</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!-- 日志文件最大的大小，需配合文件名%i -->
+<!--        <triggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>512MB</MaxFileSize>
+        </triggeringPolicy>-->
+    </appender>
+
+    <appender name="ROUTER_ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/router-access.log</file>
+        <!-- 按照每天生成日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logPath}/router-access.log.%d{yyyy-MM-dd}.zip</FileNamePattern>
+            <!--日志文件保留天数 -->
+            <MaxHistory>7</MaxHistory>
+            <!-- 日志总保存量大小 -->
+            <totalSizeCap>${logCapacity}</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%m%n</pattern>
+        </encoder>
+        <!-- 追加方式记录日志 -->
+        <append>true</append>
+    </appender>
+
+    <!-- 过滤器可以指定哪些包/类，哪个等级 -->
+    <logger name="com" level="INFO">
+        <appender-ref ref="SYSTEM_ROLLING_FILE"/>
+    </logger>
+    <logger name="org" level="INFO">
+        <appender-ref ref="SYSTEM_ROLLING_FILE"/>
+    </logger>
+    <logger name="com.letv.mas.router.config.ZuulLogFilter" level="INFO">
+        <appender-ref ref="ROUTER_ROLLING_FILE"/>
+    </logger>
+
+    <!-- 全局控制台遇到INFO及以上级别就进行输出 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>

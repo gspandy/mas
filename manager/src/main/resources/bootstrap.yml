@@ -29,6 +29,11 @@ spring:
 eureka:
   dashboard:
     path: '/oldDashboard'
+#server:
+  #tomcat:
+    #max-connections: 20000
+    #max-threads: 5000
+    #accept-count: 1000
 # eureka用于发现配置中心
 #eureka:
   #client:

@@ -27,6 +27,9 @@ spring:
     bus:
       destination: tvvideo.springcloud.config
       enabled: true
+    eureka:
+      watcher:
+        enabled: true
 server:
   port: ${EUREKA_SERVER_PORT:8011}
 
@@ -40,7 +43,7 @@ eureka:
     # 服务实例的meta数据键值对集合，可由注册中心进行服务实例间传递
     metadata-map:
       # [HA-P配置]-当前服务实例的zone
-      zone: ${EUREKA_SERVER_ZONE:tz-1}
+      zone: ${EUREKA_SERVER_ZONE:sjs-1}
       #config bus refresh index
       index: ${spring.application.index:127.0.0.1}
       #config bus refresh profiles
@@ -49,9 +52,9 @@ eureka:
     prefer-ip-address: true
     ip-address: ${EUREKA_SERVER_IP:127.0.0.1}
     # [服务续约]-心跳检查之服务失效时间，默认为90s，这个配置一般为lease-renewal-interval-in-seconds的三倍！eureka server的bug，失效时间为2倍，因此设置预想失效时间的1/2
-    lease-expiration-duration-in-seconds: 15
+    lease-expiration-duration-in-seconds: 8
     # [服务续约]-服务续约任务调用的间隔时间，默认为30s
-    lease-renewal-interval-in-seconds: 10
+    lease-renewal-interval-in-seconds: 5
     # [服务监控]-当前实例的服务信息地址
     status-page-url: http://${EUREKA_SERVER_IP:127.0.0.1}:${server.port}/info
     # [服务监控]-当前实例的服务健康状态地址
@@ -66,15 +69,15 @@ eureka:
     # [服务续约]-允许当前服务实例获取注册信息，默认为true
     fetch-registry: true
     # [HA配置]-可用zone内注册中心地址列表
-    availability-zones:
-      cn-bj: ${eureka.instance.metadata-map.zone},sjs-1,dx-1
+    #availability-zones:
+      #cn-bj: ${eureka.instance.metadata-map.zone},sjs-1,dx-1
     service-url:
       #sjs-1: http://letvMasManager:admin20180605@10.129.29.86:8015/eureka,http://letvMasManager:admin20180605@10.129.29.90:8015/eureka
       #dx-1: http://letvMasManager:admin20180605@10.112.34.124:8015/eureka,http://letvMasManager:admin20180605@10.112.34.127:8015/eureka
       #defaultZone: ''
-      defaultZone: ${EUREKA_SERVER_LIST:http://letvMasManager:admin20180605@10.129.29.90:8015/eureka}
+      defaultZone: ${EUREKA_SERVER_LIST:http://letvMasManager:admin20180605@10.129.29.86:8015/eureka}
     # [服务续约]-当前服务实例更新注册服务缓存清单的更新间隔时间，默认为30s，一般和lease-renewal-interval-in-seconds保持一致！
-    registry-fetch-interval-seconds: 10
+    registry-fetch-interval-seconds: 5
     # [服务监控]-开启健康检查，只能在application.yml中设置！
     healthcheck:
       enabled: true
@@ -87,22 +90,30 @@ eureka:
     #eureka-service-url-poll-interval-seconds: 10（bus发出refrush后会重新new client,非eureka原本机制，springcloud实现）
     #定时从config取instance的ip hostname lease-expiration-duration-in-seconds lease-renewal-interval-in-seconds 信息的时间秒 默认为30秒，发现不一样时执行注册
     #instance-info-replication-interval-seconds: 10（bus发出refrush后会重新new client,非eureka原本机制，springcloud实现）
+
+    #自定义的参数，为了运行时修复eureka server list
+    service-name: letv-mas-manager
+    service-user: letvMasManager
+    service-passwd: admin20180605
+    #查找eureka server url 时去掉自己，如果不配置则用ip-address+server.port
+    #local: ${EUREKA_SERVER_IP:127.0.0.1}:${server.port}
+
   server:
     # 允许自我保护模式，默认开启，保证注册中心出现网络分区故障时不再删除服务注册表信息
     enable-self-preservation: true
 
     # 主动清理租约过期定时任务执行频率，默认60s
-    eviction-interval-timer-in-ms: 5000
+    eviction-interval-timer-in-ms: 3000
 
-    # 刷新readCacheMap的时间，默认为30 * 100（30s），client读取的是readCacheMap，这个时间决定多久会把readWriteCacheMap的缓存更新到readCacheMap中
-    #response-cache-update-interval-ms: 3000
+    # 刷新readCacheMap的时间，默认为30 * 1000（30s），client读取的是readCacheMap，这个时间决定多久会把readWriteCacheMap的缓存更新到readCacheMap中
+    response-cache-update-interval-ms: 3000
 
     # 缓存readWriteCacheMap失效时间，默认为180s，这个只有在这个时间过去后缓存才会失效，失效前不会更新，过期后从registry重新读取注册服务信息，registry为ConcurrentHashMap
     # 如启用了evictio（主动清理租约过期定时任务），可忽略这个配置
     #response-cache-auto-expiration-in-seconds: 90
 
     #不使用readCacheMap，直接走readWriteCacheMap读取
-    use-read-only-response-cache: false
+    use-read-only-response-cache: true
 
     #不开启分批过期，如果过期一次全部下线
     #renewal-percent-threshold: 0

@@ -1,6 +1,7 @@
 zuul:
   debug:
     request: true
+    logfile: true
   host:
     # 网关最大链接数（网关最大链接数 <= 每个路由最大链接数 * 路由个数）
     max-total-connections: 8000

@@ -30,7 +30,7 @@ MAINTAINER dengliwei dengliwei@le.com
 # create mw and app dir
 RUN mkdir -p /letv/app/mas/router
 # create the dir linking with external volume!!!
-RUN mkdir -p /letv/logs/mas/router
+RUN mkdir -p /letv/logs/mas/router && chmod 777 /letv/logs/mas/router
 
 # create the dir linking with external volume
 VOLUME ["/letv/app/mas/router", "/letv/logs/mas/router"]
@@ -47,6 +47,6 @@ ENV JAVA_OPTS=
 
 # Set the default command to execute
 # when creating a new container
-CMD [ "/bin/bash", "-c", "java $JAVA_OPTS -jar /letv/app/mas/router-1.0-SNAPSHOT.jar" ]
+CMD [ "/bin/bash", "-c", "echo '10.124.66.211 i.static.itv.letv.com' >> /etc/hosts;java $JAVA_OPTS -jar /letv/app/mas/router-1.0-SNAPSHOT.jar" ]
 
 COPY ./target/router-1.0-SNAPSHOT.jar /letv/app/mas/
