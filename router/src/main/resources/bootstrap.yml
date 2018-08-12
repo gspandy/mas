@@ -33,4 +33,3 @@ logging:
     org.apache.kafka: error
     org.apache.kafka.clients: error
     org.apache.kafka.common: error
-

@@ -4,7 +4,9 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -18,9 +20,13 @@ import java.util.*;
  * Created by leeco on 18/8/7.
  */
 @ConditionalOnProperty(value = "zuul.debug.logfile", havingValue = "true", matchIfMissing = false)
+@RefreshScope
 @Component
 public class ZuulLogFilter extends ZuulFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(ZuulLogFilter.class);
+
+    @Value("${zuul.debug.logfile}")
+    private boolean enableLogfile = false;
 
     @Override
     public String filterType() {
@@ -40,7 +46,13 @@ public class ZuulLogFilter extends ZuulFilter {
     @Override
     public Object run() {
         try {
+            // 默认不输出日志
+            if (!enableLogfile) {
+                return null;
+            }
+
             RequestContext requestContext = RequestContext.getCurrentContext();
+            long stime = System.currentTimeMillis();
             final List<String> routingDebug = (List<String>) requestContext.get("routingDebug");
             final Map<String, String> routingMap = this.parseRoutingDebug(routingDebug);
             HttpServletRequest request = requestContext.getRequest();
@@ -98,7 +110,7 @@ public class ZuulLogFilter extends ZuulFilter {
                     .append(this.handleEmpty(request.getHeader("user-agent"))).append(splitSymbol)
                     .append(this.handleEmpty(routingMap.get("routeHost"))).append(splitSymbol)
                     .append(upstream_response_time).append(splitSymbol)
-                    .append(request_time)
+                    .append(request_time + System.currentTimeMillis() - stime)
             ;
             LOGGER.info(sb.toString());
 

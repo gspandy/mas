@@ -8,7 +8,7 @@
     <!-- 控制台输出 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %level [%class:%line] %logger{80} - %m%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %level [%class:%line] %logger - %m%n</pattern>
         </encoder>
         <target>System.out</target>
     </appender>
@@ -24,7 +24,7 @@
             <totalSizeCap>2GB</totalSizeCap>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %level [%class:%line] %logger{25} - %m%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %level [%class:%line] %logger - %m%n</pattern>
         </encoder>
         <!-- 追加方式记录日志 -->
         <append>true</append>
