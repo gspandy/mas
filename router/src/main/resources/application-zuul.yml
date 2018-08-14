@@ -1,6 +1,6 @@
 zuul:
   debug:
-    request: true
+    request: false
     logfile: true
   host:
     # 网关最大链接数（网关最大链接数 <= 每个路由最大链接数 * 路由个数）
@@ -48,6 +48,7 @@ ribbon:
   ReadTimeout: 500
   # 是否在所有操作异常时重试
   OkToRetryOnAllOperations: false
+  retryableStatusCodes: 500,502
   # 最大本地重试次数，前提OkToRetryOnAllOperations＝true
   MaxAutoRetries: 1
   # 最大重选 Server 次数，前提OkToRetryOnAllOperations＝true（最大总重试次数 = 最大本地重试次数 * 最大重选 Server 次数；总调用次数 = （最大本地重试次数+1）* 最大重选 Server 次数）
