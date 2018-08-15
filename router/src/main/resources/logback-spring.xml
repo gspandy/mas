@@ -24,6 +24,8 @@
             <totalSizeCap>2GB</totalSizeCap>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 立即IO输出，关闭走流缓存8K -->
+            <immediateFlush>false</immediateFlush>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %level [%class:%line] %logger - %m%n</pattern>
         </encoder>
         <!-- 追加方式记录日志 -->
@@ -49,13 +51,23 @@
             <!--日志文件保留天数 -->
             <MaxHistory>7</MaxHistory>
             <!-- 日志总保存量大小 -->
-            <totalSizeCap>${logCapacity}</totalSizeCap>
+            <!--<totalSizeCap>${logCapacity}</totalSizeCap>-->
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 立即IO输出，关闭走流缓存8K -->
+            <immediateFlush>false</immediateFlush>
             <pattern>%m%n</pattern>
         </encoder>
         <!-- 追加方式记录日志 -->
         <append>true</append>
+    </appender>
+
+    <appender name="SYSTEM_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000000" discardingThreshold="0" includeCallerData="false">
+        <appender-ref ref="SYSTEM_ROLLING_FILE" />
+    </appender>
+
+    <appender name="ROUTER_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000000" discardingThreshold="0" includeCallerData="false">
+        <appender-ref ref="ROUTER_ROLLING_FILE" />
     </appender>
 
     <!-- 过滤器可以指定哪些包/类，哪个等级 -->
@@ -66,12 +78,12 @@
         <appender-ref ref="SYSTEM_ROLLING_FILE"/>
     </logger>
     <logger name="com.letv.mas.router.config.ZuulLogFilter" level="INFO">
-        <appender-ref ref="ROUTER_ROLLING_FILE"/>
+        <appender-ref ref="ROUTER_ROLLING_FILE_ASYNC"/>
     </logger>
 
     <!-- 全局控制台遇到INFO及以上级别就进行输出 -->
-    <root level="INFO">
-        <appender-ref ref="STDOUT"/>
-    </root>
+    <!--<root level="INFO">-->
+        <!--<appender-ref ref="STDOUT"/>-->
+    <!--</root>-->
 
 </configuration>

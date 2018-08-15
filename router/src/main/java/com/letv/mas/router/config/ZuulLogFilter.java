@@ -52,10 +52,21 @@ public class ZuulLogFilter extends ZuulFilter {
             }
 
             RequestContext requestContext = RequestContext.getCurrentContext();
-            long stime = System.currentTimeMillis();
-            final List<String> routingDebug = (List<String>) requestContext.get("routingDebug");
-            final Map<String, String> routingMap = this.parseRoutingDebug(routingDebug);
             HttpServletRequest request = requestContext.getRequest();
+            long stime = System.currentTimeMillis();
+            List<String> routingDebug = (List<String>) requestContext.get("routingDebug"); // 先从debug.request中取
+            Map<String, String> routingMap = null;
+            if (null == routingDebug || routingDebug.size() == 0) { // 取不到从FilterExecutionSummary中取
+                StringBuilder filterExecutions = requestContext.getFilterExecutionSummary();
+                if (null != filterExecutions && filterExecutions.length() > 0) {
+                    routingDebug = Arrays.asList(filterExecutions.toString().split(","));
+                    routingMap = this.parseRoutingDebug(routingDebug);
+                }
+                routingMap.put("contentLength", String.valueOf(requestContext.getOriginContentLength()));
+                routingMap.put("routeHost", requestContext.getRouteHost().toString());
+            } else {
+                routingMap = this.parseRoutingDebug(routingDebug);
+            }
 
 /*            // 打印请求参数
             InputStream in = request.getInputStream();
@@ -75,7 +86,7 @@ public class ZuulLogFilter extends ZuulFilter {
 //            float upstream_response_time = 0.0f, request_time = 0.0f;
             int upstream_response_time = 0, request_time = 0;
 //            int unit = 1000;
-            if (routingMap.size() > 0) {
+            if (null != routingMap && routingMap.size() > 0) {
                 try {
 //                    upstream_response_time = (new BigDecimal(routingMap.get("postTime"))).divide(new BigDecimal(unit), 3, BigDecimal.ROUND_HALF_UP).floatValue();
 //                    request_time = upstream_response_time + (new BigDecimal(routingMap.get("preTime"))).divide(new BigDecimal(unit), 3, BigDecimal.ROUND_HALF_UP).floatValue();
@@ -173,15 +184,31 @@ public class ZuulLogFilter extends ZuulFilter {
         }
     }
 
+    private String addStrNum(String a, String b) {
+        String ret = "0";
+        try {
+            ret = String.valueOf(Integer.parseInt(a) + Integer.parseInt(b));
+        } catch (NumberFormatException nfe) {
+
+        }
+        return ret;
+    }
+
     private Map<String, String> parseRoutingDebug(List<String> debugInfos) {
         HashMap<String, String> ret = new HashMap<String, String>();
-        int index = -1;
-        String symbol = null;
+        int index = -1, time = 0;
+        String symbol = null, timeStr = null;
         boolean found = false;
+
+        if (null == debugInfos) {
+            return ret;
+        }
 
         for (String debugInfo : debugInfos) {
             index = -1;
             found = false;
+            time = 0;
+            timeStr = null;
 
             symbol = "routeHost";
             if (debugInfo.contains(symbol + "=")) {
@@ -208,6 +235,26 @@ public class ZuulLogFilter extends ZuulFilter {
             if (!found && debugInfo.contains("SimpleHostRoutingFilter") && debugInfo.contains(symbol)) {
                 index = debugInfo.indexOf(symbol);
                 ret.put("contentLength", debugInfo.substring(index + symbol.length()));
+                found = true;
+            }
+
+            if (!found && (debugInfo.contains("ServletDetectionFilter")
+                    || debugInfo.contains("Servlet30WrapperFilter")
+                    || debugInfo.contains("PreDecorationFilter"))) {
+                index = debugInfo.lastIndexOf("[");
+                timeStr = debugInfo.substring(index + 1, debugInfo.length() - 3);
+                if (null != ret.get("preTime")) {
+                    ret.put("preTime", this.addStrNum(ret.get("preTime"), timeStr));
+                } else {
+                    ret.put("preTime", timeStr);
+                }
+                found = true;
+            }
+
+            if (!found && (debugInfo.contains("SimpleHostRoutingFilter")
+                    || debugInfo.contains("RibbonRoutingFilter"))) {
+                index = debugInfo.lastIndexOf("[");
+                ret.put("postTime", debugInfo.substring(index + 1, debugInfo.length() - 3));
                 found = true;
             }
         }
