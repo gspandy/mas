@@ -28,3 +28,4 @@ mvn -B -e -f $module/pom.xml clean $cmd
 
 #mvn -B -f common/pom.xml clean deploy
 #mvn -B -f grpc/pom.xml clean deploy
+# scp -r ./omp root@10.58.89.189:/letv/web/omp.mas.letv.cn ott@20170601

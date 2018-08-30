@@ -4,7 +4,10 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.metrics.CounterService;
+import org.springframework.boot.actuate.metrics.GaugeService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
@@ -27,6 +30,12 @@ public class ZuulLogFilter extends ZuulFilter {
 
     @Value("${zuul.debug.logfile}")
     private boolean enableLogfile = false;
+
+//    @Autowired
+    private CounterService counterService;
+
+//    @Autowired
+    private GaugeService gaugeService;
 
     @Override
     public String filterType() {
@@ -104,6 +113,7 @@ public class ZuulLogFilter extends ZuulFilter {
                              '$status^A$request_length^A$bytes_sent^A$body_bytes_sent^A'
                              '$http_referer^A$http_user_agent^A$upstream_addr^A$upstream_response_time^A
             */
+            long costTime = request_time + System.currentTimeMillis() - stime;
             sb.append(this.getISO8601Timestamp(new Date())).append(splitSymbol)
                     .append(request.getRemoteAddr()).append(splitSymbol)
                     .append(this.handleEmpty(request.getHeader("x-forwarded-for"))).append(splitSymbol)
@@ -121,8 +131,15 @@ public class ZuulLogFilter extends ZuulFilter {
                     .append(this.handleEmpty(request.getHeader("user-agent"))).append(splitSymbol)
                     .append(this.handleEmpty(routingMap.get("routeHost"))).append(splitSymbol)
                     .append(upstream_response_time).append(splitSymbol)
-                    .append(request_time + System.currentTimeMillis() - stime)
+                    .append(costTime)
             ;
+
+            if (null != counterService) {
+                counterService.increment("status." + requestContext.getResponseStatusCode() + "." + request.getRequestURI());
+            }
+            if (null != gaugeService) {
+                gaugeService.submit("response." + request.getRequestURI(), costTime);
+            }
             LOGGER.info(sb.toString());
 
 /*            LOGGER.info("request url: {}", request.getRequestURL().toString());
@@ -177,7 +194,7 @@ public class ZuulLogFilter extends ZuulFilter {
     }
 
     private String handleEmpty(String str) {
-        if (StringUtils.isEmpty(str)) {
+        if (StringUtils.isEmpty(str) || str.equals("null")) {
             return "-";
         } else {
             return str;

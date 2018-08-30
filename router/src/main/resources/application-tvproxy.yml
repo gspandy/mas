@@ -8,6 +8,20 @@ spring:
         enabled: true
   profiles:
     include: config,zuul,trace
+  metrics:
+    servo:
+      enabled: false
+#    export:
+#      enabled: true
+#      influx:
+#        uri: http://10.58.89.189:8086
+#        username: api
+#        password: api@20180307
+#        db: letv-mas
+#        batchCount: 10
+#        batchInterval: 1000
+#      delay-millis: 5000
+#      includes: heap.used,heap.committed,mem,mem.free,threads,datasource.primary.active,datasource.primary.usage
 
 server:
   port: ${ROUTER_SERVER_PORT}
@@ -32,6 +46,24 @@ management:
 #  info:
 #    git:
 #      mode: full
+  metrics:
+    export:
+      enabled: true
+      influx:
+        enabled: true
+        auto-create-db: true
+        batch-size: 10000
+        compressed: true
+        connect-timeout: 1s
+        consistency: one
+        uri: http://10.58.89.189:8086
+        db: letv-mas-service
+        num-threads: 2
+        user-name: api
+        password: api@20180307
+        read-timeout: 2s
+        retention-policy:
+        step: PT10s
 
 eureka:
   instance:

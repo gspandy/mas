@@ -18,6 +18,7 @@ zuul:
     use-separate-thread-pools: true
     # hystrix command 的 threadPoolKey 前缀，在 Zuul 中 threadPoolKey = $thread-pool-key-prefix + $commandKey
     thread-pool-key-prefix: letv-mas-router-zuulpool-
+  # 路由map配置，查询接口：/routes?format=details
   routes:
     # 路由id，应全局唯一
     r-letv-mas-caller-tvproxy-user:
@@ -26,12 +27,12 @@ zuul:
       # 匹配请求路由的 pattern（如果与其他 route 的 path 有包含关系，应确保约束性强的 route 配置块在前）
       path: '/api/tv/user/**'
       # 转发请求时是否忽略前缀: （http://$host1/api/user/list -> http://$host2/user/list）
-      strip-prefix: true
+      strip-prefix: false
       # 路由是否支持失败重试 （需要 spring retry 和 ribbon 支持）
       retryable: false
     r-static-html:
       path: '/static/**'
-      url: http://i.static.itv.letv.com/index.html
+      url: http://i.static.itv.letv.com/
       # 转发请求时是否忽略前缀: （http://$host1/api/user/list -> http://$host2/user/list）
       strip-prefix: true
       # 路由是否支持失败重试 （需要 spring retry 和 ribbon 支持）

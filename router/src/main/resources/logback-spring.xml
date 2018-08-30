@@ -82,8 +82,8 @@
     </logger>
 
     <!-- 全局控制台遇到INFO及以上级别就进行输出 -->
-    <!--<root level="INFO">-->
-        <!--<appender-ref ref="STDOUT"/>-->
-    <!--</root>-->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
 
 </configuration>
