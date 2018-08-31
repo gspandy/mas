@@ -132,5 +132,5 @@ endpoints:
 # 自定义系统日志输出
 logout:
   path: /letv/logs/mas/router
-  level: ERROR
+  level: INFO
   capacity: 30GB

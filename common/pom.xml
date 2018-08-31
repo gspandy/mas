@@ -25,7 +25,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <org.slf4j>1.6.6</org.slf4j>
         <log4j>1.2.17</log4j>
-        <io.micrometer>1.0.6</io.micrometer>
         <spring.cloud>Edgware.SR3</spring.cloud>
     </properties>
 
@@ -59,19 +58,6 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
-        <!--监控采集（B）-->
-        <!--https://micrometer.io/docs/ref/spring/1.5-->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-spring-legacy</artifactId>
-            <version>${io.micrometer}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-influx</artifactId>
-            <version>${io.micrometer}</version>
-        </dependency>
-        <!--监控采集（E）-->
     </dependencies>
 
     <dependencyManagement>

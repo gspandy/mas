@@ -28,6 +28,7 @@
         <log4j>1.2.17</log4j>
         <fastjson>1.2.47</fastjson>
         <mas.common>1.0-SNAPSHOT</mas.common>
+        <io.micrometer>1.0.6</io.micrometer>
         <spring.cloud>Edgware.SR3</spring.cloud>
         <spring.boot>1.5.13.RELEASE</spring.boot>
     </properties>
@@ -92,6 +93,19 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson}</version>
         </dependency>
+        <!--监控采集（B）-->
+        <!--https://micrometer.io/docs/ref/spring/1.5-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-spring-legacy</artifactId>
+            <version>${io.micrometer}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-influx</artifactId>
+            <version>${io.micrometer}</version>
+        </dependency>
+        <!--监控采集（E）-->
     </dependencies>
 
     <dependencyManagement>
