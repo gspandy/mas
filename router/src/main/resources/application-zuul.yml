@@ -68,9 +68,9 @@ letv-mas-caller-tvproxy-user:
     OkToRetryOnAllOperations: false
     retryableStatusCodes: 500,502
     # 同 Ribbon 全局配置，service 配置优先
-    MaxAutoRetries: 1
+    MaxAutoRetries: 0
     # 同 Ribbon 全局配置，service 配置优先
-    MaxAutoRetriesNextServer: 1
+    MaxAutoRetriesNextServer: 0
 
 # 根据上游的serviceid来指定其hystrix配置
 hystrix:
@@ -105,7 +105,7 @@ hystrix:
           strategy: THREAD
           thread:
             # 指令执行超时时间
-            timeoutInMilliseconds: 500
+            timeoutInMilliseconds: 1000
             # 超时后是否中断执行线程
             interruptOnTimeout: true
   # 可以配置为 default 全局默认配置或以 threadPoolKey 为单位单独配置，threadPoolKey 配置优先

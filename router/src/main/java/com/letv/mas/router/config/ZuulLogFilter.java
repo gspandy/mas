@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -71,8 +72,12 @@ public class ZuulLogFilter extends ZuulFilter {
                     routingDebug = Arrays.asList(filterExecutions.toString().split(","));
                     routingMap = this.parseRoutingDebug(routingDebug);
                 }
-                routingMap.put("contentLength", String.valueOf(requestContext.getOriginContentLength()));
-                routingMap.put("routeHost", requestContext.getRouteHost().toString());
+                routingMap.put("contentLength", handleEmpty(requestContext.getOriginContentLength()));
+                if (null != requestContext.getRouteHost()) {
+                    routingMap.put("routeHost", handleEmpty(requestContext.getRouteHost()));
+                } else if (null != requestContext.get("serviceId")) {
+                    routingMap.put("routeHost", handleEmpty(requestContext.get("serviceId")));
+                }
             } else {
                 routingMap = this.parseRoutingDebug(routingDebug);
             }
@@ -193,11 +198,23 @@ public class ZuulLogFilter extends ZuulFilter {
         return nowAsISO;
     }
 
-    private String handleEmpty(String str) {
-        if (StringUtils.isEmpty(str) || str.equals("null")) {
-            return "-";
+    private String handleEmpty(Object obj) {
+        if (obj != null) {
+            String str = null;
+            if (obj instanceof String) {
+                str = (String) obj;
+            } else if (obj instanceof URL) {
+                str = ((URL) obj).toString();
+            } else if (obj instanceof Long) {
+                str = String.valueOf(obj);
+            }
+            if (StringUtils.isEmpty(str) || str.equals("null")) {
+                return "-";
+            } else {
+                return str;
+            }
         } else {
-            return str;
+            return "-";
         }
     }
 

@@ -15,7 +15,7 @@ spring:
           search-paths: '{application}'
           # 配置的Git仓库基于http协议的，必须配置用户名和密码
           username: ${GIT_USERNAME:config_server}
-          password: ${GIT_PASSWORD:letv.0606}
+          password: ${GIT_PASSWORD:letv.0905}
           # 本地仓库目录设定
           basedir: /letv/app/mas/config/repos
           # 本地仓库如果有脏数据，则会强制拉取（默认是false）

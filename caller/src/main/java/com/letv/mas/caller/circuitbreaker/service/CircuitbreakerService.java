@@ -3,6 +3,7 @@ package com.letv.mas.caller.circuitbreaker.service;
 
 import com.letv.mas.caller.circuitbreaker.model.ResourceInfo;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.exception.HystrixBadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,14 @@ public class CircuitbreakerService {
         return this.unstableService.getResWithFixedDelay(delayMs);
     }
 
-    private ResourceInfo getDefaultRes(long delayMs) {
+    @HystrixCommand(commandKey = "getResWithDelay", threadPoolKey = "cbThreadPool", fallbackMethod = "getDefaultRes")
+    public ResourceInfo getResourceWithUncheckedException(long delayMs) throws Exception {
+        int i = 1 / 0;
+        return new ResourceInfo("111");
+//        return this.unstableService.getResWithFixedDelay(1L);
+    }
+
+    private ResourceInfo getDefaultRes1(long delayMs) {
         return new ResourceInfo(ResourceInfo.DEFAULT_RESOURCE_ID);
     }
 

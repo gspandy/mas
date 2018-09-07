@@ -1,0 +1,8 @@
+rest:
+  client:
+    pc:
+     timeout: 110000
+     connectionTimeout: 5000
+     maxConnections: 500
+     maxTotalConnections: 500
+     staleCheckEnabled: true

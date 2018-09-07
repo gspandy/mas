@@ -24,7 +24,7 @@ public class ConfigServerBaseTests {
 
     protected static final String LETV_MAS_CONFIG = "letv-mas-config";
 
-        protected static final String LOCAL_REPOS = "/letv/app/mas/config/repos";
+    protected static final String LOCAL_REPOS = "/letv/app/mas/config/repos";
 
     protected static final String USERNAME = "config";
 

@@ -2,6 +2,7 @@ package com.letv.mas.caller;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
@@ -20,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableHystrixDashboard
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {"com.letv.mas.caller", "com.letv.mas.common.bus","com.letv.mas.common.trace"})
+@ServletComponentScan
 public class ServiceRibbonApplication {
 
     @Bean

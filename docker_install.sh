@@ -32,6 +32,6 @@ if [ -f "/var/run/docker.sock" ]; then
    chmod a+rw /var/run/docker.sock
    sudo groupadd docker
    sudo gpasswd -a leworker docker
-   newgrp - docker
    sudo service docker restart
+   newgrp - docker
 fi

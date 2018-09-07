@@ -9,7 +9,7 @@ import org.junit.runners.Suite;
  * Created by David.Liu on 2018/6/26.
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ConfigServerApplicationTests.class,ConfigServerApplicationAuthTests.class, ConfigServerApplicationExceptionTests.class})
+@Suite.SuiteClasses({ConfigServerApplicationTests.class, ConfigServerApplicationAuthTests.class, ConfigServerApplicationExceptionTests.class})
 public class ConfigServerSuiteTests {
 
 }
