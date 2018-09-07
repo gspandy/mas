@@ -3,7 +3,7 @@
 #This script will automately isntall the telegraf on centos6.
 #Discription:
 #how to publish it: scp -r ./monitor/telegraf root@10.58.89.189:/letv/web/apk.archive.itv.letv.com
-#how to run it: wget -c -r -nH -np --reject=html http://10.58.89.189:10000/telegraf/;sudo chmod +x telegraf/install.sh;sudo telegraf/install.sh --profile=prod
+#how to run it: wget -c -nH -np --reject=html http://10.58.89.189:10000/telegraf/;sudo chmod +x telegraf/install.sh;sudo telegraf/install.sh --profile=prod
 #Author:dengliwei
 #Email:dengliwei@le.com
 #Date:2018.09.03

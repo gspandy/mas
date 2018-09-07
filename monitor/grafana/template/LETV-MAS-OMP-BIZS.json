@@ -16,7 +16,7 @@
     "gnetId": null,
     "graphTooltip": 0,
     "id": 3,
-    "iteration": 1536219314817,
+    "iteration": 1536317446975,
     "links": [],
     "panels": [
         {
@@ -951,21 +951,89 @@
                         },
                         {
                             "condition": "AND",
-                            "key": "status",
-                            "operator": "=",
-                            "value": "400"
+                            "key": "serviceIndex",
+                            "operator": "=~",
+                            "value": "/^$letv_mas_biz_host$/"
                         },
                         {
-                            "condition": "OR",
-                            "key": "status",
-                            "operator": "=",
-                            "value": "500"
-                        },
-                        {
-                            "condition": "OR",
+                            "condition": "AND",
                             "key": "status",
                             "operator": "=",
                             "value": "404"
+                        }
+                    ]
+                },
+                {
+                    "groupBy": [],
+                    "measurement": "http_server_requests",
+                    "orderByTime": "DESC",
+                    "policy": "default",
+                    "refId": "B",
+                    "resultFormat": "table",
+                    "select": [
+                        [
+                            {
+                                "params": [
+                                    "*"
+                                ],
+                                "type": "field"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "serviceName",
+                            "operator": "=~",
+                            "value": "/^$letv_mas_biz_name$/"
+                        },
+                        {
+                            "condition": "AND",
+                            "key": "serviceIndex",
+                            "operator": "=~",
+                            "value": "/^$letv_mas_biz_host$/"
+                        },
+                        {
+                            "condition": "AND",
+                            "key": "status",
+                            "operator": "=",
+                            "value": "500"
+                        }
+                    ]
+                },
+                {
+                    "groupBy": [],
+                    "measurement": "http_server_requests",
+                    "orderByTime": "DESC",
+                    "policy": "default",
+                    "refId": "C",
+                    "resultFormat": "table",
+                    "select": [
+                        [
+                            {
+                                "params": [
+                                    "*"
+                                ],
+                                "type": "field"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "serviceName",
+                            "operator": "=~",
+                            "value": "/^$letv_mas_biz_name$/"
+                        },
+                        {
+                            "condition": "AND",
+                            "key": "serviceIndex",
+                            "operator": "=~",
+                            "value": "/^$letv_mas_biz_host$/"
+                        },
+                        {
+                            "condition": "AND",
+                            "key": "status",
+                            "operator": "=",
+                            "value": "401"
                         }
                     ]
                 }
@@ -985,8 +1053,9 @@
             {
                 "allValue": null,
                 "current": {
-                    "text": "letv-mas-router-tvproxy",
-                    "value": "letv-mas-router-tvproxy"
+                    "tags": [],
+                    "text": "letv-mas-caller-tvproxy-user",
+                    "value": "letv-mas-caller-tvproxy-user"
                 },
                 "datasource": "letv-mas-omp-services",
                 "hide": 0,
@@ -1009,9 +1078,9 @@
                 "allValue": null,
                 "current": {
                     "tags": [],
-                    "text": "10.124.148.37:9001",
+                    "text": "10.112.34.124:8960",
                     "value": [
-                        "10.124.148.37:9001"
+                        "10.112.34.124:8960"
                     ]
                 },
                 "datasource": "letv-mas-omp-services",
@@ -1115,5 +1184,5 @@
     "timezone": "",
     "title": "LETV-MAS-OMP-BIZS",
     "uid": "sU4VtM2iz",
-    "version": 132
+    "version": 135
 }
