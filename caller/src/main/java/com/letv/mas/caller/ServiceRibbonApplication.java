@@ -19,9 +19,9 @@ import org.springframework.web.client.RestTemplate;
 @EnableEurekaClient
 @EnableHystrix
 @EnableHystrixDashboard
-@EnableAspectJAutoProxy(proxyTargetClass = true)
+/*@EnableAspectJAutoProxy(proxyTargetClass = true)*/
 @ComponentScan(basePackages = {"com.letv.mas.caller", "com.letv.mas.common.bus","com.letv.mas.common.trace"})
-@ServletComponentScan
+/*@ServletComponentScan*/
 public class ServiceRibbonApplication {
 
     @Bean

@@ -2,7 +2,7 @@
 <Configuration status="warn">
     <contextName>Logback for letv-mas-caller</contextName>
     <springProperty scope="context" name="logPath" source="logout.path" defaultValue="/letv/logs/mas/caller/tvproxy-user"/>
-    <springProperty scope="context" name="logLevel" source="logout.level" defaultValue="INFO"/>
+    <springProperty scope="context" name="logLevel" source="logout.level" defaultValue="DEBUG"/>
     <springProperty scope="context" name="logCapacity" source="logout.capacity" defaultValue="30GB"/>
 
     <!--输出到控制台 ConsoleAppender-->
@@ -269,7 +269,7 @@
         <appender-ref ref="HYSTRIX_DETAIL_ROLLING_FILE" />
     </appender>
     <root level="${logLevel}">
-        <appender-ref ref="console"/>
+        <!--<appender-ref ref="console"/>-->
         <appender-ref ref="SERVER-API_ASYNC"/>
         <appender-ref ref="errorLog_ASYNC"/>
     </root>

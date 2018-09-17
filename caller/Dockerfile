@@ -46,6 +46,6 @@ ENV EUREKA_SERVER_LIST=http:/localhost:8010/eureka/
 
 # Set the default command to execute
 # when creating a new container
-CMD [ "/bin/bash", "-c", "java -jar /letv/app/mas/caller-1.0-SNAPSHOT.jar" ]
+CMD [ "/bin/bash", "-c", "java $JAVA_OPTS -jar /letv/app/mas/caller-1.0-SNAPSHOT.jar" ]
 
 COPY ./target/caller-1.0-SNAPSHOT.jar /letv/app/mas/
