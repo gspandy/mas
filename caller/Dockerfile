@@ -46,6 +46,7 @@ ENV EUREKA_SERVER_LIST=http:/localhost:8010/eureka/
 
 # Set the default command to execute
 # when creating a new container
-CMD [ "/bin/bash", "-c", "java -jar /letv/app/mas/caller-1.0-SNAPSHOT.jar" ]
+CMD [ "/bin/bash", "-c", "java $JAVA_OPTS  -jar /letv/app/mas/caller-1.0-SNAPSHOT.jar" ]
+#CMD [ "/bin/bash", "-c", "java $JAVA_OPTS -Xms4g -Xmx4g -Xmn2g -Xss1024K -XX:PermSize=256m -XX:MaxPermSize=512m -XX:ParallelGCThreads=8 -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+UseCMSCompactAtFullCollection -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=10 -XX:+CMSParallelRemarkEnabled -XX:CMSFullGCsBeforeCompaction=10 -XX:CMSInitiatingOccupancyFraction=80 -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintHeapAtGC -Xloggc:/letv/logs/mas/caller/gc.log -XX:+ExplicitGCInvokesConcurrent -Dsun.rmi.dgc.client.gcInterval=14400000 -Dsun.rmi.dgc.server.gcInterval=14400000 -jar /letv/app/mas/caller-1.0-SNAPSHOT.jar" ]
 
 COPY ./target/caller-1.0-SNAPSHOT.jar /letv/app/mas/

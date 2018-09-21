@@ -49,7 +49,21 @@ public class SessionCache {
     //private static final ThreadLocal<SessionCache> sessionCache = new ThreadLocal<SessionCache>();
 
     public static void initSessionCacheForRequest() {
-        SessionCache.sessionCache.set(new SessionCache());
+        /*if (!HystrixRequestContext.isCurrentThreadInitialized()) {
+            HystrixRequestContext.initializeContext();
+        }
+        if (HystrixRequestContext.getContextForCurrentThread() == null) {
+            HystrixRequestContext.initializeContext();
+        }*/
+        if (SessionCache.sessionCache.get() == null) {
+            SessionCache.sessionCache.set(new SessionCache());
+        }
+    }
+
+    public static void shutdown() {
+        if (HystrixRequestContext.isCurrentThreadInitialized()) {
+            HystrixRequestContext.getContextForCurrentThread().shutdown();
+        }
     }
 
     public void setResponse(ResponseBean responseBean) {
@@ -60,11 +74,28 @@ public class SessionCache {
         responseBeanStack.add(responseBean);
     }
 
-    public static SessionCache getSession(){
-        /*HystrixUtil.initContext();
-        return SessionCache.sessionCache.get();*/
-        return null;
+    public static SessionCache getSession() {
+        //return null;
+        if (SessionCache.sessionCache.get() == null) {
+            return null;
+        } else {
+            if (!SessionCache.sessionCache.get().isWrite) {
+                return null;
+            }
+        }
+        return SessionCache.sessionCache.get();
     }
+
+    public boolean isWrite = true;
+
+    public void changeWriteStatus(boolean isWrite) {
+        this.isWrite = isWrite;
+    }
+
+    public boolean isWrite(){
+        return this.isWrite;
+    }
+
 
     public void setResponse(String url, Object data, String result) {
         Object debug = this.getCommObj("debug");
@@ -109,6 +140,7 @@ public class SessionCache {
     public void setCommObj(String key, Object obj) {
         this.commObjPool.put(key, obj);
     }
+
 
     public void init() {
         if (responseBeanStack != null) {

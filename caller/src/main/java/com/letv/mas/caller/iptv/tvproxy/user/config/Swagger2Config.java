@@ -1,6 +1,7 @@
 package com.letv.mas.caller.iptv.tvproxy.user.config;
 
 import com.letv.mas.caller.iptv.tvproxy.user.annotation.Iptv;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -9,9 +10,10 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-/*@Configuration
+@Configuration
+@ConditionalOnProperty(value = "spring.cloud.iptv.doc.enabled", havingValue= "true", matchIfMissing = false)
 @EnableSwagger2
-@Iptv*/
+@Iptv
 public class Swagger2Config {
 
     @Bean

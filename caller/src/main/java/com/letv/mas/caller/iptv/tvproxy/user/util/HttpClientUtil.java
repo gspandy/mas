@@ -40,12 +40,15 @@ public class HttpClientUtil extends RestTemplate {
     // protected static SwitchTpDaoMBean switchTpDaoMBean =
     // JmxClient.getBean(SwitchTpDao.class);
 
+    @Autowired
+    MeterRegistry registry;
+
     /*
      * 第三方服务状态集
      */
     private static final Map<String, TpServiceStatus> tpServerStatusMap = new HashMap<>();
     // private static long INTERFACE_RESPONSE_TIME = 2000;// 第三方接口响应时间临界值 2s
-    private static long INTERFACE_RESPONSE_TIME = 2000L;
+    private static long INTERFACE_RESPONSE_TIME = 500;
 
     static {
         /* 临时处理，防止定时切服 at wangshengkai */
@@ -833,8 +836,8 @@ public class HttpClientUtil extends RestTemplate {
             synchronized (tpServerStatusMap) {// 防止多个线程重复初始化
                 if (tpServerStatusMap.get(domain) == null) {
                     tpServerStatus = new TpServiceStatus();
-
                     this.tpServerStatusMap.put(domain, tpServerStatus);
+                    Gauge.builder("net_uptime", tpServerStatus, TpServiceStatus::getResponseTime).tag("uri",domain).register(registry);
                 } else {
                     tpServerStatus = tpServerStatusMap.get(domain);
                 }
@@ -869,17 +872,16 @@ public class HttpClientUtil extends RestTemplate {
         this.serviceStatusLoger.info("[" + domain + "]" + " count:[" + cnt + "] recordStartTime:["
                 + TimeUtil.timestamp2date(recordStartTime) + "] totalResponseTime:[" + responseTime + "]");
 
-        /*if ((cnt >= INTERFACE_TOTAL_COUNT)
+        if ((cnt >= INTERFACE_TOTAL_COUNT)
                 || ((System.currentTimeMillis() - recordStartTime) > INTERFACE_RECORD_COUNT_RESET_TIME)) {// 请求次数达到计数上线
             if ((cnt >= INTERFACE_TOTAL_COUNT)) {
                 long avgTime = responseTime / cnt;
                 if ((avgTime) > INTERFACE_RESPONSE_TIME) {// 平均响应时间
                     // 解决并发量大下瞬时间熔断失效问题
-                    synchronized (tpServiceStatus) {
+                    /*synchronized (tpServiceStatus) {
                         tpServiceStatus.setCloseTime(System.currentTimeMillis());// 关闭（更新关闭时间）
-                    }
-                    this.apiSwitchMonitor.info("[" + domain + "]" + " close time:["
-                            + TimeUtil.timestamp2date(System.currentTimeMillis()) + "]" + "average response time:["
+                    }*/
+                    this.apiSwitchMonitor.info("[" + domain + "]" + "average response time:["
                             + avgTime + "]");
                 }
             }
@@ -889,9 +891,8 @@ public class HttpClientUtil extends RestTemplate {
                 tpServiceStatus.setTotalResponseTime(0);
                 tpServiceStatus.setRecordStartTime(System.currentTimeMillis());
             }
-        }*/
-
-         tpServerStatusMap.put(domain, tpServiceStatus);
+        }
+        //tpServerStatusMap.put(domain, tpServiceStatus);
     }
 
     /**

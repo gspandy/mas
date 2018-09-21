@@ -232,12 +232,6 @@ public class UserService extends BaseService {
         }
 
         return response;
-
-        /*LePayTpResponse<List<SubscribeInfoV2>> subscrobeInfoListResponse = this.facadeTpDao.getUserTpDao().getVipInfoV2(null, commonParam);
-        UserAccountDto userAccountDto = new UserAccountDto();
-        userAccountDto.setDisplayName(subscrobeInfoListResponse.getData().size() + "");
-        response.setData(userAccountDto);
-        return response;*/
     }
 
     /**
@@ -749,7 +743,7 @@ public class UserService extends BaseService {
             return null;
         }
 
-        @HystrixCommand(threadPoolKey = "cacheThreadPool",fallbackMethod = "queryBalanceFormCacheFallback")
+        //@HystrixCommand(threadPoolKey = "cacheThreadPool",fallbackMethod = "queryBalanceFormCacheFallback")
         public BalanceQueryResultResponse queryBalanceFormCache(CommonParam commonParam) {
             return this.facadeCacheDao.getUserCacheDao().queryBalance(commonParam);
         }

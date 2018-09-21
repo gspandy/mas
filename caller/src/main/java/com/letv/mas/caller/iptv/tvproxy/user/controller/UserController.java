@@ -44,4 +44,9 @@ public class UserController extends BaseController {
             @ApiParam(value = "接口通用参数", required = true) @ModelAttribute CommonParam commonParam) {
         return facadeService.getUserService().test2(deviceType,sign,commonParam);
     }
+
+    @RequestMapping("/test2")
+    public int test2() {
+        return 1;
+    }
 }

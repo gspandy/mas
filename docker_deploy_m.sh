@@ -23,6 +23,8 @@ for arg in "$@"; do
       hosts_file=$value;;
     --jmxport)
       jmxport=$value;;
+    --project_net)
+      project_net=$value;;
     --help)
       echo "args:"
       echo "--module="
@@ -53,7 +55,8 @@ if [ -z "$env_file" ]; then
     run_env=""
 else
     if [ -f "${env_file}" ]; then
-        host_ip=$(ifconfig eth0 | grep 'inet ' | sed s/^.*addr://g | sed s/Bcast.*$//g | sed 's/\s\+//g')
+        #host_ip=$(ifconfig eth0 | grep 'inet ' | sed s/^.*addr://g | sed s/Bcast.*$//g | sed 's/\s\+//g')
+        host_ip=$(ip a|grep -w 'inet'|grep 'global eth'|grep -E "(10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})"|sed 's/^.*inet //g'|sed 's/\/[0-9][0-9].*$//g')
         host_ip_len=`echo "$host_ip" | awk '{print length($0)}'`
         if [ "$host_ip_len" -gt 15 ]; then
             host_ip=$(ifconfig eth0 | grep 'inet ' | awk '{print $2}')
@@ -96,7 +99,14 @@ if [ -n "$jmxport" ]; then
     run_jmx="-p ${jmxport}:${jmxport}"
 fi
 
-docker_deploy="sh ${cur_dir}/docker_deploy.sh --image=${docker_hub_host}${docker_hub_path}${app_base} --app=${app} --run_opts='-v ${app_base_path}/${app}:/letv/app/mas/${module} -v ${log_base_path}/${app}:/letv/logs/mas/${module} -p ${port}:${port} ${run_jmx} ${run_env} ${run_hosts} --restart=always' --port=${port} --turl='${tsurl}'"
+run_docker_net=""
+if [ -z "$project_net" ]; then
+    run_docker_net=""
+else
+    run_docker_net="--net=$project_net"
+fi
+
+docker_deploy="sh ${cur_dir}/docker_deploy.sh --image=${docker_hub_host}${docker_hub_path}${app_base} --app=${app} --run_opts='-v ${app_base_path}/${app}:/letv/app/mas/${module} -v ${log_base_path}/${app}:/letv/logs/mas/${module} -p ${port}:${port} ${run_jmx} ${run_env} ${run_hosts} ${run_docker_net} --restart=always' --port=${port} --turl='${tsurl}'"
 
 echo "${docker_deploy}"
 echo "docker deploy ..."

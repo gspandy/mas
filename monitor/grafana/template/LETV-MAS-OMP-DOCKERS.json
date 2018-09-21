@@ -16,7 +16,7 @@
     "gnetId": null,
     "graphTooltip": 0,
     "id": 1,
-    "iteration": 1536219215120,
+    "iteration": 1537492534932,
     "links": [],
     "panels": [
         {
@@ -35,12 +35,12 @@
             "id": 2,
             "legend": {
                 "avg": false,
-                "current": false,
+                "current": true,
                 "max": false,
                 "min": false,
                 "show": true,
                 "total": false,
-                "values": false
+                "values": true
             },
             "lines": true,
             "linewidth": 1,
@@ -576,14 +576,18 @@
             {
                 "allValue": null,
                 "current": {
-                    "text": "LetvWebServer-53CA32",
-                    "value": "LetvWebServer-53CA32"
+                    "tags": [],
+                    "text": "vm-10-124-66-111 + vm-10-124-66-112",
+                    "value": [
+                        "vm-10-124-66-111",
+                        "vm-10-124-66-112"
+                    ]
                 },
                 "datasource": "letv-mas-omp-dockers",
                 "hide": 0,
                 "includeAll": false,
                 "label": "letv_mas_docker_host",
-                "multi": false,
+                "multi": true,
                 "name": "letv_mas_docker_host",
                 "options": [],
                 "query": "SHOW TAG VALUES WITH KEY = \"host\"",
@@ -599,8 +603,10 @@
             {
                 "allValue": null,
                 "current": {
-                    "text": "letv-mas-router-9001",
-                    "value": "letv-mas-router-9001"
+                    "text": "letv-mas-caller-8910",
+                    "value": [
+                        "letv-mas-caller-8910"
+                    ]
                 },
                 "datasource": "letv-mas-omp-dockers",
                 "hide": 0,
@@ -654,5 +660,5 @@
     "timezone": "",
     "title": "LETV-MAS-OMP-DOCKERS",
     "uid": "8A5Ee4tmk",
-    "version": 35
+    "version": 38
 }

@@ -1,0 +1,66 @@
+spring:
+  cloud:
+    stream:
+      # 自定义开关
+      enabled: true
+#      kafka:
+#        binder:
+#          zkNodes: ${ZK_NODES:zk2101i.test.db.lecloud.com:2101/kafka/kafka9101}
+#          brokers: ${KAFKA_BROKERS:k9101i.test.db.lecloud.com:9101}
+#          # 生产者确认，0、1、-1，默认为1。0为不确认，1为leader单确认，-1为同步副本确认。-1的情况下消息可靠性更高。
+#          required-acks: -1
+#          # 是否自动创建topic，默认为true。设为false的情况下，依赖手动配置broker相关topic>配置，如果topic不存在binder则无法启动。
+#          auto-create-topics: true
+#          configuration:
+#            security:
+#              protocol: SASL_PLAINTEXT
+#            sasl:
+#              mechanism: PLAIN
+#          jaas:
+#            loginModule: org.apache.kafka.common.security.plain.PlainLoginModule
+#            options:
+#              username: tvvideo
+#              password: tvvideo-secret
+      # 指定中间件
+      default-binder: config-kafka
+      binders:
+        config-kafka:
+          type: kafka
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      #zkNodes: ${ZK_NODES:zk2101i.test.db.lecloud.com:2101/kafka/kafka9101}
+                      #brokers: ${KAFKA_BROKERS:k9101i.test.db.lecloud.com:9101}
+                      zkNodes: ${ZK_NODES:zk2001i.bjxy.db.lecloud.com:2001/kafka/kafka9001}
+                      brokers: ${KAFKA_BROKERS:k9001i.bjxy.db.lecloud.com:9001}
+                      # 生产者确认，0、1、-1，默认为1。0为不确认，1为leader单确认，-1为同步副本确认。-1的情况下消息可靠性更高。
+                      required-acks: -1
+                      # 是否自动创建topic，默认为true。设为false的情况下，依赖手动配置broker相关topic>配置，如果topic不存在binder则无法启动。
+                      auto-create-topics: true
+                      configuration:
+                        security:
+                          protocol: SASL_PLAINTEXT
+                        sasl:
+                          mechanism: PLAIN
+                      jaas:
+                        loginModule: org.apache.kafka.common.security.plain.PlainLoginModule
+                        options:
+                          username: tvvideo
+                          password: tvvideo-secret
+    bus:
+      # 是否启用bus
+      enabled: true
+      # Bus使用的队列或Topic，kafka中的topic，rabbitmq中的queue
+      destination: tvvideo.springcloud.config
+      trace:
+        # 是否启用bus事件跟踪，可以通过/trace页面查看
+        enabled: true
+      refresh:
+        # 是否发送refresh事件，开启时支持基于config文件变更的动态配置
+        enabled: true
+      env:
+        # 是否开启env事件，开启时支持直接动态配置相应环境变量，如/bus/env?arg1=value1&arg2=value2
+        enabled: true

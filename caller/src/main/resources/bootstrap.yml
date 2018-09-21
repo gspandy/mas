@@ -7,7 +7,7 @@ spring:
     active: ${CALLER_PROFILE:dev}
   cloud:
     config:
-      uri: ${CONFIG_SERVER_DOMAIN:http://10.112.33.0/}
+      uri: ${CONFIG_SERVER_DOMAIN:http://config.mas.letv.cn}
       failFast: true #the client will halt with an Exception
       enabled: true
       # boostrap.yml配置优先于启动参数变量--spring.profiles.active

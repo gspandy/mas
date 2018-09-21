@@ -8,7 +8,7 @@ spring:
     config:
       uri: ${CONFIG_SERVER_DOMAIN:http://config.mas.letv.cn/}
       failFast: true #the client will halt with an Exception
-      enabled: false
+      enabled: true
       # boostrap.yml配置优先于启动参数变量--spring.profiles.active
       profile: ${spring.profiles.active:${ROUTER_SERVER_PROFILE:default}}
       label: master

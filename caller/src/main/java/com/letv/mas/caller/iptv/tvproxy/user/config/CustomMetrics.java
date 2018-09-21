@@ -50,7 +50,7 @@ public class CustomMetrics implements MeterBinder {
         if (tpServerStatusMap.isEmpty()) {
             return;
         }
-        logger.info(" ---scheduledBind--- "+tpServerStatusMap.size());
+        logger.info(" ---CustomMetrics scheduledBind size--- "+tpServerStatusMap.size());
         Iterator<Map.Entry<String, TpServiceStatus>> entries = tpServerStatusMap.entrySet().iterator();
         while (entries.hasNext()) {
             Map.Entry<String, TpServiceStatus> entry = entries.next();
@@ -63,6 +63,7 @@ public class CustomMetrics implements MeterBinder {
                 continue;
             }
             if (!nodes.contains(key)) {
+                logger.info(" ---CustomMetrics scheduledBind key--- "+key);
                 Gauge.builder("net_uptime", tpServiceStatus, TpServiceStatus::getResponseTime).tag("uri",key).register(registry);
                 //Gauge.builder("net_count", tpServiceStatus, TpServiceStatus::getCount).tag("uri",key).register(registry);
                 nodes.add(key);

@@ -15,36 +15,6 @@ public class HttpClientConfiguration {
 
     private static final Logger logger = Logger.getLogger(HttpClientConfiguration.class);
 
-    /*@Bean
-    public ServletRegistrationBean getServlet() {
-        HystrixMetricsStreamServlet streamServlet = new HystrixMetricsStreamServlet();
-        ServletRegistrationBean registrationBean = new ServletRegistrationBean(streamServlet);
-        registrationBean.setLoadOnStartup(1);
-        registrationBean.addUrlMappings("/hystrix.stream");
-        registrationBean.setName("HystrixMetricsStreamServlet");
-        return registrationBean;
-    }*/
-    /*@Bean
-    public ServletRegistrationBean getServlet(){
-
-        HystrixMetricsStreamServlet streamServlet = new HystrixMetricsStreamServlet();
-
-        ServletRegistrationBean regBean = new ServletRegistrationBean(streamServlet);
-
-        regBean.setLoadOnStartup(1);
-
-        List mappingList = new ArrayList();
-
-        mappingList.add("/hystrix.stream");
-
-        regBean.setUrlMappings(mappingList);
-
-        regBean.setName("hystrixServlet");
-
-        return regBean;
-
-    }*/
-
     @Bean
     RestConfig getRestConfig() {
         logger.info("RestConfig init ....");

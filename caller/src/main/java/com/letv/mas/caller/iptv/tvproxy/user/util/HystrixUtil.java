@@ -12,8 +12,12 @@ public class HystrixUtil {
     private static Log hystrixMonitor = LogFactory.getLog("hystrixMonitorLog");
     private static Log resourceMonitor = LogFactory.getLog("resourceMonitorLog");
     private static Log log = LogFactory.getLog(HystrixUtil.class);
+    public static boolean enableHyLogfile = false;
 
     public static void logFallBack(String group, String name, String resource, Throwable e) {
+        if (!enableHyLogfile) {
+            return;
+        }
         String log = group + "|" + name + "|" + resource;
         if (e != null && StringUtil.isNotBlank(e.getMessage())) {
             log = log + "|" + e.getMessage();
@@ -39,6 +43,9 @@ public class HystrixUtil {
     }
 
     public static void logHystrix() {
+        if (!enableHyLogfile) {
+            return;
+        }
         HystrixRequestLog hystrixRequestLog = HystrixRequestLog.getCurrentRequest();
         if (hystrixRequestLog != null) {
             hystrixRequestLog.getAllExecutedCommands().forEach(hystrixInvokableInfo -> {
@@ -64,7 +71,7 @@ public class HystrixUtil {
                     hystrixMonitor.info(log);
                 }*/
                 if (isOpen || isFallBack || isTimeOut || StringUtil.isNotBlank(errorStr)) {
-                    String logStr = group + "|" + name + "|" + TimeUtil.timestamp2date(start / 1000000) + "|" + time + "|" + isOpen + "|" + isFallBack + "|" + isTimeOut + "|" + errorStr;
+                    String logStr = group + "|" + name  + "|" + time + "|" + isOpen + "|" + isFallBack + "|" + isTimeOut + "|" + errorStr;
                     hystrixMonitor.info(logStr);
                 }
 

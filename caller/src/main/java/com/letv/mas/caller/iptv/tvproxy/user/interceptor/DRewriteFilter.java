@@ -25,9 +25,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/*@Order(1)
-@WebFilter(filterName = "rewrite", urlPatterns = "/api/tv/*")
-@Iptv*/
+@Order(1)
+@WebFilter(filterName = "rewrite", urlPatterns = "/iptv/api/new/*")
+@Iptv
 public class DRewriteFilter implements Filter {
     private final static ArrayList<String> DEBUG_IP_WHITELIST = new ArrayList<String>(
             Arrays.asList("10.58.*.*", "10.124.66.210", "10.124.66.211"));
@@ -37,7 +37,11 @@ public class DRewriteFilter implements Filter {
     /*@Autowired(required = false)
     private SessionCache sessionCache;*/
 
-    private boolean enableLogfile = true;
+    @Value("${spring.cloud.iptv.host-log.enabled}")
+    private boolean enableLogfile = false;
+
+    @Value("${spring.cloud.iptv.hystrix-log.enabled}")
+    private boolean enableHyLogfile = false;
 
     private String host = "127.0.0.1";
 
@@ -55,7 +59,7 @@ public class DRewriteFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
             ServletException {
         HystrixUtil.initContext();
-        SessionCache.initSessionCacheForRequest();
+        HystrixUtil.enableHyLogfile = enableHyLogfile;
         long stime = System.currentTimeMillis();
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
@@ -71,8 +75,8 @@ public class DRewriteFilter implements Filter {
                 chain.doFilter(request, response);
             }
         }
-        //this.log(request, response, stime);
-        //HystrixUtil.logHystrix();
+        this.loghostAccess(request, response, stime);
+        HystrixUtil.logHystrix();
         HystrixUtil.shutdown();
     }
 
@@ -89,25 +93,30 @@ public class DRewriteFilter implements Filter {
                                       FilterChain chain) {
         String ret = null;
         String debug = request.getParameter("debug");
-        if (StringUtil.isNotBlank(debug) && isAllowIp()) {
-            if (Integer.parseInt(debug) > 0) {
-                SessionCache.getSession().setCommObj("debug", request.getParameter("debug"));
-                try {
-                    HsResponseWrapper hsResponseWrapper = new HsResponseWrapper(response);
-                    chain.doFilter(request, hsResponseWrapper);
-                    ret = hsResponseWrapper.getContent();
-                } catch (Exception e) {
-                    // TODO
-                }
+        if (StringUtil.isNotBlank(debug) && isAllowIp() && Integer.parseInt(debug) > 0) {
+            SessionCache.initSessionCacheForRequest();
+            //SessionCache.getSession().changeWriteStatus(true);
+            SessionCache.getSession().setCommObj("debug", request.getParameter("debug"));
+        } else {
+            //SessionCache.getSession().changeWriteStatus(false);
+        }
+        if (SessionCache.getSession() != null) {
+            try {
+                HsResponseWrapper hsResponseWrapper = new HsResponseWrapper(response);
+                chain.doFilter(request, hsResponseWrapper);
+                ret = hsResponseWrapper.getContent();
+            } catch (Exception e) {
+                // TODO
             }
         }
         return ret;
     }
 
     private boolean isAllowIp() {
-        if (StringUtil.isNotBlank(profile) && profile.endsWith("prod")) {
+        //暂时先放开，待业务稳定
+        /*if (StringUtil.isNotBlank(profile) && profile.endsWith("prod")) {
             return IpAddrUtil.matchIP(DEBUG_IP_WHITELIST, IpAddrUtil.getIPAddr());
-        }
+        }*/
         return true;
     }
 
@@ -159,7 +168,7 @@ public class DRewriteFilter implements Filter {
         return ret;
     }
 
-    private void log(HttpServletRequest request,
+    private void loghostAccess(HttpServletRequest request,
                      HttpServletResponse response, long stime) {
         // 默认不输出日志
         if (!enableLogfile) {

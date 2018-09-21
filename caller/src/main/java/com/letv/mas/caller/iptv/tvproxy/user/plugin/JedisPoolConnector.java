@@ -240,46 +240,52 @@ public class JedisPoolConnector {
     }
 
     private void initJedisPoolConfig() {
-        this.masterJedisPoolConfig = new MsJedisPoolConfig();
-        String redis_master_pass = null;
         if (jedisConfig == null) {
             return;
         }
-        if (StringUtil.isNotBlank(jedisConfig.getMaster().getPass())) {
-            redis_master_pass = jedisConfig.getMaster().getPass();
+        if (jedisConfig.getMaster() != null) {
+            this.masterJedisPoolConfig = new MsJedisPoolConfig();
+            String redis_master_pass = null;
+            if (StringUtil.isNotBlank(jedisConfig.getMaster().getPass())) {
+                redis_master_pass = jedisConfig.getMaster().getPass();
+            }
+            JedisPoolConfig masterConfig = new JedisPoolConfig();
+            if(jedisConfig.getPool() != null){
+                masterConfig.setMaxTotal(jedisConfig.getPool().getMaxActive());
+                masterConfig.setMaxIdle(jedisConfig.getPool().getMaxIdle());
+                masterConfig.setMaxWaitMillis(jedisConfig.getPool().getMaxWait());
+                masterConfig.setTestOnBorrow(jedisConfig.getPool().isTestOnBorrow());
+                masterConfig.setTestOnReturn(jedisConfig.getPool().isTestOnReturn());
+            }
+            this.masterJedisPoolConfig.jedisPoolConfig = masterConfig;
+            this.masterJedisPoolConfig.password = redis_master_pass;
+            this.masterJedisPoolConfig.host = jedisConfig.getMaster().getIp();
+            this.masterJedisPoolConfig.port = jedisConfig.getMaster().getPort();
+            this.masterJedisPoolConfig.socketTimeout = jedisConfig.getMaster().getSocketTimeout();
+            this.MASTER_CHECK_EXCEPTION_COUNT = masterConfig.getMaxTotal();
         }
-        JedisPoolConfig masterConfig = new JedisPoolConfig();
-        masterConfig.setMaxTotal(jedisConfig.getPool().getMaxActive());
-        masterConfig.setMaxIdle(jedisConfig.getPool().getMaxIdle());
-        masterConfig.setMaxWaitMillis(jedisConfig.getPool().getMaxWait());
-        masterConfig.setTestOnBorrow(jedisConfig.getPool().isTestOnBorrow());
-        masterConfig.setTestOnReturn(jedisConfig.getPool().isTestOnReturn());
-        this.masterJedisPoolConfig.jedisPoolConfig = masterConfig;
-        this.masterJedisPoolConfig.password = redis_master_pass;
-        this.masterJedisPoolConfig.host = jedisConfig.getMaster().getIp();
-        this.masterJedisPoolConfig.port = jedisConfig.getMaster().getPort();
-        this.masterJedisPoolConfig.socketTimeout = jedisConfig.getMaster().getSocketTimeout();
-        this.MASTER_CHECK_EXCEPTION_COUNT = masterConfig.getMaxTotal();
 
-        this.slaveJedisPoolConfig = new MsJedisPoolConfig();
-        String redis_slave_pass = null;
-        if (StringUtil.isNotBlank(jedisConfig.getSlave().getPass())) {
-            redis_slave_pass = jedisConfig.getSlave().getPass();
+        if (jedisConfig.getSlave() != null) {
+            this.slaveJedisPoolConfig = new MsJedisPoolConfig();
+            String redis_slave_pass = null;
+            if (StringUtil.isNotBlank(jedisConfig.getSlave().getPass())) {
+                redis_slave_pass = jedisConfig.getSlave().getPass();
+            }
+            JedisPoolConfig slaveConfig = new JedisPoolConfig();
+            if(jedisConfig.getPool() != null){
+                slaveConfig.setMaxTotal(jedisConfig.getPool().getMaxActive());
+                slaveConfig.setMaxIdle(jedisConfig.getPool().getMaxIdle());
+                slaveConfig.setMaxWaitMillis(jedisConfig.getPool().getMaxWait());
+                slaveConfig.setTestOnBorrow(jedisConfig.getPool().isTestOnBorrow());
+                slaveConfig.setTestOnReturn(jedisConfig.getPool().isTestOnReturn());
+            }
+            this.slaveJedisPoolConfig.jedisPoolConfig = slaveConfig;
+            this.slaveJedisPoolConfig.password = redis_slave_pass;
+            this.slaveJedisPoolConfig.host = jedisConfig.getSlave().getIp();
+            this.slaveJedisPoolConfig.port = jedisConfig.getSlave().getPort();
+            this.slaveJedisPoolConfig.socketTimeout = jedisConfig.getSlave().getSocketTimeout();
+            this.SLAVE_CHECK_EXCEPTION_COUNT = slaveConfig.getMaxTotal();
         }
-        JedisPoolConfig slaveConfig = new JedisPoolConfig();
-
-        slaveConfig.setMaxTotal(jedisConfig.getPool().getMaxActive());
-        slaveConfig.setMaxIdle(jedisConfig.getPool().getMaxIdle());
-        slaveConfig.setMaxWaitMillis(jedisConfig.getPool().getMaxWait());
-        slaveConfig.setTestOnBorrow(jedisConfig.getPool().isTestOnBorrow());
-        slaveConfig.setTestOnReturn(jedisConfig.getPool().isTestOnReturn());
-
-        this.slaveJedisPoolConfig.jedisPoolConfig = slaveConfig;
-        this.slaveJedisPoolConfig.password = redis_slave_pass;
-        this.slaveJedisPoolConfig.host = jedisConfig.getMaster().getIp();
-        this.slaveJedisPoolConfig.port = jedisConfig.getMaster().getPort();
-        this.slaveJedisPoolConfig.socketTimeout = jedisConfig.getMaster().getSocketTimeout();
-        this.SLAVE_CHECK_EXCEPTION_COUNT = slaveConfig.getMaxTotal();
     }
 
     class MsJedisPoolConfig {

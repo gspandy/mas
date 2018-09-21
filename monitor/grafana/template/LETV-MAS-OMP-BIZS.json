@@ -16,7 +16,7 @@
     "gnetId": null,
     "graphTooltip": 0,
     "id": 3,
-    "iteration": 1536317446975,
+    "iteration": 1537491842659,
     "links": [],
     "panels": [
         {
@@ -448,7 +448,7 @@
             "steppedLine": false,
             "targets": [
                 {
-                    "alias": "[[tag_serviceIndex]]",
+                    "alias": "[[tag_serviceIndex]]-[[tag_status]]",
                     "groupBy": [
                         {
                             "params": [
@@ -459,6 +459,12 @@
                         {
                             "params": [
                                 "serviceIndex"
+                            ],
+                            "type": "tag"
+                        },
+                        {
+                            "params": [
+                                "status"
                             ],
                             "type": "tag"
                         }
@@ -473,7 +479,7 @@
                         [
                             {
                                 "params": [
-                                    "count"
+                                    "mean"
                                 ],
                                 "type": "field"
                             },
@@ -884,23 +890,548 @@
             }
         },
         {
-            "columns": [],
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
             "datasource": "letv-mas-omp-services",
-            "fontSize": "100%",
+            "fill": 1,
             "gridPos": {
-                "h": 4,
+                "h": 6,
                 "w": 24,
                 "x": 0,
                 "y": 29
             },
+            "id": 15,
+            "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "alias": "$tag_uri",
+                    "groupBy": [
+                        {
+                            "params": [
+                                "10s"
+                            ],
+                            "type": "time"
+                        },
+                        {
+                            "params": [
+                                "uri"
+                            ],
+                            "type": "tag"
+                        }
+                    ],
+                    "measurement": "net_uptime",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "refId": "A",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": [
+                                    "value"
+                                ],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "serviceName",
+                            "operator": "=",
+                            "value": "letv-mas-caller-tvproxy-user"
+                        },
+                        {
+                            "condition": "AND",
+                            "key": "serviceIndex",
+                            "operator": "=~",
+                            "value": "/^$letv_mas_biz_host$/"
+                        }
+                    ]
+                }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "service: net_uptime",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "format": "ms",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
+        },
+        {
+            "alert": {
+                "conditions": [
+                    {
+                        "evaluator": {
+                            "params": [
+                                0.5
+                            ],
+                            "type": "gt"
+                        },
+                        "operator": {
+                            "type": "and"
+                        },
+                        "query": {
+                            "params": [
+                                "A",
+                                "5m",
+                                "now"
+                            ]
+                        },
+                        "reducer": {
+                            "params": [],
+                            "type": "avg"
+                        },
+                        "type": "query"
+                    },
+                    {
+                        "evaluator": {
+                            "params": [
+                                500
+                            ],
+                            "type": "gt"
+                        },
+                        "operator": {
+                            "type": "or"
+                        },
+                        "query": {
+                            "params": [
+                                "B",
+                                "5m",
+                                "now"
+                            ]
+                        },
+                        "reducer": {
+                            "params": [],
+                            "type": "avg"
+                        },
+                        "type": "query"
+                    },
+                    {
+                        "evaluator": {
+                            "params": [
+                                0.5
+                            ],
+                            "type": "gt"
+                        },
+                        "operator": {
+                            "type": "or"
+                        },
+                        "query": {
+                            "params": [
+                                "C",
+                                "5m",
+                                "now"
+                            ]
+                        },
+                        "reducer": {
+                            "params": [],
+                            "type": "avg"
+                        },
+                        "type": "query"
+                    },
+                    {
+                        "evaluator": {
+                            "params": [
+                                500
+                            ],
+                            "type": "gt"
+                        },
+                        "operator": {
+                            "type": "or"
+                        },
+                        "query": {
+                            "params": [
+                                "D",
+                                "5m",
+                                "now"
+                            ]
+                        },
+                        "reducer": {
+                            "params": [],
+                            "type": "avg"
+                        },
+                        "type": "query"
+                    }
+                ],
+                "executionErrorState": "alerting",
+                "frequency": "60s",
+                "handler": 1,
+                "name": "mas-alerts-tvproxy",
+                "noDataState": "no_data",
+                "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "letv-mas-omp-services",
+            "fill": 1,
+            "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 35
+            },
+            "id": 13,
+            "legend": {
+                "avg": true,
+                "current": true,
+                "hideEmpty": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "null as zero",
+            "percentage": false,
+            "pointradius": 5,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [
+                {
+                    "alias": "/cpu*/i",
+                    "fill": 0,
+                    "lines": true,
+                    "yaxis": 1,
+                    "zindex": 2
+                },
+                {
+                    "alias": "/status*/i",
+                    "fill": 2,
+                    "lines": true,
+                    "yaxis": 2
+                }
+            ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "alias": "cpu-$tag_serviceIndex",
+                    "groupBy": [
+                        {
+                            "params": [
+                                "serviceIndex"
+                            ],
+                            "type": "tag"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "system_cpu_usage",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT \"value\" FROM \"system_cpu_usage\" WHERE (\"serviceName\" = 'letv-mas-router-tvproxy' AND (\"serviceIndex\" = '10.124.148.37:9001' OR \"serviceIndex\" = '10.124.148.32:9001')) AND $timeFilter GROUP BY \"serviceIndex\" ",
+                    "rawQuery": true,
+                    "refId": "A",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": [
+                                    "value"
+                                ],
+                                "type": "field"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "serviceName",
+                            "operator": "=",
+                            "value": "letv-mas-router-tvproxy"
+                        },
+                        {
+                            "condition": "AND",
+                            "key": "serviceIndex",
+                            "operator": "=",
+                            "value": "10.124.148.37:9001"
+                        },
+                        {
+                            "condition": "OR",
+                            "key": "serviceIndex",
+                            "operator": "=",
+                            "value": "10.124.148.32:9001"
+                        }
+                    ]
+                },
+                {
+                    "alias": "status-$tag_serviceIndex",
+                    "groupBy": [
+                        {
+                            "params": [
+                                "$__interval"
+                            ],
+                            "type": "time"
+                        },
+                        {
+                            "params": [
+                                "serviceIndex"
+                            ],
+                            "type": "tag"
+                        },
+                        {
+                            "params": [
+                                "null"
+                            ],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "http_server_requests",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT \"count\" FROM \"http_server_requests\" WHERE (\"serviceName\" = 'letv-mas-router-tvproxy' AND \"uri\" =~ /\\/*/ AND (\"status\" = '404' OR \"status\" = '400' OR \"status\" = '500') AND (\"serviceIndex\" = '10.124.148.32:9001' OR \"serviceIndex\" = '10.124.148.37:9001')) AND $timeFilter GROUP BY \"serviceIndex\" ",
+                    "rawQuery": true,
+                    "refId": "B",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": [
+                                    "count"
+                                ],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "sum"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "serviceName",
+                            "operator": "=",
+                            "value": "letv-mas-router-tvproxy"
+                        },
+                        {
+                            "condition": "AND",
+                            "key": "serviceIndex",
+                            "operator": "=",
+                            "value": "10.124.148.32:9001"
+                        },
+                        {
+                            "condition": "AND",
+                            "key": "uri",
+                            "operator": "=",
+                            "value": "/iptv/api/new/user/**"
+                        },
+                        {
+                            "condition": "AND",
+                            "key": "status",
+                            "operator": "=",
+                            "value": "404"
+                        }
+                    ]
+                },
+                {
+                    "alias": "cpu-$tag_serviceIndex",
+                    "groupBy": [
+                        {
+                            "params": [
+                                "$__interval"
+                            ],
+                            "type": "time"
+                        },
+                        {
+                            "params": [
+                                "null"
+                            ],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT \"value\" FROM \"system_cpu_usage\" WHERE (\"serviceName\" = 'letv-mas-caller-tvproxy-user' AND (\"serviceIndex\" = '10.124.66.111:8910' OR \"serviceIndex\" = '10.124.66.112:8910')) AND $timeFilter GROUP BY \"serviceIndex\"",
+                    "rawQuery": true,
+                    "refId": "C",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": [
+                                    "value"
+                                ],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            }
+                        ]
+                    ],
+                    "tags": []
+                },
+                {
+                    "alias": "status-$tag_serviceIndex",
+                    "groupBy": [
+                        {
+                            "params": [
+                                "$__interval"
+                            ],
+                            "type": "time"
+                        },
+                        {
+                            "params": [
+                                "null"
+                            ],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT \"count\" FROM \"http_server_requests\" WHERE (\"serviceName\" = 'letv-mas-caller-tvproxy-user'  AND \"uri\" =~ /\\/*/ AND (\"status\" = '404' OR \"status\" = '400' OR \"status\" = '500') AND (\"serviceIndex\" = '10.124.66.111:8910' OR \"serviceIndex\" = '10.124.66.112:8910')) AND $timeFilter GROUP BY \"serviceIndex\" ",
+                    "rawQuery": true,
+                    "refId": "D",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": [
+                                    "value"
+                                ],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            }
+                        ]
+                    ],
+                    "tags": []
+                }
+            ],
+            "thresholds": [
+                {
+                    "colorMode": "critical",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 0.5
+                }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "alerts",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "transparent": true,
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
+        },
+        {
+            "columns": [],
+            "datasource": "letv-mas-omp-services",
+            "fontSize": "100%",
+            "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 43
+            },
             "id": 4,
             "links": [],
-            "pageSize": null,
+            "pageSize": 50,
             "scroll": true,
             "showHeader": true,
             "sort": {
                 "col": 0,
-                "desc": true
+                "desc": false
             },
             "styles": [
                 {
@@ -928,9 +1459,13 @@
             "targets": [
                 {
                     "groupBy": [],
+                    "hide": false,
+                    "limit": "100",
                     "measurement": "http_server_requests",
                     "orderByTime": "DESC",
                     "policy": "autogen",
+                    "query": "SELECT * FROM \"autogen\".\"http_server_requests\" WHERE (\"serviceName\" =~ /^$letv_mas_biz_name$/ AND \"serviceIndex\" =~ /^$letv_mas_biz_host$/ AND (\"status\" = '404' OR \"status\" = '400' OR \"status\" = '500' OR \"status\" = '504') AND \"count\" > 0 AND \"uri\" =~ /^$letv_mas_biz_uri$/) AND $timeFilter ORDER BY time DESC LIMIT 200",
+                    "rawQuery": true,
                     "refId": "A",
                     "resultFormat": "table",
                     "select": [
@@ -960,80 +1495,18 @@
                             "key": "status",
                             "operator": "=",
                             "value": "404"
-                        }
-                    ]
-                },
-                {
-                    "groupBy": [],
-                    "measurement": "http_server_requests",
-                    "orderByTime": "DESC",
-                    "policy": "default",
-                    "refId": "B",
-                    "resultFormat": "table",
-                    "select": [
-                        [
-                            {
-                                "params": [
-                                    "*"
-                                ],
-                                "type": "field"
-                            }
-                        ]
-                    ],
-                    "tags": [
-                        {
-                            "key": "serviceName",
-                            "operator": "=~",
-                            "value": "/^$letv_mas_biz_name$/"
                         },
                         {
                             "condition": "AND",
-                            "key": "serviceIndex",
-                            "operator": "=~",
-                            "value": "/^$letv_mas_biz_host$/"
+                            "key": "count",
+                            "operator": ">",
+                            "value": "0"
                         },
                         {
                             "condition": "AND",
-                            "key": "status",
-                            "operator": "=",
-                            "value": "500"
-                        }
-                    ]
-                },
-                {
-                    "groupBy": [],
-                    "measurement": "http_server_requests",
-                    "orderByTime": "DESC",
-                    "policy": "default",
-                    "refId": "C",
-                    "resultFormat": "table",
-                    "select": [
-                        [
-                            {
-                                "params": [
-                                    "*"
-                                ],
-                                "type": "field"
-                            }
-                        ]
-                    ],
-                    "tags": [
-                        {
-                            "key": "serviceName",
+                            "key": "uri",
                             "operator": "=~",
-                            "value": "/^$letv_mas_biz_name$/"
-                        },
-                        {
-                            "condition": "AND",
-                            "key": "serviceIndex",
-                            "operator": "=~",
-                            "value": "/^$letv_mas_biz_host$/"
-                        },
-                        {
-                            "condition": "AND",
-                            "key": "status",
-                            "operator": "=",
-                            "value": "401"
+                            "value": "/^$letv_mas_biz_uri$/"
                         }
                     ]
                 }
@@ -1078,9 +1551,11 @@
                 "allValue": null,
                 "current": {
                     "tags": [],
-                    "text": "10.112.34.124:8960",
+                    "text": "10.112.34.124:8920 + 10.124.66.111:8910 + 10.124.66.112:8910",
                     "value": [
-                        "10.112.34.124:8960"
+                        "10.112.34.124:8920",
+                        "10.124.66.111:8910",
+                        "10.124.66.112:8910"
                     ]
                 },
                 "datasource": "letv-mas-omp-services",
@@ -1101,7 +1576,7 @@
                 "useTags": false
             },
             {
-                "allValue": null,
+                "allValue": "",
                 "current": {
                     "text": "All",
                     "value": [
@@ -1126,8 +1601,9 @@
                 "useTags": false
             },
             {
-                "allValue": null,
+                "allValue": "",
                 "current": {
+                    "tags": [],
                     "text": "All",
                     "value": [
                         "$__all"
@@ -1184,5 +1660,5 @@
     "timezone": "",
     "title": "LETV-MAS-OMP-BIZS",
     "uid": "sU4VtM2iz",
-    "version": 135
+    "version": 188
 }

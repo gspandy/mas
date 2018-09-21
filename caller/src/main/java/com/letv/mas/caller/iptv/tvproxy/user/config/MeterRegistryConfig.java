@@ -30,6 +30,19 @@ public class MeterRegistryConfig {
 
     @Bean
     @Primary
+    MeterRegistryCustomizer<MeterRegistry> metricsConfig() {
+        return registry -> {
+            registry.config().commonTags("serviceName", applicationName);
+            registry.config().commonTags("serviceIndex", applicationIndex);
+            new JvmMemoryMetrics().bindTo(registry);
+            new JvmGcMetrics().bindTo(registry);
+            new ProcessorMetrics().bindTo(registry);
+            new JvmThreadMetrics().bindTo(registry);
+        };
+    }
+
+    /*@Bean
+    @Primary
     MeterRegistryCustomizer<MeterRegistry> metricsConfig(CustomMetrics customMetrics) {
         return registry -> {
             registry.config().commonTags("serviceName", applicationName);
@@ -47,5 +60,5 @@ public class MeterRegistryConfig {
     @Bean
     CustomMetrics getCustomMetrics(){
         return new CustomMetrics();
-    }
+    }*/
 }

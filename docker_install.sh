@@ -28,10 +28,11 @@ else
    service docker start;
 fi
 
-if [ -f "/var/run/docker.sock" ]; then
+if [ -e "/var/run/docker.sock" ]; then
    chmod a+rw /var/run/docker.sock
    sudo groupadd docker
    sudo gpasswd -a leworker docker
-   sudo service docker restart
    newgrp - docker
+   exit
+   sudo service docker restart
 fi

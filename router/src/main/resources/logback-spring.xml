@@ -71,12 +71,6 @@
     </appender>
 
     <!-- 过滤器可以指定哪些包/类，哪个等级 -->
-    <logger name="com" level="INFO">
-        <appender-ref ref="SYSTEM_ROLLING_FILE"/>
-    </logger>
-    <logger name="org" level="INFO">
-        <appender-ref ref="SYSTEM_ROLLING_FILE"/>
-    </logger>
     <logger name="com.letv.mas.router.config.ZuulLogFilter" level="INFO">
         <appender-ref ref="ROUTER_ROLLING_FILE_ASYNC"/>
     </logger>
@@ -84,6 +78,7 @@
     <!-- 全局控制台遇到INFO及以上级别就进行输出 -->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="SYSTEM_ROLLING_FILE"/>
     </root>
 
 </configuration>

@@ -21,6 +21,8 @@ for arg in "$@"; do
       region=$value;;
     --jmxport)
       jmxport=$value;;
+    --project_net)
+      project_net=$value;;
     --help)
       echo "args:"
       echo "--module="
@@ -63,7 +65,7 @@ fi
 
 if [ -f "${env_file}" ]; then
     echo "${env_file}"
-    docker_deploy="sh ${cur_dir}/docker_deploy_m.sh --module=${module} --port=${port} --zone=${zone} --region=${region} --env_file=${env_file} --hosts_file=${hosts_file} --jmxport=${jmxport}"
+    docker_deploy="sh ${cur_dir}/docker_deploy_m.sh --module=${module} --port=${port} --zone=${zone} --region=${region} --env_file=${env_file} --hosts_file=${hosts_file} --jmxport=${jmxport} --project_net=${project_net}"
     eval "$docker_deploy"
 else
     echo "[error]the file[${env_file}] was not existed!"

@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableZuulProxy
 @EnableEurekaClient
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.letv.mas.common.config.monitor.influxdb" })
+@ComponentScan(basePackages = { "com.letv.mas.common.config.monitor.influxdb", "com.letv.mas.router.config" })
 public class ServiceZuulApplication {
 
     public static void main(String[] args) {
