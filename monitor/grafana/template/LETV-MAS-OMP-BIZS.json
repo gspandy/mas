@@ -16,7 +16,7 @@
     "gnetId": null,
     "graphTooltip": 0,
     "id": 3,
-    "iteration": 1537491842659,
+    "iteration": 1537943356953,
     "links": [],
     "panels": [
         {
@@ -473,13 +473,15 @@
                     "measurement": "http_server_requests",
                     "orderByTime": "ASC",
                     "policy": "autogen",
+                    "query": "SELECT mean(\"mean\") FROM \"autogen\".\"http_server_requests\" WHERE (\"serviceName\" =~ /^$letv_mas_biz_name$/ AND \"serviceIndex\" =~ /^$letv_mas_biz_host$/ AND \"uri\" =~ /^$letv_mas_biz_uri$/ AND \"status\" =~ /^$letv_mas_biz_status$/) AND $timeFilter GROUP BY time($__interval), \"serviceIndex\", \"status\"",
+                    "rawQuery": false,
                     "refId": "A",
                     "resultFormat": "time_series",
                     "select": [
                         [
                             {
                                 "params": [
-                                    "mean"
+                                    "count"
                                 ],
                                 "type": "field"
                             },
@@ -1527,8 +1529,8 @@
                 "allValue": null,
                 "current": {
                     "tags": [],
-                    "text": "letv-mas-caller-tvproxy-user",
-                    "value": "letv-mas-caller-tvproxy-user"
+                    "text": "letv-mas-router-tvproxy",
+                    "value": "letv-mas-router-tvproxy"
                 },
                 "datasource": "letv-mas-omp-services",
                 "hide": 0,
@@ -1550,12 +1552,12 @@
             {
                 "allValue": null,
                 "current": {
+                    "selected": false,
                     "tags": [],
-                    "text": "10.112.34.124:8920 + 10.124.66.111:8910 + 10.124.66.112:8910",
+                    "text": "10.124.148.32:9001 + 10.124.148.37:9001",
                     "value": [
-                        "10.112.34.124:8920",
-                        "10.124.66.111:8910",
-                        "10.124.66.112:8910"
+                        "10.124.148.32:9001",
+                        "10.124.148.37:9001"
                     ]
                 },
                 "datasource": "letv-mas-omp-services",
@@ -1603,7 +1605,6 @@
             {
                 "allValue": "",
                 "current": {
-                    "tags": [],
                     "text": "All",
                     "value": [
                         "$__all"
@@ -1629,7 +1630,7 @@
         ]
     },
     "time": {
-        "from": "now-12h",
+        "from": "now-24h",
         "to": "now"
     },
     "timepicker": {
@@ -1660,5 +1661,5 @@
     "timezone": "",
     "title": "LETV-MAS-OMP-BIZS",
     "uid": "sU4VtM2iz",
-    "version": 188
+    "version": 189
 }

@@ -269,7 +269,7 @@
         <appender-ref ref="HYSTRIX_DETAIL_ROLLING_FILE" />
     </appender>
     <root level="${logLevel}">
-        <!--<appender-ref ref="console"/>-->
+        <appender-ref ref="console"/>
         <appender-ref ref="SERVER-API_ASYNC"/>
         <appender-ref ref="errorLog_ASYNC"/>
     </root>

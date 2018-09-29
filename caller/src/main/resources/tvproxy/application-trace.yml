@@ -44,7 +44,7 @@ spring:
   sleuth:
     enabled: true
     sampler:
-      percentage: 0.1
+      percentage: 1
   kafka:
     bootstrap-servers: ${ZIPKIN_BROKERS:k9001i.bjxy.db.lecloud.com:9001}
     producer:

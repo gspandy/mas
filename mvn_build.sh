@@ -6,6 +6,7 @@ cur_dir=$(cd "$(dirname "${0}")"; pwd)
 module=$1
 cmd=$2
 biz=$3
+file=$4
 
 if [ -z "$module" ]; then
   echo "The building target module is invalid"
@@ -23,8 +24,12 @@ if [ -n "$biz" ] && [ -f "$module/src/main/resources/bootstrap-$biz.yml" ]; then
   cp -f $module/src/main/resources/bootstrap-$biz.yml $module/src/main/resources/bootstrap.yml
 fi
 
-mvn -B -e -f $module/pom.xml clean $cmd
-#mvn -B -e -U -f $module/pom.xml clean $cmd
+if [ -z "$file" ]; then
+  file="pom.xml"
+fi
+
+mvn -B -e -f $module/$file clean $cmd
+#mvn -B -e -U -f $module/$file clean $cmd
 
 #mvn -B -f common/pom.xml clean deploy
 #mvn -B -f grpc/pom.xml clean deploy
