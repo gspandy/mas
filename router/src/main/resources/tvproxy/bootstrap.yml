@@ -1,6 +1,6 @@
 spring:
   application:
-    name: letv-mas-router
+    name: letv-mas-router-tvproxy
     index: ${ROUTER_SERVER_IP:127.0.0.1}:${ROUTER_SERVER_PORT}
   profiles:
     active: ${ROUTER_SERVER_PROFILE:default}
@@ -8,7 +8,7 @@ spring:
     config:
       uri: ${CONFIG_SERVER_DOMAIN:http://config.mas.letv.cn/}
       failFast: true #the client will halt with an Exception
-      enabled: true
+      enabled: false
       # boostrap.yml配置优先于启动参数变量--spring.profiles.active
       profile: ${spring.profiles.active:${ROUTER_SERVER_PROFILE:default}}
       label: master
