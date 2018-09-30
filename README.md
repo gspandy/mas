@@ -70,7 +70,7 @@ git clone https://github.com/leeway-deng/mas.git
 │   ├── pom[-{部门}-{业务线}[-{功能集}]].xml maven编译配置文件[注]
 
 备注：
-pom[-{部门}-{业务线}[-{功能集}]].xml 如存在不同业务线、不同功能集共存维护，可做隔离打包配置，具体说明如下：
+- pom[-{部门}-{业务线}[-{功能集}]].xml 如存在不同业务线、不同功能集共存维护，可做隔离打包配置，具体说明如下：
 eg.可参考文件{mas}/caller/pom-tvproxy-user.xml
 ~~~
     <build>
@@ -132,12 +132,29 @@ eg.可参考文件{mas}/caller/pom-tvproxy-user.xml
           </plugins>  
     </build>
 ~~~
+
 * 本地编译
 ./mvn_build.sh caller package '' pom-tvproxy-user.xml
 * JK编译
 Root POM选取 caller/pom-tvproxy-user.xml
 * 本地IDE调试运行
 先执行如上本地编译，如IdeaIDE在Run/Debug配置修改Main入口类，并去掉Make加载项（不执行pom.xml编译）即可进行调试运行
+
+-/info增加git版本及编译信息，具体参考{mas}/router/pom-tvproxy.xml中相关部分：
+~~~
+...
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                ...
+            </plugin>   
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                ...
+            </plugin>  
+...                                                    
+~~~
 
 #### 框架说明
 
