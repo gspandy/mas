@@ -1,0 +1,19 @@
+<script src="js/jquery-2.0.2.min.js" type="text/javascript"></script>
+<script>
+    $(function () {
+      $.ajax({
+             url: "http://127.0.0.1:8901/isLogin",
+             type: 'get',
+             dataType: 'jsonp',
+             jsonp: "jsoncallback",
+             jsonpCallback: 'callback',
+             success: function (data) {
+             console.log(data);
+             window.location.href=data;
+             },
+             error: function (err) {
+             window.location.href="https://sso.lecommons.com/login.php?site=workbench&backurl=http://omp.mas.letv.cn/";
+             }
+             });
+      })
+    </script>

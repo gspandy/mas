@@ -1,52 +1,60 @@
+<!--<script src="../../../js/common/navbar.js" type="text/javascript"></script>-->
 <!-- Left side column. contains the logo and sidebar -->
 <aside class="left-side sidebar-offcanvas">
     <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
+    <section class="sidebar" id="sidebar">
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
                 <img src="../../img/avatar3.png" class="img-circle" alt="User Image" />
             </div>
             <div class="pull-left info">
-                <p>Hello, Mas</p>
+                <p id="p_username">Hello, Mas</p>
 
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
         <!-- /.Sidebar user panel -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
-        <ul class="sidebar-menu">
-            <li>
-                <a href="../../index.html">
-                    <i class="fa fa-dashboard"></i> <span>MainPanel</span>
-                </a>
-            </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-folder"></i>
-                    <span>MasDev</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="../../pages/mas/c_code_git.html"><i class="fa fa-angle-double-right"></i> letv-mas-code</a></li>
-                    <li><a href="../../pages/mas/c_deploy_jenkins.html"><i class="fa fa-angle-double-right"></i> letv-mas-deploy</a></li>
-                    <li><a href="../../pages/mas/c_eureka_manager.html"><i class="fa fa-angle-double-right"></i> letv-mas-manager</a></li>
-                    <li><a href="../../pages/mas/c_trace_zipkin.html"><i class="fa fa-angle-double-right"></i> letv-mas-trace</a></li>
-                </ul>
-            </li>
+        <ul class="sidebar-menu" id="treeMenu">
+<!--            <li>-->
+<!--                <a href="../../index.html" id="MainPanel">-->
+<!--                    <i class="fa fa-dashboard"></i> <span>MainPanel</span>-->
+<!--                </a>-->
+<!--            </li>-->
+<!--            <li class="treeview">-->
+<!--                <a href="#">-->
+<!--                    <i class="fa fa-folder"></i>-->
+<!--                    <span>MasDev</span>-->
+<!--                    <i class="fa fa-angle-left pull-right"></i>-->
+<!--                </a>-->
+<!--                <ul class="treeview-menu">-->
+<!--                    <!--href="../../pages/mas/c_code_git.html"-->-->
+<!--                    <li><a onclick="loadPageByAcl(this)"><i class="fa fa-angle-double-right"></i> letv-mas-code</a></li>-->
+<!--                    <!--href="../../pages/mas/c_deploy_jenkins.html"-->-->
+<!--                    <li><a onclick="loadPageByAcl(this)"><i class="fa fa-angle-double-right"></i> letv-mas-deploy</a></li>-->
+<!--                    <!--href="../../pages/mas/c_eureka_manager.html"-->-->
+<!--                    <li><a onclick="loadPageByAcl(this)"><i class="fa fa-angle-double-right"></i> letv-mas-manager</a></li>-->
+<!--                    <!--href="../../pages/mas/c_trace_zipkin.html"-->-->
+<!--                    <li><a onclick="loadPageByAcl(this)"><i class="fa fa-angle-double-right"></i> letv-mas-trace</a></li>-->
+<!--                </ul>-->
+<!--            </li>-->
 
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-folder"></i>
-                    <span>MasOps</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="../../pages/mas/c_trace_kibana.html"><i class="fa fa-angle-double-right"></i> letv-mas-logs</a></li>
-                    <li><a href="../../pages/mas/c_mw_kafka.html"><i class="fa fa-angle-double-right"></i> letv-mw-kafka</a></li>
-                    <li><a href="../../pages/mas/c_docker_dashboard.html"><i class="fa fa-angle-double-right"></i> letv-mas-dashboard</a></li>
-                </ul>
-            </li>
+<!--            <li class="treeview">-->
+<!--                <a href="#">-->
+<!--                    <i class="fa fa-folder"></i>-->
+<!--                    <span>MasOps</span>-->
+<!--                    <i class="fa fa-angle-left pull-right"></i>-->
+<!--                </a>-->
+<!--                <ul class="treeview-menu">-->
+<!--                    <!--href="../../pages/mas/c_trace_kibana.html"-->-->
+<!--                    <li><a onclick="loadPageByAcl(this)"><i class="fa fa-angle-double-right"></i> letv-mas-logs</a></li>-->
+<!--                    <!--href="../../pages/mas/c_mw_kafka.html"-->-->
+<!--                    <li><a onclick="loadPageByAcl(this)"><i class="fa fa-angle-double-right"></i> letv-mw-kafka</a></li>-->
+<!--                    <!--href="../../pages/mas/c_docker_dashboard.html"-->-->
+<!--                    <li><a onclick="loadPageByAcl(this)"><i class="fa fa-angle-double-right"></i> letv-mas-dashboard</a></li>-->
+<!--                </ul>-->
+<!--            </li>-->
             <!--<li class="treeview">-->
                 <!--<a href="#">-->
                     <!--<i class="fa fa-folder"></i>-->
