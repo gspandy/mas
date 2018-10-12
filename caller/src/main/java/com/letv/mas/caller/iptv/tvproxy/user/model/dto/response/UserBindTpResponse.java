@@ -1,4 +1,4 @@
-package com.letv.mas.caller.iptv.tvproxy.user.response;
+package com.letv.mas.caller.iptv.tvproxy.user.model.dto.response;
 
 /**
  * 机卡绑定需求，鉴别该账号是否领取过该机器的机卡绑定套餐（调用用户绑定查询接口）的请求返回结果封装类

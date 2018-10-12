@@ -46,7 +46,7 @@ public class HttpClientUtil extends RestTemplate {
     /*
      * 第三方服务状态集
      */
-    private static final Map<String, TpServiceStatus> tpServerStatusMap = new HashMap<>();
+    private final static Map<String, TpServiceStatus> tpServerStatusMap = new HashMap<>();
     // private static long INTERFACE_RESPONSE_TIME = 2000;// 第三方接口响应时间临界值 2s
     private static long INTERFACE_RESPONSE_TIME = 500;
 

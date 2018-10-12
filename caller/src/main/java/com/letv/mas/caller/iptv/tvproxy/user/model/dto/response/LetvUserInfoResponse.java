@@ -1,4 +1,4 @@
-package com.letv.mas.caller.iptv.tvproxy.user.response;
+package com.letv.mas.caller.iptv.tvproxy.user.model.dto.response;
 
 public class LetvUserInfoResponse {
     private Long uid;// 用户中心uid

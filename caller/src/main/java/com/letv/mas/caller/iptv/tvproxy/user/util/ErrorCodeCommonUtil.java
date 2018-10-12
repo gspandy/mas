@@ -1,7 +1,6 @@
 package com.letv.mas.caller.iptv.tvproxy.user.util;
 
-import com.letv.mas.caller.iptv.tvproxy.user.response.BaseResponse;
-import com.letv.mas.caller.iptv.tvproxy.user.util.MessageUtils;
+import com.letv.mas.caller.iptv.tvproxy.user.model.dto.response.BaseResponse;
 
 /**
  * 用户模块和会员模块通用常量类，提供两个模块共用的字段或方法，尽可能减少两个模块的同层直接依赖；

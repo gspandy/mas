@@ -18,13 +18,14 @@ public class HystrixUtil {
         if (!enableHyLogfile) {
             return;
         }
-        String log = group + "|" + name + "|" + resource;
-        if (e != null && StringUtil.isNotBlank(e.getMessage())) {
-            log = log + "|" + e.getMessage();
-        } else {
-            log = log + "|timeout";
+        String logStr = group + "|" + name + "|" + resource;
+        if (e != null) {
+            if (StringUtil.isNotBlank(e.getMessage())) {
+                logStr = logStr + "|" + e.getMessage();
+            }
+            log.error(logStr,e);
         }
-        resourceMonitor.info(log);
+        resourceMonitor.info(logStr);
     }
 
     public static void initContext() {

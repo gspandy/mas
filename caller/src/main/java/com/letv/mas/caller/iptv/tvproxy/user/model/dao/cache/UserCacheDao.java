@@ -6,7 +6,7 @@ import com.letv.mas.caller.iptv.tvproxy.user.constant.CacheContentConstants;
 import com.letv.mas.caller.iptv.tvproxy.user.constant.CommonConstants;
 import com.letv.mas.caller.iptv.tvproxy.user.model.bean.UserStatus;
 import com.letv.mas.caller.iptv.tvproxy.user.plugin.CommonParam;
-import com.letv.mas.caller.iptv.tvproxy.user.response.BalanceQueryResultResponse;
+import com.letv.mas.caller.iptv.tvproxy.user.model.dto.response.BalanceQueryResultResponse;
 import com.letv.mas.caller.iptv.tvproxy.user.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;

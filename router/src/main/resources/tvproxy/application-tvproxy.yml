@@ -3,11 +3,13 @@ spring:
     name: letv-mas-router-tvproxy
     index: ${ROUTER_SERVER_IP}:${ROUTER_SERVER_PORT}
   cloud:
+    client:
+      ipAddress: ${ROUTER_SERVER_IP}
     loadbalancer:
       retry:
         enabled: true
   profiles:
-    include: config,zuul,trace
+    include: config,zuul,trace,biz
   metrics:
     servo:
       enabled: false

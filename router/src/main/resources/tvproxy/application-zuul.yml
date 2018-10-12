@@ -38,6 +38,9 @@ zuul:
       strip-prefix: true
       # 路由是否支持失败重试 （需要 spring retry 和 ribbon 支持）
       retryable: false
+    r-local:
+      path: '/i/**'
+      url: forward:/i
 
 # Ribbon 全局配置
 ribbon:

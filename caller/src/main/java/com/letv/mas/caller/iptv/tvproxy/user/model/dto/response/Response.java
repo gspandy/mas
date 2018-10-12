@@ -1,4 +1,4 @@
-package com.letv.mas.caller.iptv.tvproxy.user.response;
+package com.letv.mas.caller.iptv.tvproxy.user.model.dto.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

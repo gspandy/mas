@@ -3,7 +3,7 @@ package com.letv.mas.caller.iptv.tvproxy.user.controller;
 import com.letv.mas.caller.iptv.tvproxy.user.annotation.Iptv;
 import com.letv.mas.caller.iptv.tvproxy.user.model.dto.UserAccountDto;
 import com.letv.mas.caller.iptv.tvproxy.user.plugin.CommonParam;
-import com.letv.mas.caller.iptv.tvproxy.user.response.Response;
+import com.letv.mas.caller.iptv.tvproxy.user.model.dto.response.Response;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.ModelAttribute;

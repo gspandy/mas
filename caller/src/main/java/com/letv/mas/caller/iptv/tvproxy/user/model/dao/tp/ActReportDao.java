@@ -4,7 +4,7 @@ import com.letv.mas.caller.iptv.tvproxy.user.annotation.Iptv;
 import com.letv.mas.caller.iptv.tvproxy.user.util.ConfigOperationUtil;
 import com.letv.mas.caller.iptv.tvproxy.user.constant.ApplicationConstants;
 import com.letv.mas.caller.iptv.tvproxy.user.plugin.CommonParam;
-import com.letv.mas.caller.iptv.tvproxy.user.response.ReportTpResponse;
+import com.letv.mas.caller.iptv.tvproxy.user.model.dto.response.ReportTpResponse;
 import com.letv.mas.caller.iptv.tvproxy.user.util.CommonUtil;
 import com.letv.mas.caller.iptv.tvproxy.user.util.StringUtil;
 import org.apache.commons.logging.Log;

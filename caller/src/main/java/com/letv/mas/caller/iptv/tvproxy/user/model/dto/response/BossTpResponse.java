@@ -1,4 +1,4 @@
-package com.letv.mas.caller.iptv.tvproxy.user.response;
+package com.letv.mas.caller.iptv.tvproxy.user.model.dto.response;
 
 /**
  * boss V2接口响应基类

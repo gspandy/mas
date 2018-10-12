@@ -1,7 +1,6 @@
 package com.letv.mas.caller.iptv.tvproxy.user.service;
 
 import com.letv.mas.caller.iptv.tvproxy.user.annotation.Iptv;
-import com.letv.mas.caller.iptv.tvproxy.user.annotation.Upstream;
 import com.letv.mas.caller.iptv.tvproxy.user.constant.*;
 import com.letv.mas.caller.iptv.tvproxy.user.model.bean.DeviceBindConentV2;
 import com.letv.mas.caller.iptv.tvproxy.user.model.bean.SubscribeInfo;
@@ -12,13 +11,15 @@ import com.letv.mas.caller.iptv.tvproxy.user.model.dto.LetvUserDto;
 import com.letv.mas.caller.iptv.tvproxy.user.model.dto.LetvUserInfoDto;
 import com.letv.mas.caller.iptv.tvproxy.user.model.dto.UserAccountDto;
 import com.letv.mas.caller.iptv.tvproxy.user.plugin.CommonParam;
-import com.letv.mas.caller.iptv.tvproxy.user.response.*;
+import com.letv.mas.caller.iptv.tvproxy.user.model.dto.response.*;
 import com.letv.mas.caller.iptv.tvproxy.user.util.*;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.Span;
+import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -760,9 +761,28 @@ public class UserService extends BaseService {
         Response<UserAccountDto> test = new Response<UserAccountDto>();
         return test;
     }
-
+@Autowired
+    Tracer tracer;
     public Response<UserAccountDto> test2(Integer deviceType, String sign, CommonParam commonParam) {
         Response<UserAccountDto> test = new Response<UserAccountDto>();
+        Span span =tracer.createSpan("tvproxy/test");
+        try {
+            span.logEvent("redisService start");
+            span.tag("name", "test2");
+            span.tag("peer.service", "redisService");
+            span.tag("peer.ipv4", "127.0.0.1");
+            span.tag("peer.port", "6379");
+            span.tag("method", "get");
+            span.logEvent("redisService end");
+        } catch (Exception e) {
+
+        } finally {
+            if (span != null) {
+                tracer.close(span);
+            }
+        }
+        System.out.println("test........");
+        tracer.close(span);
         return test;
     }
 }
