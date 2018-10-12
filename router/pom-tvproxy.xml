@@ -28,8 +28,10 @@
         <log4j>1.2.17</log4j>
         <fastjson>1.2.47</fastjson>
         <mas.common>1.0-SNAPSHOT</mas.common>
+        <springfox-swagger2>2.9.2</springfox-swagger2>
         <spring.cloud>Edgware.SR3</spring.cloud>
         <spring.boot>1.5.13.RELEASE</spring.boot>
+        <guava>23.0</guava>
     </properties>
 
     <dependencies>
@@ -91,6 +93,22 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava}</version>
+        </dependency>
+        <!--https://github.com/springfox/springfox-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-swagger2}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-swagger2}</version>
         </dependency>
     </dependencies>
 

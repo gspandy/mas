@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 /**
  * Created by leeco on 18/10/8.
+ * TODO: async-mq + spring cloud task
  */
 @Service("GrafanaAlertService")
 public class GrafanaAlertServiceImpl implements IAlertService {

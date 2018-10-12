@@ -1,3 +1,6 @@
 biz:
   ex-urls:
     ali.dingding.robot.webhook: https://oapi.dingtalk.com/robot/send?access_token=b17826941792acdaa7f5b5b2ea0070585eabce931b4c943363a80993a9146b1f
+
+iptv:
+  doc.enabled: true
