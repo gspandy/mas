@@ -1,4 +1,4 @@
-package com.letv.mas.client.demo.mapper;
+package com.letv.mas.client.demo.model.dao;
 
 import com.letv.mas.client.demo.model.dto.AclDto;
 import com.letv.mas.client.demo.model.dto.UserDto;

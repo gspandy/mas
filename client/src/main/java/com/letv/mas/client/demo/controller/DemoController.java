@@ -1,12 +1,17 @@
 package com.letv.mas.client.demo.controller;
 
 import com.google.gson.Gson;
-import com.letv.mas.client.demo.mapper.DemoMapper;
+import com.letv.mas.client.demo.model.dao.DemoMapper;
 import com.letv.mas.client.demo.model.dto.AclDto;
 import com.letv.mas.client.demo.model.dto.UserDto;
 
+import com.letv.mas.client.demo.util.RedisUtil;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,6 +41,12 @@ public class DemoController {
     @Value("${server.port}")
     String port;
 
+    @Resource
+    private DemoMapper demoMapper;
+
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
+
     @RequestMapping("/hi")
     public String hi(@RequestParam String name) {
         return "hi " + name + ",i am from " + zone + ":" + port;
@@ -45,17 +56,94 @@ public class DemoController {
 
     /**
      * 页面跳转
-     * @param jsoncallback
-     * @param request
-     * @param response
      */
     @RequestMapping("/isLogin")
-    public void isLogin(@RequestParam String jsoncallback,HttpServletRequest request,HttpServletResponse response){
+    public void isLogin(@RequestParam String jsoncallback,HttpServletResponse response){
+        callBackJson(jsoncallback,INDEX,response);
+    }
+
+    /**
+     * 退出登录
+     */
+    @RequestMapping("/logout")
+    public void logout(@RequestParam String jsoncallback,HttpServletRequest request,HttpServletResponse response){
+        Cookie[] cookies = request.getCookies();
+
+        if(cookies.length != 0){
+            for (Cookie cookie:cookies){
+                if("loginUser".equals(cookie.getName())){
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                    redisUtil().lPOP(cookie.getValue(), redisUtil().lGet(cookie.getValue(), 0, -1).size());
+                    callBackJson(jsoncallback,"OK",response);
+                }
+            }
+        }
+    }
+
+    /**
+     * 检查是否登录
+     */
+    @RequestMapping("/checkLogin")
+    public void checkLogin(@RequestParam String jsoncallback, HttpServletRequest request,HttpServletResponse response){
+        String loginUser = (String) request.getAttribute("loginUser");
+        if(StringUtils.isNotBlank(loginUser)){
+            Cookie[] cookies = request.getCookies();
+            if(cookies != null && cookies.length != 0){
+                for (Cookie cookie: cookies){
+                    if("loginUser".equals(cookie.getName())){
+                        callBackJson(jsoncallback,cookie.getValue(),response);
+                    }
+                }
+            }
+            Cookie cookie = new Cookie("loginUser", loginUser);
+            cookie.setMaxAge(-1);
+            response.addCookie(cookie);
+            callBackJson(jsoncallback,loginUser,response);
+        }
+    }
+
+    /**
+     * 根据登录用户查询权限
+     */
+    @RequestMapping("/loadPageByAcl")
+    public void loadPageByAcl(@RequestParam String jsoncallback,HttpServletRequest request,HttpServletResponse response){
+        String loginUser = (String) request.getAttribute("loginUser");
+        UserDto userByMail = demoMapper.findUserByMail(loginUser);
+        if(userByMail==null){
+            demoMapper.insertUser(loginUser);
+            userByMail = demoMapper.findUserByMail(loginUser);
+        }
+        List allAcl = redisUtil().lGet("AllAcl", 0, -1);
+        if(allAcl != null && allAcl.size() == 0){
+            allAcl = demoMapper.findAllAcls();
+            redisUtil().lSet("AllAcl",allAcl);
+            redisUtil().expire("AllAcl", 86400);
+        }
+        List showAcl = redisUtil().lGet(userByMail.getMail(),0,-1);
+        System.err.println();
+        if(showAcl != null && showAcl.size() == 0 && allAcl != null && allAcl.size() != 0){
+            String[] acls = userByMail.getCode().split(",");
+            for (int i = 0; i < acls.length; i++) {
+                for (Object acl : allAcl) {
+                    if (((AclDto)acl).getId().equals(acls[i])) {
+                        showAcl.add(acl);
+                        break;
+                    }
+                }
+            }
+            redisUtil().lSet(userByMail.getMail(),showAcl);
+            redisUtil().expire(userByMail.getMail(),1800);
+        }
+        callBackJson(jsoncallback,showAcl,response);
+    }
+
+    private void callBackJson(@RequestParam String jsoncallback,Object s, HttpServletResponse response) {
         PrintWriter out = null;
         Gson gson = new Gson();
         try {
             out = response.getWriter();
-            out.print(jsoncallback+"(" + gson.toJson(INDEX) + ")");
+            out.print(jsoncallback+"(" + gson.toJson(s) + ")");
         }catch (IOException e){
             e.printStackTrace();
         }finally {
@@ -64,126 +152,13 @@ public class DemoController {
         }
     }
 
-    @Resource
-    private DemoMapper demoMapper;
-
-    /**
-     * 退出登录
-     * @param jsoncallback
-     * @param request
-     * @param response
-     */
-    @RequestMapping("/logout")
-    public void logout(@RequestParam String jsoncallback,HttpServletRequest request,HttpServletResponse response){
-        PrintWriter out = null;
-        Gson gson = new Gson();
-        Cookie[] cookies = request.getCookies();
-        if(cookies.length != 0){
-            for (Cookie cookie:cookies){
-                if("loginUser".equals(cookie.getName())){
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
-                    try {
-                        response.setContentType("text/json;charset=UTF-8");
-                        request.setCharacterEncoding("UTF-8");
-
-                        out = response.getWriter();
-                        out.print(jsoncallback+"(" + gson.toJson("OK") + ")");
-                    }catch (IOException e){
-                        e.printStackTrace();
-                    }finally {
-                        out.flush();
-                        out.close();
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * 检查是否登录
-     * @param jsoncallback
-     * @param request
-     * @param response
-     */
-    @RequestMapping("/checkLogin")
-    public void checkLogin(@RequestParam String jsoncallback,
-                      HttpServletRequest request,HttpServletResponse response){
-        PrintWriter out = null;
-        Gson gson = new Gson();
-        String loginUser = (String) request.getAttribute("loginUser");
-        if(StringUtils.isNotBlank(loginUser)){
-            Cookie[] cookies = request.getCookies();
-            if(cookies != null && cookies.length != 0){
-                for (Cookie cookie: cookies){
-                    if("loginUser".equals(cookie.getName())){
-                        try {
-                            out = response.getWriter();
-                            out.print(jsoncallback+"(" + gson.toJson(cookie.getValue()) + ")");
-                        }catch (IOException e){
-                            e.printStackTrace();
-                        } finally{
-                            out.flush();
-                            out.close();
-                        }
-                    }
-                }
-            }
-            try {
-                Cookie cookie = new Cookie("loginUser", loginUser);
-                cookie.setMaxAge(-1);
-                response.addCookie(cookie);
-                out = response.getWriter();
-                out.print(jsoncallback+"(" + gson.toJson(loginUser) + ")");
-            }catch (IOException e){
-                e.printStackTrace();
-            } finally{
-                out.flush();
-                out.close();
-            }
-        }
-    }
-
-    /**
-     * 根据登录用户查询权限
-     * @param jsoncallback
-     * @param request
-     * @param response
-     */
-    @RequestMapping("/loadPageByAcl")
-    public void loadPageByAcl(@RequestParam String jsoncallback,
-                           HttpServletRequest request,HttpServletResponse response){
-        PrintWriter out = null;
-        Gson gson = new Gson();
-        String loginUser = (String) request.getAttribute("loginUser");
-        UserDto userByMail = demoMapper.findUserByMail(loginUser);
-        if(userByMail==null){
-            demoMapper.insertUser(loginUser);
-            userByMail = demoMapper.findUserByMail(loginUser);
-        }
-        List<AclDto> showAcl = new ArrayList<>();
-        if(StringUtils.isNotBlank(userByMail.getCode())) {
-            List<AclDto> allAcl = demoMapper.findAllAcls();
-            if (allAcl != null && allAcl.size() != 0) {
-                String[] acls = userByMail.getCode().split(",");
-                for (int i = 0; i < acls.length; i++) {
-                    for (AclDto acl : allAcl) {
-                        if (acl.getId().equals(acls[i])) {
-                            showAcl.add(acl);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        try {
-            out = response.getWriter();
-            out.print(jsoncallback + "(" + gson.toJson(showAcl) + ")");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            out.flush();
-            out.close();
-        }
+    private RedisUtil redisUtil(){
+        RedisUtil redisUtil = new RedisUtil();
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new JdkSerializationRedisSerializer());
+        redisUtil.setRedisTemplate(redisTemplate);
+        return redisUtil;
     }
 }
