@@ -14,7 +14,7 @@ if [ -z "$module" ]; then
 fi
 
 if [ -z "$cmd" ]; then
-  cmd="package"
+  cmd="clean package"
 fi
 
 if [ -n "$biz" ] && [ -f "$module/src/main/resources/bootstrap-$biz.yml" ]; then
@@ -28,7 +28,7 @@ if [ -z "$file" ]; then
   file="pom.xml"
 fi
 
-mvn -B -e -f $module/$file clean $cmd
+mvn -B -e -f $module/$file $cmd
 #mvn -B -e -U -f $module/$file clean $cmd
 
 #mvn -B -f common/pom.xml clean deploy

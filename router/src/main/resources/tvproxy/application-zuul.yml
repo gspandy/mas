@@ -10,7 +10,7 @@ zuul:
   # 服务名匹配表达式，定义不自动创建路由的规则（默认情况下所有 Eureka 上的服务都会被 Zuul 自动地创建映射关系来进行路由，推荐配置为*）
   ignored-services: '*'
   # 设置不希望被 API 网关进行路由的 URL 表达式
-  ignored-patterns:
+  ignored-patterns: '/i/**'
   # hystrix 熔断隔离策略，在 Zuul 网关内建议配置为 THREAD-线程隔离
   ribbon-isolation-strategy: THREAD
   thread-pool:
@@ -31,6 +31,12 @@ zuul:
       strip-prefix: false
       # 路由是否支持失败重试 （需要 spring retry 和 ribbon 支持）
       retryable: false
+    r-letv-mas-caller-tvproxy-user-doc:
+      # 需要转发的目的 service id，上游注册在 Eureka 中的 serivice id
+      service-id: letv-mas-caller-tvproxy-user
+      # 匹配请求路由的 pattern（如果与其他 route 的 path 有包含关系，应确保约束性强的 route 配置块在前）
+      path: '/letv-mas-caller-tvproxy-user/v2/api-docs/**'
+      strip-prefix: true
     r-static-html:
       path: '/static/**'
       url: http://i.static.itv.letv.com/
@@ -38,9 +44,9 @@ zuul:
       strip-prefix: true
       # 路由是否支持失败重试 （需要 spring retry 和 ribbon 支持）
       retryable: false
-    r-local:
-      path: '/i/**'
-      url: forward:/i
+#    r-local:
+#      path: '/i/**'
+#      url: forward:/i
 
 # Ribbon 全局配置
 ribbon:
@@ -120,9 +126,9 @@ hystrix:
   threadpool:
     default:
       # 核心线程数量 =｛CPU资源角度｝［（线程等待时间与线程CPU时间之比 + 1）* CPU数目 ］或者 ｛qps角度｝［ 最大qps * (99%平均响应时间 + 预留缓存)］
-      coreSize: 200
+      coreSize: 10
       # 最大线程数量
-      maximumSize: 200
+      maximumSize: 50
       # 当设为-1，会使用SynchronousQueue; 值为正则使用LinkedBlcokingQueue；该设置只会在初始化时有效，之后不能修改
       maxQueueSize: -1
     # $thread-pool-key-prefix + $commandKey

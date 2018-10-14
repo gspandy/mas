@@ -16,11 +16,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import springfox.documentation.builders.*;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger.web.SwaggerResource;
-import springfox.documentation.swagger.web.SwaggerResourcesProvider;
+import springfox.documentation.swagger.web.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import static com.google.common.collect.Lists.*;
@@ -43,7 +43,7 @@ public class Swagger2Config extends WebMvcConfigurerAdapter implements Environme
     private TypeResolver typeResolver;
 
     @Autowired
-    ZuulProperties properties;
+    ZuulProperties zuulProperties;
 
     @Bean
     public Docket proxyApi() {
@@ -71,16 +71,44 @@ public class Swagger2Config extends WebMvcConfigurerAdapter implements Environme
 //                .tags(new Tag("大屏微服务代理层", "接口文档"));
     }
 
+    /**
+     * 定制upsteam服务
+     * @return
+     */
 //    @Primary
 //    @Bean
     public SwaggerResourcesProvider swaggerResourcesProvider() {
         return () -> {
             List<SwaggerResource> resources = new ArrayList<>();
-            properties.getRoutes().values().stream()
+            zuulProperties.getRoutes().values().stream()
                     .forEach(route ->
                             resources.add(createResource(route.getServiceId(), route.getServiceId(), "2.0", route)));
             return resources;
         };
+    }
+
+    /**
+     * 定制UI界面
+     * @return
+     */
+    @Bean
+    UiConfiguration uiConfig() {
+        return UiConfigurationBuilder.builder()
+                .deepLinking(true)
+                .displayOperationId(false)
+                .defaultModelsExpandDepth(1)
+                .defaultModelExpandDepth(1)
+                .defaultModelRendering(ModelRendering.EXAMPLE)
+                .displayRequestDuration(false)
+                .docExpansion(DocExpansion.NONE)
+                .filter(false)
+                .maxDisplayedTags(null)
+                .operationsSorter(OperationsSorter.ALPHA)
+                .showExtensions(false)
+                .tagsSorter(TagsSorter.ALPHA)
+                .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
+                .validatorUrl(null)
+                .build();
     }
 
     private ApiInfo apiInfo() {
@@ -88,15 +116,19 @@ public class Swagger2Config extends WebMvcConfigurerAdapter implements Environme
                 .title("大屏/微服务/代理层网关")
                 .description("接口文档")
                 .version("1.0.0")
+                .contact(new Contact("dengliwei", "http://omp.mas.letv.cn", "dengliwei@le.com"))
                 .build();
     }
 
     private SwaggerResource createResource(String name, String location, String version,
                                            ZuulProperties.ZuulRoute route) {
-        SwaggerResource swaggerResource = new SwaggerResource();
-        swaggerResource.setName(name);
-        swaggerResource.setLocation("/" + location + "/v2/api-docs");
-        swaggerResource.setSwaggerVersion(version);
+        SwaggerResource swaggerResource = null;
+        if (route.getPath().contains("api-docs")) {
+            swaggerResource = new SwaggerResource();
+            swaggerResource.setName(name);
+            swaggerResource.setLocation("/" + location + "/v2/api-docs");
+            swaggerResource.setSwaggerVersion(version);
+        }
         return swaggerResource;
     }
 
