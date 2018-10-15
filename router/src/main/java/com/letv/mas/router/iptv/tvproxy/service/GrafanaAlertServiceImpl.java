@@ -19,7 +19,7 @@ public class GrafanaAlertServiceImpl implements IAlertService {
     DingDingDao dingDingDao;
 
     @Override
-    public boolean handleMessage(Object msg) {
+    public boolean handleMessage(Object msg, AlertType alertType) {
 
         if (msg instanceof GrafanaNotifyDto) {
             GrafanaNotifyDto grafanaNotifyDto = (GrafanaNotifyDto) msg;
@@ -28,41 +28,43 @@ public class GrafanaAlertServiceImpl implements IAlertService {
                 return false;
             }
 
-            DingRobotDto dingRobotDto = new DingRobotDto();
-            StringBuilder content = new StringBuilder();
-            dingRobotDto.setMsgtype("markdown");
-            dingRobotDto.setTitle(grafanaNotifyDto.getTitle());
+            if (alertType == AlertType.DINGDING) {
+                DingRobotDto dingRobotDto = new DingRobotDto();
+                StringBuilder content = new StringBuilder();
+                dingRobotDto.setMsgtype("markdown");
+                dingRobotDto.setTitle(grafanaNotifyDto.getTitle());
 
-            if (StringUtils.isNotBlank(grafanaNotifyDto.getRuleName())) {
-                content.append("### ").append(grafanaNotifyDto.getRuleName());
-            } else {
-                content.append("### ").append(grafanaNotifyDto.getTitle());
-            }
-
-            if (StringUtils.isNotBlank(grafanaNotifyDto.getState())) {
-                content.append(" **{").append(grafanaNotifyDto.getState()).append("}**");
-            }
-
-            if (StringUtils.isNotBlank(grafanaNotifyDto.getMessage())) {
-                content.append("\n").append("> ").append(grafanaNotifyDto.getMessage());
-            }
-
-            if (StringUtils.isNotBlank(grafanaNotifyDto.getImageUrl())) {
-                content.append("\n\n").append("> ![screenshot](").append(grafanaNotifyDto.getImageUrl()).append(")");
-            }
-
-            if (null != grafanaNotifyDto.getEvalMatches() && grafanaNotifyDto.getEvalMatches().size() > 0) {
-                for (GrafanaNotifyDto.EvalMatche evalMatche : grafanaNotifyDto.getEvalMatches()) {
-                    content.append("\n- ").append(evalMatche);
+                if (StringUtils.isNotBlank(grafanaNotifyDto.getRuleName())) {
+                    content.append("### ").append(grafanaNotifyDto.getRuleName());
+                } else {
+                    content.append("### ").append(grafanaNotifyDto.getTitle());
                 }
-            }
 
-            if (StringUtils.isNotBlank(grafanaNotifyDto.getRuleUrl())) {
-                content.append("\n\n").append("> [查看详情](").append(grafanaNotifyDto.getRuleUrl()).append(")");
-            }
+                if (StringUtils.isNotBlank(grafanaNotifyDto.getState())) {
+                    content.append(" **{").append(grafanaNotifyDto.getState()).append("}**");
+                }
 
-            dingRobotDto.setContent(content.toString());
-            return dingDingDao.notify(dingRobotDto);
+                if (StringUtils.isNotBlank(grafanaNotifyDto.getMessage())) {
+                    content.append("\n").append("> ").append(grafanaNotifyDto.getMessage());
+                }
+
+                if (StringUtils.isNotBlank(grafanaNotifyDto.getImageUrl())) {
+                    content.append("\n\n").append("> ![screenshot](").append(grafanaNotifyDto.getImageUrl()).append(")");
+                }
+
+                if (null != grafanaNotifyDto.getEvalMatches() && grafanaNotifyDto.getEvalMatches().size() > 0) {
+                    for (GrafanaNotifyDto.EvalMatche evalMatche : grafanaNotifyDto.getEvalMatches()) {
+                        content.append("\n- ").append(evalMatche);
+                    }
+                }
+
+                if (StringUtils.isNotBlank(grafanaNotifyDto.getRuleUrl())) {
+                    content.append("\n\n").append("> [查看详情](").append(grafanaNotifyDto.getRuleUrl()).append(")");
+                }
+
+                dingRobotDto.setContent(content.toString());
+                return dingDingDao.notify(dingRobotDto);
+            }
         }
 
         return false;

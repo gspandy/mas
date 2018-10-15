@@ -1,5 +1,8 @@
 package com.letv.mas.router.iptv.tvproxy.model.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -8,16 +11,26 @@ import java.util.Map;
  * refer: http://docs.grafana.org/alerting/notifications/, [Webhook]
  * Created by leeco on 18/10/8.
  */
+@ApiModel(value = "GrafanaNotifyDto", description = "Grafana通知参数集合")
 public class GrafanaNotifyDto extends BaseDto implements Serializable {
 
     private static final long serialVersionUID = 669277880313271099L;
+
+    @ApiModelProperty(value = "通知标题", required = false)
     private String title;
+    @ApiModelProperty(value = "报警规则id", required = true)
     private String ruleId;
+    @ApiModelProperty(value = "报警规则名称", required = false)
     private String ruleName;
+    @ApiModelProperty(value = "报警详情地址", required = false)
     private String ruleUrl;
+    @ApiModelProperty(value = "报警状态", required = true, allowableValues = "")
     private String state;
+    @ApiModelProperty(value = "报警截图", required = false)
     private String imageUrl;
+    @ApiModelProperty(value = "报警描述", required = false)
     private String message;
+    @ApiModelProperty(value = "报警评估指标", required = true)
     private List<GrafanaNotifyDto.EvalMatche> evalMatches;
 
     public String getTitle() {
@@ -84,11 +97,15 @@ public class GrafanaNotifyDto extends BaseDto implements Serializable {
         this.evalMatches = evalMatches;
     }
 
+    @ApiModel(value = "EvalMatche", description = "评估指标")
     public static class EvalMatche extends BaseDto implements Serializable {
 
         private static final long serialVersionUID = -7940240032627451474L;
+
+        @ApiModelProperty(value = "评估项", required = true)
         private String metric;
         // private Map tags;
+        @ApiModelProperty(value = "评估值", required = false)
         private String value;
 
         public String getMetric() {
