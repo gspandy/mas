@@ -4,3 +4,9 @@ biz:
 
 iptv:
   doc.enabled: true
+
+security:
+  jwt:
+    token:
+      secret-key: tvproxy-apis@20181016
+      expire-time: 864000

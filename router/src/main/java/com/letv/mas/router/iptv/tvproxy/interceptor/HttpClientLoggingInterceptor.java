@@ -1,5 +1,6 @@
 package com.letv.mas.router.iptv.tvproxy.interceptor;
 
+import com.letv.mas.router.iptv.tvproxy.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;
@@ -26,7 +27,7 @@ public class HttpClientLoggingInterceptor implements ClientHttpRequestIntercepto
         String splitSymbol = "|";
         ClientHttpResponse response = clientHttpRequestExecution.execute(request, body);
         if (LOGGER.isInfoEnabled()) {
-            sb.append(this.getISO8601Timestamp(new Date())).append(splitSymbol)
+            sb.append(TimeUtil.getISO8601Timestamp(new Date())).append(splitSymbol)
                     .append(request.getURI()).append(splitSymbol)
                     .append(request.getMethod()).append(splitSymbol)
                     .append(response.getStatusCode()).append(splitSymbol)
@@ -36,17 +37,5 @@ public class HttpClientLoggingInterceptor implements ClientHttpRequestIntercepto
         return response;
     }
 
-    /**
-     * 传入Data类型日期，返回字符串类型时间（ISO8601标准时间）
-     *
-     * @param date
-     * @return
-     */
-    private String getISO8601Timestamp(Date date) {
-        TimeZone tz = TimeZone.getTimeZone("Asia/Shanghai");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-        df.setTimeZone(tz);
-        String nowAsISO = df.format(date);
-        return nowAsISO;
-    }
+
 }

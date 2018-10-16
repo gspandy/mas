@@ -1,0 +1,43 @@
+spring:
+    datasource:
+        name: test
+        url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF8
+        username: root
+        password:
+        # 数据库驱动
+        driver-class-name: com.mysql.jdbc.Driver
+        # 数据库连接池
+        type: com.alibaba.druid.pool.DruidDataSource
+        # 拦截器设置：监控统计-stat, 日志-log4j, 防御sql注入-wall
+        # 监控统计用的filter:stat
+        filters: stat, wall
+        # 连接池中最小空闲连接数
+        minIdle: 1
+        # 连接池中最大活动连接数
+        maxActive: 20
+        # 初始化时连接数
+        initialSize: 1
+        # 获取连接时最大等待时间，单位ms。配置了maxWait之后，缺省启用公平锁，并发效率会有所下降，如果需要可以通过配置useUnfairLock属性为true使用非公平锁。
+        maxWait: 60000
+        # 间隔多久进行一次检测需要关闭的空闲连接，单位ms，有两个含义：
+        # 1) Destroy线程会检测连接的间隔时间，如果连接空闲时间大于等于minEvictableIdleTimeMillis则关闭物理连接。
+        # 2) testWhileIdle的判断依据，详细看testWhileIdle属性的说明
+        timeBetweenEvictionRunsMillis: 60000
+        # 连接保持空闲而不被驱逐的最长时间，单位ms
+        minEvictableIdleTimeMillis: 300000
+        # 用来检测连接是否有效的sql，要求是一个查询语句，常用select 'x'。如果validationQuery为null，testOnBorrow、testOnReturn、testWhileIdle都不会其作用。
+        validationQuery: select 'x'
+        # 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+        testWhileIdle: true
+        # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+        testOnBorrow: false
+        # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+        testOnReturn: false
+        # 是否开启PSCache：oracle设为true，mysql设为false；分库分表较多推荐设置为false
+        poolPreparedStatements: false
+        # 指定每个连接上PSCache的大小，单位M；要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。
+        maxOpenPreparedStatements: -1
+
+mybatis:
+    basepackage: com.letv.mas.router.iptv.tvproxy.model.dao.db.mysql
+    xmlLocation: classpath:mapper/**/*.xml

@@ -44,7 +44,7 @@ public class AlertMgrController {
             notes = "消息体参考：http://docs.grafana.org/alerting/notifications<br/>",
             httpMethod = "POST")
     @RequestMapping(value = { "/grafana/dingding" }, method = RequestMethod.POST)
-    public BaseResponseDto<String> notifyFromGrafana(@ModelAttribute @RequestBody GrafanaNotifyDto grafanaNotifyDto) {
+    public BaseResponseDto<String> notifyFromGrafana(@RequestBody GrafanaNotifyDto grafanaNotifyDto) {
         BaseResponseDto<String> responseDto = new BaseResponseDto<String>();
         boolean result = alertService.handleMessage(grafanaNotifyDto, IAlertService.AlertType.DINGDING);
         if (result) {

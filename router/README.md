@@ -2,7 +2,9 @@
 
 #### tvproxy 大屏代理层公共网关
 
-###### [OAuth2](https://tools.ietf.org/html/rfc6749)支持
+###### [JWT](https://tools.ietf.org/html/rfc7519)／支持
+
+###### [OAuth2](https://tools.ietf.org/html/rfc6749)／可选支持
 
 ~~~
 +--------+                               +---------------+
@@ -23,6 +25,7 @@
 |        |<-(F)--- Protected Resource ---|               |
 +--------+                               +---------------+
 ~~~  
+
 
 ###### RBAC权限管理
 * 字典参考

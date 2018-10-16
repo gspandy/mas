@@ -30,8 +30,11 @@
         <mas.common>1.0-SNAPSHOT</mas.common>
         <spring.cloud>Edgware.SR3</spring.cloud>
         <spring.boot>1.5.13.RELEASE</spring.boot>
-        <springfox-swagger2>2.9.2</springfox-swagger2>
         <guava>23.0</guava>
+        <springfox-swagger2>2.9.2</springfox-swagger2>
+        <springfox-swagger2>2.9.2</springfox-swagger2>
+        <druid.version>1.1.12</druid.version>
+        <jjwt.version>0.9.1</jjwt.version>
     </properties>
 
     <dependencies>
@@ -109,6 +112,27 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${springfox-swagger2}</version>
+        </dependency>
+
+        <!--mysql & dbpool (B)-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!--https://mvnrepository.com/artifact/com.alibaba/druid-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+        <!--mysql & dbpool (E)-->
+
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
     </dependencies>
 
