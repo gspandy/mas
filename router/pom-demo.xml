@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>mas-router-tvproxy</name>
-    <description>Project for the tvproxy based on mas router</description>
+    <name>mas-router</name>
+    <description>Demo project for eureka service's zuul</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -30,10 +30,6 @@
         <mas.common>1.0-SNAPSHOT</mas.common>
         <spring.cloud>Edgware.SR3</spring.cloud>
         <spring.boot>1.5.13.RELEASE</spring.boot>
-        <guava>23.0</guava>
-        <springfox-swagger2>2.9.2</springfox-swagger2>
-        <druid.version>1.1.12</druid.version>
-        <jjwt.version>0.9.1</jjwt.version>
     </properties>
 
     <dependencies>
@@ -96,43 +92,6 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson}</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava}</version>
-        </dependency>
-        <!--https://github.com/springfox/springfox-->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox-swagger2}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox-swagger2}</version>
-        </dependency>
-
-        <!--mysql & dbpool (B)-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <!--https://mvnrepository.com/artifact/com.alibaba/druid-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>${druid.version}</version>
-        </dependency>
-        <!--mysql & dbpool (E)-->
-
-        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>${jjwt.version}</version>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -149,10 +108,11 @@
 
     <build>
         <!--默认源代码目录-->
+        <sourceDirectory>${basedir}/src/main/java/com/letv/mas/router/demo</sourceDirectory>
         <outputDirectory>${project.build.directory}/classes</outputDirectory>
         <resources>
             <resource>
-                <directory>${basedir}/src/main/resources/tvproxy</directory>
+                <directory>${basedir}/src/main/resources/demo</directory>
             </resource>
         </resources>
         <plugins>
@@ -227,7 +187,7 @@
                                     <filtering>true</filtering>
                                 </resource>
                                 <resource>
-                                    <directory>src/main/resources/tvproxy</directory>
+                                    <directory>src/main/resources/demo</directory>
                                     <filtering>true</filtering>
                                     <includes>
                                         <include>**/*.yml</include>
@@ -246,7 +206,7 @@
                 <version>${spring.boot}</version>
                 <configuration>
                     <!-- 可以把依赖的包都打包到生成的Jar包中 -->
-                    <mainClass>com.letv.mas.router.iptv.tvproxy.ServiceZuulApplication</mainClass>
+                    <mainClass>com.letv.mas.router.demo.ServiceZuulApplication</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
                 <executions>

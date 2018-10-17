@@ -139,7 +139,7 @@ eg.可参考文件{mas}/caller/pom-tvproxy-user.xml
 ~~~
 
 * 本地编译
-./mvn_build.sh caller package '' pom-tvproxy-user.xml
+./mvn_build.sh caller 'clean package' '' pom-tvproxy-user.xml
 * JK编译
 Root POM选取 caller/pom-tvproxy-user.xml
 * 本地IDE调试运行

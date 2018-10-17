@@ -1,7 +1,7 @@
 package com.letv.mas.caller.circuitbreaker;
 
 import com.alibaba.fastjson.JSON;
-import com.letv.mas.caller.ServiceRibbonApplication;
+import com.letv.mas.caller.demo.ServiceRibbonApplication;
 import com.letv.mas.caller.circuitbreaker.model.ResourceInfo;
 import com.letv.mas.caller.circuitbreaker.service.CircuitbreakerService;
 import com.netflix.util.Pair;

@@ -1,4 +1,4 @@
-package com.letv.mas.router;
+package com.letv.mas.router.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
