@@ -19,11 +19,11 @@ spring:
     #  配置mysql的驱动程序类
     driver-class-name: org.gjt.mm.mysql.Driver
     #  数据库连接地址
-    url: jdbc:mysql://localhost:3306/letv?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://10.58.92.90:3306/letv?useUnicode=true&characterEncoding=UTF-8
     #  数据库用户名
-    username: root
+    username: zhangshuai6
     #  数据库密码
-    password: root
+    password: zhangshuai6@le.com
     #  进行数据库连接池的配置
     dbcp2:
       #  数据库连接池的最小维持连接数
@@ -36,9 +36,9 @@ spring:
       max-wait-millis: 200
   redis:
     database: 1
-    host: 127.0.0.1
+    host: 10.58.92.90
     port: 6379
-    password:
+    password: 123456
     timeout: 5000
 
 server:

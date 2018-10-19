@@ -121,7 +121,6 @@ public class DemoController {
             redisUtil().expire("AllAcl", 86400);
         }
         List showAcl = redisUtil().lGet(userByMail.getMail(),0,-1);
-        System.err.println();
         if(showAcl != null && showAcl.size() == 0 && allAcl != null && allAcl.size() != 0){
             String[] acls = userByMail.getCode().split(",");
             for (int i = 0; i < acls.length; i++) {
@@ -135,6 +134,7 @@ public class DemoController {
             redisUtil().lSet(userByMail.getMail(),showAcl);
             redisUtil().expire(userByMail.getMail(),1800);
         }
+        showAcl.add(userByMail.getType());
         callBackJson(jsoncallback,showAcl,response);
     }
 

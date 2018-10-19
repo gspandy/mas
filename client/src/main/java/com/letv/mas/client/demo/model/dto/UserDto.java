@@ -7,6 +7,7 @@ public class UserDto implements Serializable {
     private String id;
     private String mail;
     private String dept_id;
+    private String type;
     private String status;
     private String code;
 
@@ -32,6 +33,14 @@ public class UserDto implements Serializable {
 
     public void setDept_id(String dept_id) {
         this.dept_id = dept_id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getStatus() {

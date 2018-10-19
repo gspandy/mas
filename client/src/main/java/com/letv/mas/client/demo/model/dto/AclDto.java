@@ -1,15 +1,19 @@
 package com.letv.mas.client.demo.model.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AclDto implements Serializable {
 
     private String id;
     private String path;
     private String name;
-    private String parentId;
+    private String _parentId;
+    private Boolean checked;
     private String seq;
     private String status;
+    private List<Object> children = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -35,12 +39,20 @@ public class AclDto implements Serializable {
         this.name = name;
     }
 
-    public String getParentId() {
-        return parentId;
+    public String get_parentId() {
+        return _parentId;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
+    public void set_parentId(String _parentId) {
+        this._parentId = _parentId;
+    }
+
+    public Boolean getChecked() {
+        return checked;
+    }
+
+    public void setChecked(Boolean checked) {
+        this.checked = checked;
     }
 
     public String getSeq() {
@@ -57,5 +69,13 @@ public class AclDto implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<Object> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Object> children) {
+        this.children = children;
     }
 }

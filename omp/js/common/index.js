@@ -22,7 +22,7 @@ function checkLogin() {
                 jsonp:"jsoncallback",
                 jsonpCallback:'callback',
                 success:function(data){
-//                    console.log(data);
+                   // console.log(data);
                     $("#treeMenu").remove();
                     $("#sidebar").append("<ul class=\"sidebar-menu\" id=\"treeMenu\"></ul>");
                     $("#treeMenu").append("<li>\n" +
@@ -32,26 +32,39 @@ function checkLogin() {
                                          "            </li>");
                    document.getElementById("MainPanel").href="http://omp.mas.letv.cn/index.html"+window.location.search;
                     for(var j = 0,len = data.length; j < len; j++) {
-                        if(data[j]['parentId'] == 0){
+                        if(data[j]['_parentId'] == 0){
+                            var dto = data[j];
+                            var id = dto.id;
                             $("#treeMenu").append("<li class=\"treeview\">\n" +
                                 "                <a href=\"#\">\n" +
                                 "                    <i class=\"fa fa-folder\"></i>\n" +
-                                "                    <span>MasDev</span>\n" +
+                                "                    <span>"+dto.name+"</span>\n" +
                                 "                    <i class=\"fa fa-angle-left pull-right\"></i>\n" +
                                 "                </a>\n" +
                                                   "                <ul class=\"treeview-menu\" id="+data[j]['name']+" style=\"display: block;\">\n" +
                                 "                </ul>\n" +
                                 "            </li>"
                             );
+                            for(var k = 0,l = data.length; k < l; k++) {
+                                if(data[k]['_parentId'] == id){
+                                    $("#"+dto.name+"").append("<li><a href="+data[k]['path']+"><i class=\"fa fa-angle-double-right\"></i>"+data[k]['name']+"</a></li>");
+                                }
+                            }
                         }
-                   if(data[j]['parentId'] == 12){
-                   $("#MasDev").append("<li><a href="+data[j]['path']+"><i class=\"fa fa-angle-double-right\"></i>"+data[j]['name']+"</a></li>");
-                   }
-                   if(data[j]['parentId'] == 17){
-                   $("#MasOps").append("<li><a href="+data[j]['path']+"><i class=\"fa fa-angle-double-right\"></i>"+data[j]['name']+"</a></li>");
-                   }
+                       if(data[j] == 2){
+                           $("#treeMenu").append("<li class=\"treeview\">\n" +
+                               "                <a href=\"#\">\n" +
+                               "                    <i class=\"fa fa-folder\"></i>\n" +
+                               "                    <span>系统管理</span>\n" +
+                               "                    <i class=\"fa fa-angle-left pull-right\"></i>\n" +
+                               "                </a>\n" +
+                               "                <ul class=\"treeview-menu\" id=\"systemMenu\" style=\"display: block;\">\n" +
+                               "                </ul>\n" +
+                               "            </li>");
+                           $("#systemMenu").append("<li><a href=\"../../pages/mas/c_acl_ admin.html\"><i class=\"fa fa-angle-double-right\"></i>权限管理</a></li>");
+                           $("#systemMenu").append("<li><a href=\"../../pages/mas/c_user_admin.html\"><i class=\"fa fa-angle-double-right\"></i>用户管理</a></li>");
+                       }
                     }
-                   
                 },
                 error:function(err){
                     console.log("消息服务器网络异常！");
