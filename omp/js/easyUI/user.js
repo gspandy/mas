@@ -129,7 +129,9 @@ $(function () {
                             success: function (data) {
                                 $("#myIndex").val($('#dg').datagrid('getRowIndex',rows[0]));
                                 $("#updateId").val(rows[0].id);
-                                $("#mailName").html("正在修改邮箱为<br/>"+rows[0].mail+"的权限");
+                                $("#mailName").html("<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=1)\" width=\"100%\" color=#987cb9 SIZE=3>" +
+                                    "正在修改邮箱为<br/>&nbsp&nbsp&nbsp&nbsp"+rows[0].mail+"的权限" +
+                                    "<HR style=\"FILTER: alpha(opacity=100,finishopacity=0,style=1)\" width=\"100%\" color=#987cb9 SIZE=3>");
                                 if(rows[0].type == 2){
                                     document.getElementById('radio2').checked=true;
                                 }else {
