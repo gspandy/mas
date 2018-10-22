@@ -139,7 +139,10 @@ eg.可参考文件{mas}/caller/pom-tvproxy-user.xml
 ~~~
 
 * 本地编译
-./mvn_build.sh caller 'clean package' '' pom-tvproxy-user.xml
+./mvn_build.sh caller 'clean package' '' pom-tvproxy-user.xml [注1]
+备注：
+-1: 参数依次对应：{子系统文件夹名} {maven编译参数} {业务bootstrap配置profile，配置资源如bootstrap-xxx} {指定业务pom文件}
+-2: 为配合Idea等IDE调试，会自动切换源码目录解决业务独立代码资源差异引用及包路径问题
 * JK编译
 Root POM选取 caller/pom-tvproxy-user.xml
 * 本地IDE调试运行

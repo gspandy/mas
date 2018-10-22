@@ -9,7 +9,7 @@ spring:
       retry:
         enabled: true
   profiles:
-    include: config,zuul,trace,biz
+    include: config,zuul,trace,biz,db
   metrics:
     servo:
       enabled: false

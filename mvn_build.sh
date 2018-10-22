@@ -25,8 +25,7 @@ if [ -z "$file" ]; then
 else
     cp -f $module/$file $module/pom.xml
     if [ -f "$module/pom.xml" ]; then
-        resource_path=$(cat $module/pom.xml | grep '<directory>${basedir}/src/main/resources' | sed 's/.*\/src\/main\/resources\/\(.*\)<\/directory>/\1/g'
-tvproxy)
+        resource_path=$(cat $module/pom.xml | grep '<directory>${basedir}/src/main/resources' | sed 's/.*\/src\/main\/resources\/\(.*\)<\/directory>/\1/g')
         if [ -z "$file" ]; then
             resource_path="/"
         else
