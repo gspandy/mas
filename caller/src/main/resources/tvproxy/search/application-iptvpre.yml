@@ -1,0 +1,163 @@
+spring:
+  application:
+    name: letv-mas-caller-tvproxy-search
+    index: ${CALLER_SERVER_IP:127.0.0.1}:${CALLER_SERVER_PORT:5555}
+  zipkin:
+      enabled: false
+  metrics:
+    servo:
+      enabled: false
+  sleuth:
+      enabled: false
+  scheduled:
+        enabled: false
+  cloud:
+    bus:
+      enabled: false
+    eureka:
+      client:
+        enabled: false
+    iptv:
+      enabled: true
+      doc:
+        enabled: false
+      host-log:
+        enabled: true
+      hystrix-log:
+        enabled: true
+  profiles:
+    include: configpre,app,redispre,bus,trace,thriftpre
+server:
+  port: ${CALLER_SERVER_PORT:5555}
+  #servlet-path: /api/tv
+  path: '/iptv/api/new'
+  tomcat:
+    accept-count: 1000
+    max-threads: 1000
+    max-connections: 1000
+eureka:
+  instance:
+    # 全网服务实例唯一标识
+    instance-id: ${eureka.instance.ip-address}:${server.port}
+    # 服务实例的meta数据键值对集合，可由注册中心进行服务实例间传递
+    metadata-map:
+      zone: ${CALLER_SERVER_ZONE:dx-1}
+    # 开启ip，默认为false＝》hostname
+    prefer-ip-address: true
+    ip-address: ${CALLER_SERVER_IP:127.0.0.1}
+    # [服务续约]-心跳检查之服务失效时间，默认为90s，这个配置一般为lease-renewal-interval-in-seconds的三倍！
+    lease-expiration-duration-in-seconds: 15
+    # [服务续约]-服务续约任务调用的间隔时间，默认为30s
+    lease-renewal-interval-in-seconds: 10
+    # [服务监控]-当前实例的服务信息地址
+    status-page-url: http://${CALLER_SERVER_IP:127.0.0.1}:${server.port}/info
+    # [服务监控]-当前实例的服务健康状态地址
+    health-check-url: http://${CALLER_SERVER_IP:127.0.0.1}:${server.port}/health
+  client:
+    enabled: true
+    # [HA-P配置]-开启当前服务实例优先发现同zone的注册中心，默认为true
+    prefer-same-zone-eureka: true
+    # [服务注册]-允许当前服务实例注册，默认为true
+    register-with-eureka: true
+    # [服务续约]-允许当前服务实例获取注册信息，默认为true
+    fetch-registry: true
+    # [HA配置]-可用zone内注册中心地址列表
+    region: cn_bj
+    availability-zones:
+      cn_bj: ${eureka.instance.metadata-map.zone},cy-1,dx-1
+    service-url:
+      cy-1: http://letvMasManager:admin20180605@10.124.65.232:8015/eureka,http://letvMasManager:admin20180605@10.124.65.233:8015/eureka
+      dx-1: http://letvMasManager:admin20180605@10.112.34.124:8015/eureka,http://letvMasManager:admin20180605@10.112.34.127:8015/eureka
+    # [服务续约]-当前服务实例更新注册服务缓存清单的更新间隔时间，默认为30s，一般和lease-renewal-interval-in-seconds保持一致！
+    registry-fetch-interval-seconds: 10
+    # [服务监控]-开启健康检查，只能在application.yml中设置！
+    healthcheck:
+      enabled: true
+endpoints:
+  refresh:
+    enabled: true
+    # 安全验证
+    sensitive: false
+  shutdown:
+    enabled: true
+    # 安全验证
+    sensitive: false
+management:
+  security:
+    enabled: false
+  health:
+    redis:
+      enabled: false
+  metrics:
+    export:
+      enabled: true
+      delay: 10000
+      influx:
+        enabled: true
+        auto-create-db: true
+        batch-size: 10000
+        compressed: true
+        connect-timeout: 1s
+        consistency: one
+        uri: ${METRICS_INFLUXDB_URI:http://10.58.89.189:8086}
+        db: ${METRICS_INFLUXDB_DB:letv_mas_service_user}
+        num-threads: 2
+        user-name: ${METRICS_INFLUXDB_USERNAME:api}
+        password: ${METRICS_INFLUXDB_PASSWORD:api@20180307}
+        read-timeout: 2s
+        retention-policy:
+        step: PT10s
+security:
+  basic:
+    # 启用基本身份认证
+    enabled: false
+# 自定义系统日志输出
+logout:
+  path: /letv/logs/mas/caller/tvproxy-user
+  level: 'info'
+  capacity: 30GB
+#http://www.cnblogs.com/tiancai/p/9591012.html
+hystrix:
+  command:
+    default:
+      circuitBreaker:
+        requestVolumeThreshold: '20'
+        sleepWindowInMilliseconds: '5000'
+        errorThresholdPercentage: '50'
+      metrics:
+        rollingStats:
+          timeInMilliseconds: '10000'
+          numBuckets: '10'
+        rollingPercentile:
+          enabled: 'false'
+          timeInMilliseconds: '10000'
+          numBuckets: '10'
+          bucketSize: '100'
+      execution:
+        isolation:
+          strategy: 'THREAD'
+          thread:
+            timeoutInMilliseconds: 1000
+            interruptOnTimeout: 'true'
+      fallback:
+        isolation:
+          semaphore:
+            maxConcurrentRequests: 1000
+      requestCache:
+        enabled: false
+      requestLog:
+        enabled: false
+  threadpool:
+    default:
+      # 核心线程数量
+      coreSize: 100
+      # 最大线程数量
+      maximumSize: 100
+      # 当设为-1，会使用SynchronousQueue; 值为正则使用LinkedBlcokingQueue；该设置只会在初始化时有效，之后不能修改
+      maxQueueSize: -1
+logging:
+  level:
+    root: info
+    org.apache.kafka: info
+    org.apache.kafka.clients: info
+    org.apache.kafka.common: info

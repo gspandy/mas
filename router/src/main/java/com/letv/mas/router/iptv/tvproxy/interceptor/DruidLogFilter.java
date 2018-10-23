@@ -17,7 +17,6 @@ public class DruidLogFilter extends FilterEventAdapter {
 
     @Override
     protected void statementExecuteBefore(StatementProxy statement, String sql) {
-        LOGGER.info(this.toString());
         super.statementExecuteBefore(statement, sql);
     }
 

@@ -244,7 +244,7 @@
     </dependencyManagement>
 
     <build>
-        <sourceDirectory>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/user</sourceDirectory>
+        <sourceDirectory>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/common</sourceDirectory>
         <!--默认源代码目录-->
         <outputDirectory>${project.build.directory}/classes</outputDirectory>
         <!--默认测试源代码目录-->
@@ -253,7 +253,7 @@
         <!--默认资源目录-->
         <resources>
             <resource>
-                <directory>${basedir}/src/main/resources/tvproxy/user</directory>
+                <directory>${basedir}/src/main/resources/tvproxy/common</directory>
             </resource>
             <!--<resource>
                 <directory>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/user</directory>
@@ -272,7 +272,7 @@
             <!--</testResource>-->
         <!--</testResources>-->
         <plugins>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>3.0.0</version>
@@ -285,12 +285,12 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/common</source>
+                                <source>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy_user</source>
                             </sources>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
@@ -350,15 +350,6 @@
                                         <include>**/*.xml</include>
                                     </includes>
                                 </resource>
-                                <resource>
-                                    <directory>src/main/resources/tvproxy/user</directory>
-                                    <filtering>true</filtering>
-                                    <includes>
-                                        <include>**/*.yml</include>
-                                        <include>**/*.properties</include>
-                                        <include>**/*.xml</include>
-                                    </includes>
-                                </resource>
                             </resources>
                         </configuration>
                     </execution>
@@ -370,7 +361,7 @@
                 <version>1.5.10.RELEASE</version>
                 <configuration>
                     <!-- 可以把依赖的包都打包到生成的Jar包中 -->
-                    <mainClass>com.letv.mas.caller.iptv.tvproxy.user.TvProxyUserApplication</mainClass>
+                    <mainClass>com.letv.mas.caller.iptv.tvproxy.common.TvProxyApplication</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
                 <executions>

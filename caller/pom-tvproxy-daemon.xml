@@ -229,6 +229,12 @@
             <artifactId>commons-pool</artifactId>
             <version>${commons-pool-version}</version>
         </dependency>
+
+        <!-- rabbitMq -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -244,7 +250,7 @@
     </dependencyManagement>
 
     <build>
-        <sourceDirectory>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/user</sourceDirectory>
+        <sourceDirectory>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/daemon</sourceDirectory>
         <!--默认源代码目录-->
         <outputDirectory>${project.build.directory}/classes</outputDirectory>
         <!--默认测试源代码目录-->
@@ -253,7 +259,7 @@
         <!--默认资源目录-->
         <resources>
             <resource>
-                <directory>${basedir}/src/main/resources/tvproxy/user</directory>
+                <directory>${basedir}/src/main/resources/tvproxy/daemon</directory>
             </resource>
             <!--<resource>
                 <directory>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/user</directory>
@@ -272,25 +278,26 @@
             <!--</testResource>-->
         <!--</testResources>-->
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/common</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
+           <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>build-helper-maven-plugin</artifactId>
+               <version>3.0.0</version>
+               <executions>
+                   <execution>
+                       <id>add-source</id>
+                       <phase>generate-sources</phase>
+                       <goals>
+                           <goal>add-source</goal>
+                       </goals>
+                       <configuration>
+                           <sources>
+                               <source>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/common</source>
+                           </sources>
+                       </configuration>
+                   </execution>
+               </executions>
             </plugin>
+
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
@@ -351,7 +358,7 @@
                                     </includes>
                                 </resource>
                                 <resource>
-                                    <directory>src/main/resources/tvproxy/user</directory>
+                                    <directory>src/main/resources/tvproxy/daemon</directory>
                                     <filtering>true</filtering>
                                     <includes>
                                         <include>**/*.yml</include>
@@ -370,7 +377,7 @@
                 <version>1.5.10.RELEASE</version>
                 <configuration>
                     <!-- 可以把依赖的包都打包到生成的Jar包中 -->
-                    <mainClass>com.letv.mas.caller.iptv.tvproxy.user.TvProxyUserApplication</mainClass>
+                    <mainClass>com.letv.mas.caller.iptv.tvproxy.daemon.TvProxyDaemonApplication</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
                 <executions>

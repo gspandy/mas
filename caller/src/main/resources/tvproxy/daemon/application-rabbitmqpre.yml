@@ -1,0 +1,20 @@
+rabbitmq:
+  vip:
+    mq:
+      vhost: /vhost_yuanxian
+      host: mq5772i.test.db.lecloud.com
+      port: 5772
+      username: yuanxian
+      password: yuanxianyuanxian
+      fanout_exchange_name: letvclient.cibn.yuanxian.videoCharge.queue.exchange
+      queue_name: letvclient.cibn.yuanxian.videoCharge.queue
+      exchange_name: yuanxian.videoCharge.fanout.exchange
+#spring:
+#  rabbitmq:
+#    host: 'mq5772i.test.db.lecloud.com'
+#    port: 5772
+#    username: 'yuanxian'
+#    password: 'yuanxianyuanxian'
+#    publisher-confirms: true
+#    virtual-host: '/vhost_yuanxian'
+

@@ -41,6 +41,7 @@
         <commons-pool-version>1.6</commons-pool-version>
         <mybatis-version>1.3.2</mybatis-version>
         <pagehelper-version>4.1.0</pagehelper-version>
+        <search-recommendation-thrift-version>v1.4.4</search-recommendation-thrift-version>
     </properties>
 
     <dependencies>
@@ -229,6 +230,13 @@
             <artifactId>commons-pool</artifactId>
             <version>${commons-pool-version}</version>
         </dependency>
+
+        <!-- search jar 本地jar包，先mvn install到本地仓库-->
+        <dependency>
+            <groupId>com.letv.search</groupId>
+            <artifactId>search-recommendation-thrift</artifactId>
+            <version>${search-recommendation-thrift-version}</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -244,7 +252,7 @@
     </dependencyManagement>
 
     <build>
-        <sourceDirectory>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/user</sourceDirectory>
+        <sourceDirectory>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/search</sourceDirectory>
         <!--默认源代码目录-->
         <outputDirectory>${project.build.directory}/classes</outputDirectory>
         <!--默认测试源代码目录-->
@@ -253,7 +261,7 @@
         <!--默认资源目录-->
         <resources>
             <resource>
-                <directory>${basedir}/src/main/resources/tvproxy/user</directory>
+                <directory>${basedir}/src/main/resources/tvproxy/search</directory>
             </resource>
             <!--<resource>
                 <directory>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/user</directory>
@@ -272,25 +280,26 @@
             <!--</testResource>-->
         <!--</testResources>-->
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/common</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
+           <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>build-helper-maven-plugin</artifactId>
+               <version>3.0.0</version>
+               <executions>
+                   <execution>
+                       <id>add-source</id>
+                       <phase>generate-sources</phase>
+                       <goals>
+                           <goal>add-source</goal>
+                       </goals>
+                       <configuration>
+                           <sources>
+                               <source>${basedir}/src/main/java/com/letv/mas/caller/iptv/tvproxy/common</source>
+                           </sources>
+                       </configuration>
+                   </execution>
+               </executions>
             </plugin>
+
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
@@ -351,7 +360,7 @@
                                     </includes>
                                 </resource>
                                 <resource>
-                                    <directory>src/main/resources/tvproxy/user</directory>
+                                    <directory>src/main/resources/tvproxy/search</directory>
                                     <filtering>true</filtering>
                                     <includes>
                                         <include>**/*.yml</include>
@@ -370,7 +379,7 @@
                 <version>1.5.10.RELEASE</version>
                 <configuration>
                     <!-- 可以把依赖的包都打包到生成的Jar包中 -->
-                    <mainClass>com.letv.mas.caller.iptv.tvproxy.user.TvProxyUserApplication</mainClass>
+                    <mainClass>com.letv.mas.caller.iptv.tvproxy.search.TvProxySearchApplication</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
                 <executions>
