@@ -1,4 +1,4 @@
-package com.letv.mas.client.demo;
+package com.letv.mas.client.omp;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

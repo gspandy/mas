@@ -1,4 +1,4 @@
-package com.letv.mas.client.demo.util;
+package com.letv.mas.client.omp.util;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;

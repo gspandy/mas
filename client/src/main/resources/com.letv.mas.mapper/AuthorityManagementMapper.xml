@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.letv.mas.client.demo.model.dao.AuthorityManagementMapper">
+<mapper namespace="com.letv.mas.client.omp.model.dao.AuthorityManagementMapper">
 
-    <resultMap type="com.letv.mas.client.demo.model.dto.UserDto" id="userInfoMap">
+    <resultMap type="com.letv.mas.client.omp.model.dto.UserDto" id="userInfoMap">
         <result column="id" property="id"/>
         <result column="mail" property="mail"/>
         <result column="dept_id" property="dept_id"/>
@@ -20,11 +20,11 @@
         select count(*) from letv_sso_user
     </select>
 
-    <select id="findPageUsers" resultMap="userInfoMap" parameterType="com.letv.mas.client.demo.model.dto.UserDto">
+    <select id="findPageUsers" resultMap="userInfoMap" parameterType="com.letv.mas.client.omp.model.dto.UserDto">
         select <include refid="user"/> from letv_sso_user limit #{startIndex},#{size}
     </select>
 
-    <select  id="findUsersByMail" resultMap="userInfoMap" parameterType="com.letv.mas.client.demo.model.dto.UserDto">
+    <select  id="findUsersByMail" resultMap="userInfoMap" parameterType="com.letv.mas.client.omp.model.dto.UserDto">
         select <include refid="user"/> from letv_sso_user where mail LIKE "%"#{mail}"%"
     </select>
 
@@ -32,7 +32,7 @@
         update letv_sso_user set code=#{code} , type=#{type} where id=#{id}
     </update>
 
-    <resultMap type="com.letv.mas.client.demo.model.dto.AclDto" id="AllAcls">
+    <resultMap type="com.letv.mas.client.omp.model.dto.AclDto" id="AllAcls">
         <result column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="path" property="path"/>

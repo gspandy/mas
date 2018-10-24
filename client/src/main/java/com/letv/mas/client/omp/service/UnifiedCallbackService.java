@@ -1,8 +1,8 @@
-package com.letv.mas.client.demo.service;
+package com.letv.mas.client.omp.service;
 
 import com.google.gson.Gson;
-import com.letv.mas.client.demo.model.dao.SSOLoginMapper;
-import com.letv.mas.client.demo.util.RedisUtil;
+import com.letv.mas.client.omp.model.dao.SSOLoginMapper;
+import com.letv.mas.client.omp.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;

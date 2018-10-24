@@ -1,4 +1,4 @@
-package com.letv.mas.client.demo.model.dto;
+package com.letv.mas.client.omp.model.dto;
 
 import java.io.Serializable;
 

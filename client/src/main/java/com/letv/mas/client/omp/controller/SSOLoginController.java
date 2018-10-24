@@ -1,9 +1,9 @@
-package com.letv.mas.client.demo.controller;
+package com.letv.mas.client.omp.controller;
 
-import com.letv.mas.client.demo.model.dao.SSOLoginMapper;
-import com.letv.mas.client.demo.model.dto.AclDto;
-import com.letv.mas.client.demo.model.dto.UserDto;
-import com.letv.mas.client.demo.service.UnifiedCallbackService;
+import com.letv.mas.client.omp.model.dao.SSOLoginMapper;
+import com.letv.mas.client.omp.model.dto.AclDto;
+import com.letv.mas.client.omp.model.dto.UserDto;
+import com.letv.mas.client.omp.service.UnifiedCallbackService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

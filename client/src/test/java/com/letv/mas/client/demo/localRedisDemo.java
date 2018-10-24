@@ -1,8 +1,7 @@
 package com.letv.mas.client.demo;
 
-import com.google.gson.Gson;
-import com.letv.mas.client.demo.model.dto.AclDto;
-import com.letv.mas.client.demo.util.RedisUtil;
+import com.letv.mas.client.omp.model.dto.AclDto;
+import com.letv.mas.client.omp.util.RedisUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

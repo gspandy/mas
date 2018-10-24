@@ -5,7 +5,7 @@
 属性namespace：空间名，主要在代理中使用。这个namespace是唯一的。
 这里把mapper标签和接口联系在一起了，namespace=写接口路径，映射文件要和接口在同一目录下
  -->
-<mapper namespace="com.letv.mas.client.demo.model.dao.SSOLoginMapper">
+<mapper namespace="com.letv.mas.client.omp.model.dao.SSOLoginMapper">
     <!-- =============映射关系标签=============
     属性type:写po类的包名类名，由于之前定义了po类的别名，这里就写这个别名
     属性id：是这个映射标签的唯一标识
@@ -14,7 +14,7 @@
     属性property：是po类里所指定的列名
     通常会在原列名后面加下划线，这是固定的，这里就是id后面_
      -->
-    <resultMap type="com.letv.mas.client.demo.model.dto.UserDto" id="userInfoMap">
+    <resultMap type="com.letv.mas.client.omp.model.dto.UserDto" id="userInfoMap">
         <result column="id" property="id"/>
         <result column="mail" property="mail"/>
         <result column="dept_id" property="dept_id"/>
@@ -31,7 +31,7 @@
          resultMap输出类型里写映射标签里的id
          parameterType：输入类型，规范输入数据类型，指明查询时使用的参数类型-->
     <!-- 验证登录 -->
-    <select id="findUserByMail" resultMap="userInfoMap" parameterType="com.letv.mas.client.demo.model.dto.UserDto">
+    <select id="findUserByMail" resultMap="userInfoMap" parameterType="com.letv.mas.client.omp.model.dto.UserDto">
         <!-- 用include标签引入sql片段，refid写定义sql片段的id，where标签不要写在片段里 -->
         select <include refid="user"/> from letv_sso_user
         <where>
@@ -42,7 +42,7 @@
     <insert id="insertUser">
         insert into letv_sso_user(mail) values (#{mail})
     </insert>
-    <resultMap type="com.letv.mas.client.demo.model.dto.AclDto" id="AllAcls">
+    <resultMap type="com.letv.mas.client.omp.model.dto.AclDto" id="AllAcls">
         <result column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="path" property="path"/>

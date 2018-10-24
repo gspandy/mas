@@ -1,6 +1,6 @@
-package com.letv.mas.client.demo.model.dao;
+package com.letv.mas.client.omp.model.dao;
 
-import com.letv.mas.client.demo.model.dto.UserDto;
+import com.letv.mas.client.omp.model.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
