@@ -1,0 +1,141 @@
+zuul:
+  debug:
+    request: false
+    logfile: true
+  host:
+    # 网关最大链接数（网关最大链接数 <= 每个路由最大链接数 * 路由个数）
+    max-total-connections: 8000
+    # 每个路由最大链接数
+    max-per-route-connections: 1000
+  # 服务名匹配表达式，定义不自动创建路由的规则（默认情况下所有 Eureka 上的服务都会被 Zuul 自动地创建映射关系来进行路由，推荐配置为*）
+  ignored-services: '*'
+  # 设置不希望被 API 网关进行路由的 URL 表达式
+  ignored-patterns: '/i/**'
+  # hystrix 熔断隔离策略，在 Zuul 网关内建议配置为 THREAD-线程隔离
+  ribbon-isolation-strategy: THREAD
+  thread-pool:
+    # service 使用独立的线程池，建议配置为 true
+    use-separate-thread-pools: true
+    # hystrix command 的 threadPoolKey 前缀，在 Zuul 中 threadPoolKey = $thread-pool-key-prefix + $commandKey
+    thread-pool-key-prefix: letv-mas-router-zuulpool-
+  # 路由map配置，查询接口：/routes?format=details
+  routes:
+    # 路由id，应全局唯一
+    r-letv-mas-caller-tvproxy-user:
+      # 需要转发的目的 service id，上游注册在 Eureka 中的 serivice id
+      service-id: letv-mas-caller-tvproxy-user
+      # 匹配请求路由的 pattern（如果与其他 route 的 path 有包含关系，应确保约束性强的 route 配置块在前）
+      #path: '/api/tv/user/**'
+      path: '/iptv/api/new/user/**'
+      # 转发请求时是否忽略前缀: （http://$host1/api/user/list -> http://$host2/user/list）
+      strip-prefix: false
+      # 路由是否支持失败重试 （需要 spring retry 和 ribbon 支持）
+      retryable: false
+    r-letv-mas-caller-tvproxy-user-doc:
+      # 需要转发的目的 service id，上游注册在 Eureka 中的 serivice id
+      service-id: letv-mas-caller-tvproxy-user
+      # 匹配请求路由的 pattern（如果与其他 route 的 path 有包含关系，应确保约束性强的 route 配置块在前）
+      path: '/letv-mas-caller-tvproxy-user/v2/api-docs/**'
+      strip-prefix: true
+    r-static-html:
+      path: '/static/**'
+      url: http://i.static.itv.letv.com/
+      # 转发请求时是否忽略前缀: （http://$host1/api/user/list -> http://$host2/user/list）
+      strip-prefix: true
+      # 路由是否支持失败重试 （需要 spring retry 和 ribbon 支持）
+      retryable: false
+#    r-local:
+#      path: '/i/**'
+#      url: forward:/i
+
+# Ribbon 全局配置
+ribbon:
+  # 启用的 HTTP Client 实现，推荐使用 okhttp
+  okhttp:
+    enabled: true
+  # 链接超时时间
+  ConnectTimeout: 200
+  # 响应超时时间 （应确保：（链接超时+响应超时应）* 最大总重试次数 <= 熔断超时）
+  ReadTimeout: 1000
+  # 是否在所有操作异常时重试
+  OkToRetryOnAllOperations: false
+  retryableStatusCodes: 500,502
+  # 最大本地重试次数，前提OkToRetryOnAllOperations＝true
+  MaxAutoRetries: 1
+  # 最大重选 Server 次数，前提OkToRetryOnAllOperations＝true（最大总重试次数 = 最大本地重试次数 * 最大重选 Server 次数；总调用次数 = （最大本地重试次数+1）* 最大重选 Server 次数）
+  MaxAutoRetriesNextServer: 1
+
+# 根据上游的serviceid来指定其ribbon配置
+letv-mas-caller-tvproxy-user:
+  ribbon:
+    # 同 Ribbon 全局配置，service 配置优先
+    ConnectTimeout: 200
+    # 同 Ribbon 全局配置，service 配置优先
+    ReadTimeout: 1000
+    # 负载均衡策略
+    NFLoadBalancerRuleClassName: com.letv.mas.common.ribbon.MetadataWeightedRule
+    # 同 Ribbon 全局配置，service 配置优先
+    OkToRetryOnAllOperations: false
+    retryableStatusCodes: 500,502
+    # 同 Ribbon 全局配置，service 配置优先
+    MaxAutoRetries: 0
+    # 同 Ribbon 全局配置，service 配置优先
+    MaxAutoRetriesNextServer: 0
+
+# 根据上游的serviceid来指定其hystrix配置
+hystrix:
+  command:
+    default:
+    #letv-mas-caller-tvproxy-user:
+      circuitBreaker:
+        # 在所有的滚动窗口中能触发断路器的最小请求样本数量
+        requestVolumeThreshold: 20
+        # 断路器从打开状态进入半开状态的时间
+        sleepWindowInMilliseconds: 5000
+        # 使熔断器打开的最小错误率（在满足最小请求样本量前提下）
+        errorThresholdPercentage: 50
+      metrics:
+        rollingStats:
+          # 滚动窗口统计总时间
+          timeInMilliseconds: 10000
+          # 滚动窗口中桶的数量（应确保：滚动窗口统计总时间 % 滚动窗口中桶的数量 = 0）
+          numBuckets: 10
+        rollingPercentile:
+          # 概要统计开关
+          enabled: false
+          # 滚动窗口统计总时间
+          timeInMilliseconds: 10000
+          # 动窗口中桶的数量（应确保：滚动窗口统计总时间 % 滚动窗口中桶的数量 = 0）
+          numBuckets: 10
+          # 此属性设置每个桶保存的执行时间的最大值。如果桶数量是100，统计窗口为10s，如果这10s里有500次执行，只有最后100次执行会被统计到bucket里去
+          bucketSize: 100
+      fallback:
+        isolation:
+          semaphore:
+            maxConcurrentRequests: 1000          
+      execution:
+        isolation:
+          # 隔离方式需在 Zuul 全局配置中同时配置
+          strategy: THREAD
+          thread:
+            # 指令执行超时时间
+            timeoutInMilliseconds: 1000
+            # 超时后是否中断执行线程
+            interruptOnTimeout: true
+  # 可以配置为 default 全局默认配置或以 threadPoolKey 为单位单独配置，threadPoolKey 配置优先
+  threadpool:
+    default:
+      # 核心线程数量 =｛CPU资源角度｝［（线程等待时间与线程CPU时间之比 + 1）* CPU数目 ］或者 ｛qps角度｝［ 最大qps * (99%平均响应时间 + 预留缓存)］
+      coreSize: 10
+      # 最大线程数量
+      maximumSize: 50
+      # 当设为-1，会使用SynchronousQueue; 值为正则使用LinkedBlcokingQueue；该设置只会在初始化时有效，之后不能修改
+      maxQueueSize: -1
+    # $thread-pool-key-prefix + $commandKey
+    letv-mas-router-zuulpool-letv-mas-caller-tvproxy-user:
+      # 核心线程数量
+      coreSize: 100
+      # 最大线程数量
+      maximumSize: 100
+      # 当设为-1，会使用SynchronousQueue; 值为正则使用LinkedBlcokingQueue；该设置只会在初始化时有效，之后不能修改
+      maxQueueSize: -1

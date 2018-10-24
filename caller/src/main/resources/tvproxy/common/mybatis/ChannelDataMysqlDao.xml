@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.dao.sql.ChannelDataMysqlDao">
+
+    <select id="getList"
+        resultType="com.letv.mas.caller.iptv.tvproxy.common.dao.sql.pojo.ChannelDataMysqlTable">
+        select * from iptv.ITV_CHANNEL_DATA where
+        in_channelid=#{channelId}
+        order by order_num
+    </select>
+</mapper>

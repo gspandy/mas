@@ -32,6 +32,9 @@ public class ZuulLogFilter extends ZuulFilter {
     @Value("${zuul.debug.logfile}")
     private boolean enableLogfile = false;
 
+    @Value("${eureka.instance.ip-address}")
+    private String localIP = "";
+
 //    @Autowired
     private CounterService counterService;
 
@@ -50,7 +53,12 @@ public class ZuulLogFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        return true;
+        RequestContext requestContext = RequestContext.getCurrentContext();
+        HttpServletRequest request = requestContext.getRequest();
+        // 过滤掉本地服务
+        boolean isLocal = /*null != request.getRemoteAddr() && request.getRemoteAddr().equals(localIP) &&*/
+                request.getRequestURI().startsWith("/i/");
+        return !isLocal;
     }
 
     @Override
@@ -276,7 +284,8 @@ public class ZuulLogFilter extends ZuulFilter {
 
             if (!found && (debugInfo.contains("ServletDetectionFilter")
                     || debugInfo.contains("Servlet30WrapperFilter")
-                    || debugInfo.contains("PreDecorationFilter"))) {
+                    || debugInfo.contains("PreDecorationFilter")
+                    || debugInfo.contains("SendForwardFilter"))) {
                 index = debugInfo.lastIndexOf("[");
                 timeStr = debugInfo.substring(index + 1, debugInfo.length() - 3);
                 if (null != ret.get("preTime")) {

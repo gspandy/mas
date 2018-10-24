@@ -1,0 +1,20 @@
+# mysql
+datasource:
+  mysql:
+    url: jdbc:mysql://10.110.94.219:3406/iptv?useUnicode=true&amp;characterEncoding=UTF-8
+    username: dengliwei
+    password: OThiMDY5OGY3OGM
+    driverClassName: com.mysql.jdbc.Driver
+    maximumConnectionCount: 50
+    minimumConnectionCount: 20
+    initialPoolSize: 20
+    maxIdleTime: 60
+    acquireIncrement: 5
+    maxStatements: 0
+    idleConnectionTestPeriod: 60
+    acquireRetryAttempts: 30
+    acquireRetryDelay: 1000
+    breakAfterAcquireFailure: false
+    testConnectionOnCheckout: false
+    testConnectionOnCheckin: false
+    checkoutTimeout: 3000

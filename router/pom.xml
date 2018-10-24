@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>mas-router</name>
-    <description>Demo project for eureka service's zuul</description>
+    <name>mas-router-tvproxy</name>
+    <description>Project for the tvproxy based on mas router</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -30,6 +30,14 @@
         <mas.common>1.0-SNAPSHOT</mas.common>
         <spring.cloud>Edgware.SR3</spring.cloud>
         <spring.boot>1.5.13.RELEASE</spring.boot>
+        <guava>23.0</guava>
+        <springfox-swagger2>2.9.2</springfox-swagger2>
+        <druid.version>1.1.12</druid.version>
+        <druid.starter.version>1.1.10</druid.starter.version>
+        <mybatis.version>1.3.2</mybatis.version>
+        <jjwt.version>0.9.1</jjwt.version>
+        <!--idea plugin: https://github.com/mplushnikov/lombok-intellij-plugin/releases-->
+        <lombok.version>1.16.20</lombok.version>
     </properties>
 
     <dependencies>
@@ -92,6 +100,63 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava}</version>
+        </dependency>
+        <!--https://github.com/springfox/springfox-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-swagger2}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-swagger2}</version>
+        </dependency>
+
+        <!--mysql & dbpool (B)-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+        <!--way-1-->
+        <!--https://mvnrepository.com/artifact/com.alibaba/druid-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+        <!--way-2-->
+        <!--https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${druid.starter.version}</version>
+        </dependency>
+        <!--mysql & dbpool (E)-->
+
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+
+        <!--idea plugin: https://github.com/mplushnikov/lombok-intellij-plugin/releases-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -107,7 +172,34 @@
     </dependencyManagement>
 
     <build>
+        <!--默认源代码目录-->
+        <outputDirectory>${project.build.directory}/classes</outputDirectory>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources/tvproxy</directory>
+            </resource>
+        </resources>
         <plugins>
+            <plugin>
+                <!--http://www.mojohaus.org/build-helper-maven-plugin/index.html-->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${basedir}/src/main/java/com/letv/mas/router/config</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
@@ -159,7 +251,7 @@
                                     <filtering>true</filtering>
                                 </resource>
                                 <resource>
-                                    <directory>src/main/resources/</directory>
+                                    <directory>src/main/resources/tvproxy</directory>
                                     <filtering>true</filtering>
                                     <includes>
                                         <include>**/*.yml</include>
@@ -176,6 +268,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot}</version>
+                <configuration>
+                    <!-- 可以把依赖的包都打包到生成的Jar包中 -->
+                    <mainClass>com.letv.mas.router.iptv.tvproxy.ServiceZuulApplication</mainClass>
+                    <layout>ZIP</layout>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -199,6 +296,17 @@
             <name>Letv Public</name>
             <url>http://maven.letv.cn/nexus/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>maven-net-cn</id>
+            <name>Maven China Mirror</name>
+            <url>http://maven.net.cn/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -206,6 +314,17 @@
             <id>letv</id>
             <name>Letv Public</name>
             <url>http://maven.letv.cn/nexus/content/groups/public/</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>maven-net-cn</id>
+            <name>Maven China Mirror</name>
+            <url>http://maven.net.cn/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </pluginRepository>
     </pluginRepositories>
 </project>

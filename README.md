@@ -46,7 +46,7 @@ git clone https://github.com/leeway-deng/mas.git
 ├── module  
 │   ├── admin 管理相关
 │   │   ├── deploy 部署相关
-│   │   │   ├── profile 业务xx环境变量配置文件集
+│   │   │   ├── {profile} 业务xx环境变量配置文件集
 │   ├── src 代码及资源目录 
 │   │   ├── main
 │   │   │   ├── java 代码目录
@@ -56,7 +56,7 @@ git clone https://github.com/leeway-deng/mas.git
 │   │   │   │   │   ├── model 数据集合
 │   │   │   │   │   │   ├── bean
 │   │   │   │   │   │   │   ├──bo 业务对象，由Service层输出的封装业务逻辑的对象
-│   │   │   │   │   │   │   ├──do 与数据库表结构一一对应,通过DAO层向上传输数据源对象
+│   │   │   │   │   │   │   ├──xdo 与数据库表结构一一对应,通过DAO层向上传输数据源对象
 │   │   │   │   │   │   ├── dao 数据访问层逻辑，与底层 MySQL、Oracle、Hbase 等进行数据交互
 │   │   │   │   │   │   ├── dto 数据传输对象，Service 或 Manager 向外传输的对象
 │   │   │   │   │   ├── service 相对具体的业务逻辑服务层
@@ -65,12 +65,17 @@ git clone https://github.com/leeway-deng/mas.git
 │   │   │   │   │   ├── XxxApplication.java SpringBoot程序主入口
 │   │   │   ├── resources 资源目录
 │   │   │   │   ├── {业务线}[{功能集}]
-│   │   │   │   │   ├── ...xml/yml/properties 相关配置文件
+│   │   │   │   │   ├── ...xml/yml/properties 相关配置文件[注1]
+│   │   │   │   │   ├──bootstrap.xml 程序主引导（本地调试），如指定应用profile
+│   │   │   │   │   ├──bootstrap-{profile} 程序主引导（xx环境），编译脚本如指定profile参数会覆盖默认引导加载文件
+│   │   │   │   │   ├──application[-{功能集}].yml/properties 应用相关功能配置
+│   │   │   │   │   ├──logback-spring.xml 程序日志输出配置
 │   ├── pom.xml 默认本module的demo编译配置文件
-│   ├── pom[-{部门}-{业务线}[-{功能集}]].xml maven编译配置文件[注]
+│   ├── pom[-{部门}-{业务线}[-{功能集}]].xml maven编译配置文件[注2]
 
 备注：
-pom[-{部门}-{业务线}[-{功能集}]].xml 如存在不同业务线、不同功能集共存维护，可做隔离打包配置，具体说明如下：
+-1. 命名规则：除引导和应用、日志配置相关外，其他业务配置遵循{功能集}[-{profile}].yml/properties；
+-2. pom[-{部门}-{业务线}[-{功能集}]].xml 如存在不同业务线、不同功能集共存维护，可做隔离打包配置，具体说明如下：
 eg.可参考文件{mas}/caller/pom-tvproxy-user.xml
 ~~~
     <build>
@@ -132,12 +137,32 @@ eg.可参考文件{mas}/caller/pom-tvproxy-user.xml
           </plugins>  
     </build>
 ~~~
+
 * 本地编译
-./mvn_build.sh caller package '' pom-tvproxy-user.xml
+./mvn_build.sh caller 'clean package' '' pom-tvproxy-user.xml [注1]
+备注：
+-1: 参数依次对应：{子系统文件夹名} {maven编译参数} {业务bootstrap配置profile，配置资源如bootstrap-xxx} {指定业务pom文件}
+-2: 为配合Idea等IDE调试，会自动切换源码目录解决业务独立代码资源差异引用及包路径问题
 * JK编译
 Root POM选取 caller/pom-tvproxy-user.xml
 * 本地IDE调试运行
 先执行如上本地编译，如IdeaIDE在Run/Debug配置修改Main入口类，并去掉Make加载项（不执行pom.xml编译）即可进行调试运行
+
+-/info增加git版本及编译信息，具体参考{mas}/router/pom-tvproxy.xml中相关部分：
+~~~
+...
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                ...
+            </plugin>   
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                ...
+            </plugin>  
+...                                                    
+~~~
 
 #### 框架说明
 
