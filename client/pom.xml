@@ -27,6 +27,9 @@
         <!-- JDK版本 -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <!--数据库-->
+        <druid.version>1.1.12</druid.version>
+        <druid.starter.version>1.1.10</druid.starter.version>
         <!-- 插件版本 -->
         <grpc.stater.version>1.0-SNAPSHOT</grpc.stater.version>
         <skipTests>true</skipTests>
@@ -129,7 +132,14 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.1.0</version>
+            <version>${druid.version}</version>
+        </dependency>
+        <!--way-2-->
+        <!--https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${druid.starter.version}</version>
         </dependency>
         <!--json-->
         <dependency>
