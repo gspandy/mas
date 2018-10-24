@@ -1,25 +1,19 @@
 package com.letv.mas.client.demo.controller;
 
-import com.google.gson.Gson;
 import com.letv.mas.client.demo.model.dao.AuthorityManagementMapper;
 
-import com.letv.mas.client.demo.model.dao.DemoMapper;
+import com.letv.mas.client.demo.model.dao.SSOLoginMapper;
 import com.letv.mas.client.demo.model.dto.AclDto;
 import com.letv.mas.client.demo.model.dto.UserDto;
-import com.letv.mas.client.demo.util.RedisUtil;
+import com.letv.mas.client.demo.service.UnifiedCallbackService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,21 +27,24 @@ public class AuthorityManagementController {
     private AuthorityManagementMapper authorityManagementMapper;
 
     @Resource
-    private DemoMapper demoMapper;
+    private SSOLoginMapper ssoLoginMapper;
 
     @Autowired
-    private RedisTemplate<Object, Object> redisTemplate;
+    private UnifiedCallbackService callbackService;
 
     /**
      * 查询所有权限tree
+     * @param jsoncallback
+     * @param name 要修改的用户
+     * @param response
      */
     @RequestMapping("/allAclsAsTree")
     public void allAclsAsTree(@RequestParam String jsoncallback,@RequestParam String name,HttpServletResponse response){
-        UserDto user = demoMapper.findUserByMail(name);
+        UserDto user = ssoLoginMapper.findUserByMail(name);
         String[] acls = user.getCode().split(",");
-        List allAcl = redisUtil().lGet("AllAcl", 0, -1);
+        List allAcl = callbackService.redisUtil().lGet("AllAcl", 0, -1);
         if(allAcl == null){
-            allAcl = demoMapper.findAllAcls();
+            allAcl = ssoLoginMapper.findAllAcls();
         }
         List showAcl = new ArrayList();
         for (int i = 0; i < acls.length; i++) {
@@ -72,15 +69,17 @@ public class AuthorityManagementController {
                 returnData.add(dto);
             }
         }
-        callBackJson(jsoncallback,returnData,response);
+        callbackService.callBackJson(jsoncallback,returnData,response);
     }
 
     /**
      * 查询所有权限
+     * @param jsoncallback
+     * @param response
      */
     @RequestMapping("/allAcls")
     public void allAcls(@RequestParam String jsoncallback, HttpServletResponse response){
-        callBackJson(jsoncallback,redisUtil().lGet("AllAcl", 0, -1),response);
+        callbackService.callBackJson(jsoncallback,callbackService.redisUtil().lGet("AllAcl", 0, -1),response);
     }
 
     /**
@@ -89,28 +88,35 @@ public class AuthorityManagementController {
     @RequestMapping("/updateAcl")
     public void updateAcl(@RequestParam String jsoncallback,String id,String name,String path,String _parentId,HttpServletResponse response){
         if(StringUtils.isNotBlank(id)){
-            callBackJson(jsoncallback,authorityManagementMapper.updateAcl(id,name,path,_parentId),response);
-            reloadAllAcl();
+            callbackService.callBackJson(jsoncallback,authorityManagementMapper.updateAcl(id,name,path,_parentId),response);
+            callbackService.reloadAllAcl();
         }else {
             if(!StringUtils.isNotBlank(_parentId)){
                 _parentId = "0";
             }
-            callBackJson(jsoncallback,authorityManagementMapper.insertAcl(id,name,path,_parentId),response);
-            reloadAllAcl();
+            callbackService.callBackJson(jsoncallback,authorityManagementMapper.insertAcl(id,name,path,_parentId),response);
+            callbackService.reloadAllAcl();
         }
     }
 
     /**
      * 删除权限
+     * @param jsoncallback
+     * @param id 权限对应ID
+     * @param response
      */
     @RequestMapping("/deleteAcl")
     public void deleteAcl(@RequestParam String jsoncallback,@RequestParam int id,HttpServletResponse response){
-        callBackJson(jsoncallback,authorityManagementMapper.deleteAcl(id),response);
-        reloadAllAcl();
+        callbackService.callBackJson(jsoncallback,authorityManagementMapper.deleteAcl(id),response);
+        callbackService.reloadAllAcl();
     }
 
     /**
      * 查询所有用户
+     * @param jsoncallback
+     * @param pageNum 当前页
+     * @param pageSize 加载数量
+     * @param response
      */
     @RequestMapping("/allUsers")
     public void allUsers(@RequestParam String jsoncallback,@RequestParam int pageSize,@RequestParam int pageNum,HttpServletResponse response){
@@ -122,55 +128,35 @@ public class AuthorityManagementController {
         int total = authorityManagementMapper.findAllUsers();
         map.put("total",total);
         map.put("rows",allUsers);
-        callBackJson(jsoncallback,map,response);
+        callbackService.callBackJson(jsoncallback,map,response);
     }
 
     /**
      * 按条件查找用户
+     * @param jsoncallback
+     * @param mail 用户邮箱片段
+     * @param response
      */
     @RequestMapping("/findUsersByMail")
     public void findUsersByMail(@RequestParam String jsoncallback,@RequestParam String mail, HttpServletResponse response){
-        callBackJson(jsoncallback,authorityManagementMapper.findUsersByMail(mail),response);
+        callbackService.callBackJson(jsoncallback,authorityManagementMapper.findUsersByMail(mail),response);
     }
 
     /**
      * 修改用户权限
+     * @param jsoncallback
+     * @param id 要修改的用户ID
+     * @param type 用户类型
+     * @param code 权限简码
+     * @param response
      */
     @RequestMapping("/updateUserAcl")
     public void updateUserAcl(@RequestParam String jsoncallback,@RequestParam String id,@RequestParam String type,
                               @RequestParam String code, HttpServletResponse response){
-        callBackJson(jsoncallback,authorityManagementMapper.updateUserAcl(id,type,code),response);
+        callbackService.callBackJson(jsoncallback,authorityManagementMapper.updateUserAcl(id,type,code),response);
     }
 
-    private void callBackJson(@RequestParam String jsoncallback,Object s, HttpServletResponse response) {
-        PrintWriter out = null;
-        Gson gson = new Gson();
-        try {
-            out = response.getWriter();
-            out.print(jsoncallback+"(" + gson.toJson(s) + ")");
-        }catch (IOException e){
-            e.printStackTrace();
-        }finally {
-            out.flush();
-            out.close();
-        }
-    }
 
-    private RedisUtil redisUtil(){
-        RedisUtil redisUtil = new RedisUtil();
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new JdkSerializationRedisSerializer());
-        redisUtil.setRedisTemplate(redisTemplate);
-        return redisUtil;
-    }
 
-    private void reloadAllAcl() {
-        redisUtil().lPOP("AllAcl", redisUtil().lGet("AllAcl", 0, -1).size());
-        List allAcl = demoMapper.findAllAcls();
-        redisUtil().lSet("AllAcl",allAcl);
-        redisUtil().expire("AllAcl", 86400);
-    }
 
 }
