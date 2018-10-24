@@ -160,7 +160,7 @@
         <outputDirectory>${project.build.directory}/classes</outputDirectory>
         <resources>
             <resource>
-                <directory>${basedir}/src/main/omp</directory>
+                <directory>${basedir}/src/main/resources/omp</directory>
             </resource>
         </resources>
         <plugins>
