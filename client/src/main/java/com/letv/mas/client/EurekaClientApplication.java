@@ -1,10 +1,8 @@
 package com.letv.mas.client;
 
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
@@ -18,10 +16,8 @@ import org.springframework.web.client.RestTemplate;
  */
 @SpringBootApplication
 @EnableEurekaClient
-@MapperScan("com.letv.mas.mapper")
 @ComponentScan(basePackages = {"com.letv.mas.common.config", "com.letv.mas.client", "com.letv.mas.common.bus", "com.letv.mas.common.trace"})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@ServletComponentScan
 public class EurekaClientApplication {
     @Bean
     @LoadBalanced
