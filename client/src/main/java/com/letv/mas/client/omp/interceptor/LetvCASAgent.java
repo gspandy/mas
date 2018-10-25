@@ -1,4 +1,4 @@
-package com.letv.mas.client.omp.util;
+package com.letv.mas.client.omp.interceptor;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;

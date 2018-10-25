@@ -1,6 +1,6 @@
 package com.letv.mas.client.demo;
 
-import com.letv.mas.client.omp.model.dto.AclDto;
+import com.letv.mas.client.omp.service.dto.AclDto;
 import com.letv.mas.client.omp.util.RedisUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;

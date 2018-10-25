@@ -2,14 +2,14 @@ $(function () {
     $('#ss').searchbox({
         searcher:function(value,name){
             $.ajax({
-                url: "http://127.0.0.1:8901/acl/findUsersByMail",
+                url: "http://omp.mas.letv.cn:8901/acl/findUsersByMail",
                 type: "get",
+                dataType: 'jsonp',
+                jsonp:"jsoncallback",
+                jsonpCallback:'callback',
                 data:{
                     mail:value
                 },
-                dataType: 'jsonp',
-                jsonp: "jsoncallback",
-                jsonpCallback: 'callback',
                 success: function (data) {
                     $('#dg').datagrid('loadData',data);
                 },
@@ -25,15 +25,15 @@ $(function () {
         loader:function(param,success,error){
             //跨域请求数据
             $.ajax({
-                url:"http://127.0.0.1:8901/acl/allUsers",
+                url:"http://omp.mas.letv.cn:8901/acl/allUsers",
                 type:"get",
+                dataType: 'jsonp',
+                jsonp:"jsoncallback",
+                jsonpCallback:'callback',
                 data:{
                     pageNum: $("#dg" ).datagrid("getPager" ).data("pagination" ).options.pageNumber,
                     pageSize: $("#dg" ).datagrid("getPager" ).data("pagination" ).options.pageSize
                 },
-                dataType: 'jsonp',
-                jsonp:"jsoncallback",
-                jsonpCallback:'callback',
                 success: function (res) {
                     success(res);
                 },
@@ -116,16 +116,16 @@ $(function () {
 
                         //跨域请求数据
                         $.ajax({
-                            url:'http://127.0.0.1:8901/acl/allAclsAsTree',
+                            url:'http://omp.mas.letv.cn:8901/acl/allAclsAsTree',
                             type:"get",
+                            dataType: 'jsonp',
+                            jsonp:"jsoncallback",
+                            jsonpCallback:'callback',
                             data:{
                                 pageNum: $("#dg" ).datagrid("getPager" ).data("pagination" ).options.pageNumber,
                                 pageSize: $("#dg" ).datagrid("getPager" ).data("pagination" ).options.pageSize,
                                 name: rows[0].mail
                             },
-                            dataType: 'jsonp',
-                            jsonp:"jsoncallback",
-                            jsonpCallback:'callback',
                             success: function (data) {
                                 $("#myIndex").val($('#dg').datagrid('getRowIndex',rows[0]));
                                 $("#updateId").val(rows[0].id);
@@ -184,16 +184,16 @@ function saveAcl() {
         }
     });
     $.ajax({
-        url:"http://127.0.0.1:8901/acl/updateUserAcl",
-        type:"get",
+        url:"http://omp.mas.letv.cn:8901/acl/updateUserAcl",
+        type:"post",
+        dataType: 'jsonp',
+        jsonp:"jsoncallback",
+        jsonpCallback:'callback',
         data:{
             id:updateId,
             type:type,
             code:str
         },
-        dataType: 'jsonp',
-        jsonp:"jsoncallback",
-        jsonpCallback:'callback',
         success: function (res) {
             if(res == 1){
                 $.messager.show({

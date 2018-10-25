@@ -1,6 +1,6 @@
 package com.letv.mas.client.omp.model.dao;
 
-import com.letv.mas.client.omp.model.dto.UserDto;
+import com.letv.mas.client.omp.model.xdo.UserDo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,11 +11,11 @@ public interface AuthorityManagementMapper {
 
     int findAllUsers();
 
-    List<UserDto> findUsersByMail(@Param("mail") String mail);
+    List<UserDo> findUsersByMail(@Param("mail") String mail);
 
     int updateUserAcl(@Param("id")String id,@Param("type")String type,@Param("code")String code);
 
-    List<UserDto> findPageUsers(@Param("startIndex") int pageNum,@Param("size") int pageSize);
+    List<UserDo> findPageUsers(@Param("startIndex") int pageNum, @Param("size") int pageSize);
 
     int deleteAcl(@Param("id")int id);
 

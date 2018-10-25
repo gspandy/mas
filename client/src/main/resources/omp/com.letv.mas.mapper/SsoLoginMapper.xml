@@ -14,10 +14,10 @@
     属性property：是po类里所指定的列名
     通常会在原列名后面加下划线，这是固定的，这里就是id后面_
      -->
-    <resultMap type="com.letv.mas.client.omp.model.dto.UserDto" id="userInfoMap">
+    <resultMap type="com.letv.mas.client.omp.model.xdo.UserDo" id="userInfoMap">
         <result column="id" property="id"/>
         <result column="mail" property="mail"/>
-        <result column="dept_id" property="dept_id"/>
+        <result column="user_id" property="dept_id"/>
         <result column="type" property="type"/>
         <result column="status" property="status"/>
         <result column="code" property="code"/>
@@ -25,24 +25,24 @@
     <!-- ==================定义sql片段==============
     sql:是sql片段标签属性id是该片段的唯一标识 -->
     <sql id="user">
-        id,mail,type,dept_id,status,code
+        id,mail,type,user_id,status,code
     </sql>
     <!-- 增删改查标签里的id:一定要和接口里对应的方法名一致，
          resultMap输出类型里写映射标签里的id
          parameterType：输入类型，规范输入数据类型，指明查询时使用的参数类型-->
     <!-- 验证登录 -->
-    <select id="findUserByMail" resultMap="userInfoMap" parameterType="com.letv.mas.client.omp.model.dto.UserDto">
+    <select id="findUserByMail" resultMap="userInfoMap" parameterType="com.letv.mas.client.omp.model.xdo.UserDo">
         <!-- 用include标签引入sql片段，refid写定义sql片段的id，where标签不要写在片段里 -->
-        select <include refid="user"/> from letv_sso_user
+        select <include refid="user"/> from user
         <where>
             mail=#{mail}
         </where>
     </select>
 
-    <insert id="insertUser">
-        insert into letv_sso_user(mail) values (#{mail})
+    <insert id="insertUser" parameterType="com.letv.mas.client.omp.model.xdo.UserDo">
+        insert into user(mail) values (#{mail})
     </insert>
-    <resultMap type="com.letv.mas.client.omp.model.dto.AclDto" id="AllAcls">
+    <resultMap type="com.letv.mas.client.omp.service.dto.AclDto" id="AllAcls">
         <result column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="path" property="path"/>
@@ -57,7 +57,7 @@
     </sql>
 
     <select id="findAllAcls" resultMap="AllAcls">
-         SELECT <include refid="acl"/> FROM letv_acl
+         SELECT <include refid="acl"/> FROM auth_data
      </select>
 
 

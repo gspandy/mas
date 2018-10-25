@@ -3,36 +3,36 @@
 
 <mapper namespace="com.letv.mas.client.omp.model.dao.AuthorityManagementMapper">
 
-    <resultMap type="com.letv.mas.client.omp.model.dto.UserDto" id="userInfoMap">
+    <resultMap type="com.letv.mas.client.omp.model.xdo.UserDo" id="userInfoMap">
         <result column="id" property="id"/>
         <result column="mail" property="mail"/>
-        <result column="dept_id" property="dept_id"/>
+        <result column="user_id" property="dept_id"/>
         <result column="type" property="type"/>
         <result column="status" property="status"/>
         <result column="code" property="code"/>
     </resultMap>
 
     <sql id="user">
-        id,mail,dept_id,type,status,code
+        id,mail,user_id,type,status,code
     </sql>
 
     <select id="findAllUsers" resultType="java.lang.Integer">
-        select count(*) from letv_sso_user
+        select count(id) from user
     </select>
 
-    <select id="findPageUsers" resultMap="userInfoMap" parameterType="com.letv.mas.client.omp.model.dto.UserDto">
-        select <include refid="user"/> from letv_sso_user limit #{startIndex},#{size}
+    <select id="findPageUsers" resultMap="userInfoMap" parameterType="com.letv.mas.client.omp.model.xdo.UserDo">
+        select <include refid="user"/> from user limit #{startIndex},#{size}
     </select>
 
-    <select  id="findUsersByMail" resultMap="userInfoMap" parameterType="com.letv.mas.client.omp.model.dto.UserDto">
-        select <include refid="user"/> from letv_sso_user where mail LIKE "%"#{mail}"%"
+    <select  id="findUsersByMail" resultMap="userInfoMap" parameterType="com.letv.mas.client.omp.model.xdo.UserDo">
+        select <include refid="user"/> from user where mail LIKE #{mail}"%"
     </select>
 
     <update id="updateUserAcl">
-        update letv_sso_user set code=#{code} , type=#{type} where id=#{id}
+        update user set code=#{code} , type=#{type} where id=#{id}
     </update>
 
-    <resultMap type="com.letv.mas.client.omp.model.dto.AclDto" id="AllAcls">
+    <resultMap type="com.letv.mas.client.omp.service.dto.AclDto" id="AllAcls">
         <result column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="path" property="path"/>
@@ -47,19 +47,19 @@
     </sql>
 
     <select id="findAllAcls" resultMap="AllAcls">
-        SELECT <include refid="acl"/> FROM letv_acl
+        SELECT <include refid="acl"/> FROM auth_data
     </select>
 
     <delete id="deleteAcl">
-        delete from letv_acl where id=#{id}
+        delete from auth_data where id=#{id}
     </delete>
 
     <update id="updateAcl">
-        update letv_acl set name=#{name} , path=#{path} , parent_id=#{_parentId} where id=#{id}
+        update auth_data set name=#{name} , path=#{path} , parent_id=#{_parentId} where id=#{id}
     </update>
 
-    <insert id="insertAcl">
-        INSERT INTO `letv_acl`
+    <insert id="insertAcl" parameterType="com.letv.mas.client.omp.service.dto.AclDto">
+        INSERT INTO `auth_data`
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="name !=null">
                 `name`,

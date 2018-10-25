@@ -4,19 +4,19 @@ $(function () {
 function checkLogin() {
     var m_tk= getRequest().m_tk;
     $.ajax({
-        url: "http://127.0.0.1:8901/checkLogin",
+        url: "http://omp.mas.letv.cn:8901/checkLogin",
         type: 'get',
+        dataType: 'jsonp',
+        jsonp:"jsoncallback",
+        jsonpCallback:'callback',
         data:{
             m_tk:m_tk
         },
-        dataType: 'jsonp',
-        jsonp: "jsoncallback",
-        jsonpCallback: 'callback',
         success: function (data) {
             document.getElementById("span_username").innerText = data.split("@")[0];
             document.getElementById("p_username").innerText = "Hello,"+data.split("@")[0];
             $.ajax({
-                url: "http://127.0.0.1:8901/loadPageByAcl",
+                url: "http://omp.mas.letv.cn:8901/loadPageByAcl",
                 type: 'get',
                 dataType: 'jsonp',
                 jsonp:"jsoncallback",
@@ -93,11 +93,11 @@ function getRequest() {
 }
 function logout() {
     $.ajax({
-        url: "http://127.0.0.1:8901/logout",
+        url: "http://omp.mas.letv.cn:8901/logout",
         type: 'get',
         dataType: 'jsonp',
-        jsonp: "jsoncallback",
-        jsonpCallback: 'callback',
+        jsonp:"jsoncallback",
+        jsonpCallback:'callback',
         success: function (data) {
             console.log("正常退出！");
             window.location.href="https://sso.lecommons.com/login.php?site=workbench&backurl=http://omp.mas.letv.cn/index.html";
@@ -112,7 +112,7 @@ function login() {
     var mail = $(" input[ name='mail' ] ").val();
     var password = $(" input[ name='password' ] ").val();
     $.ajax({
-        url: "http://127.0.0.1:8901/login",
+        url: "http://omp.mas.letv.cn:8901/login",
         type: 'get',
         data:{
             mail:mail,

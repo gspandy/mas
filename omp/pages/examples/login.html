@@ -35,7 +35,32 @@
                     </div>
                 </div>
                 <div class="footer">                                                               
-                    <button type="submit" class="btn bg-olive btn-block">Sign me in</button>  
+                    <button type="submit" class="btn bg-olive btn-block">Sign me in</button>
+                    <script>
+                        function login() {
+                            var mail = $(" input[ name='mail' ] ").val();
+                            var password = $(" input[ name='password' ] ").val();
+                            $.ajax({
+                                url: "http://127.0.0.1:8901/login",
+                                type: 'get',
+                                data:{
+                                    mail:mail,
+                                    password:password
+                                },
+                                dataType: 'jsonp',
+                                jsonp:"jsoncallback",
+                                jsonpCallback:'callback',
+                                success:function(data){
+//            console.log(data);
+                                    window.location.href = "http://omp.mas.letv.cn";
+                                },
+                                error:function(err){
+                                    console.log("消息服务器网络异常！");
+                                    $(" input[ name='msg' ] ").val("用户名或密码错误");
+                                }
+                            });
+                        }
+                    </script>
                     
                     <p><a href="#">I forgot my password</a></p>
                     

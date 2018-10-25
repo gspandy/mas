@@ -1,8 +1,8 @@
-package com.letv.mas.client.omp.model.dto;
+package com.letv.mas.client.omp.model.xdo;
 
 import java.io.Serializable;
 
-public class UserDto implements Serializable {
+public class UserDo implements Serializable {
 
     private String id;
     private String mail;

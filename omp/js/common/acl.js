@@ -3,15 +3,15 @@ $(function () {
         loader:function(param,success,error){
             //跨域请求数据
             $.ajax({
-                url:"http://127.0.0.1:8901/acl/allAcls",
+                url:"http://omp.mas.letv.cn:8901/acl/allAcls",
                 type:"get",
+                dataType: 'jsonp',
+                jsonp:"jsoncallback",
+                jsonpCallback:'callback',
                 data:{
                     pageNum: $("#acl" ).datagrid("getPager" ).data("pagination" ).options.pageNumber,
                     pageSize: $("#acl" ).datagrid("getPager" ).data("pagination" ).options.pageSize
                 },
-                dataType: 'jsonp',
-                jsonp:"jsoncallback",
-                jsonpCallback:'callback',
                 success: function (res) {
                     success(res);
                 },
@@ -49,17 +49,17 @@ $(function () {
             //发送ajax请求，将改后的数据提交到服务器，修改数据库
             $.ajax({
                 async:false,
-                url:"http://127.0.0.1:8901/acl/updateAcl",
-                type:"get",
+                url:"http://omp.mas.letv.cn:8901/acl/updateAcl",
+                type:"post",
+                dataType: 'jsonp',
+                jsonp:"jsoncallback",
+                jsonpCallback:'callback',
                 data:{
                     id:rowData.id,
                     name:rowData.name,
                     path:rowData.path,
                     _parentId:rowData._parentId
                 },
-                dataType: 'jsonp',
-                jsonp:"jsoncallback",
-                jsonpCallback:'callback',
                 success: function (res) {
                     if(res == 1){
                         $.messager.show({
@@ -110,14 +110,14 @@ $(function () {
                                 if(row.id != undefined){
                                     $.ajax({
                                         async:false,
-                                        url:"http://127.0.0.1:8901/acl/deleteAcl",
-                                        type:"get",
-                                        data:{
-                                            id:row.id
-                                        },
+                                        url:"http://omp.mas.letv.cn:8901/acl/deleteAcl",
+                                        type:"post",
                                         dataType: 'jsonp',
                                         jsonp:"jsoncallback",
                                         jsonpCallback:'callback',
+                                        data:{
+                                            id:row.id
+                                        },
                                         success: function (res) {
                                             if(res == 1){
                                                 $.messager.show({
