@@ -166,7 +166,7 @@
 
     <build>
         <!--默认源代码目录-->
-        <sourceDirectory>${basedir}/src/main/java/com/letv/mas/client</sourceDirectory>
+        <sourceDirectory>${basedir}/src/main/java/com/letv/mas/client/omp</sourceDirectory>
         <outputDirectory>${project.build.directory}/classes</outputDirectory>
         <resources>
             <resource>
@@ -192,7 +192,7 @@
                 <version>1.5.10.RELEASE</version>
                 <configuration>
                     <!-- 可以把依赖的包都打包到生成的Jar包中 -->
-                    <mainClass>com.letv.mas.client.EurekaClientApplication</mainClass>
+                    <mainClass>com.letv.mas.client.omp.MasOmpApplication</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
                 <executions>
