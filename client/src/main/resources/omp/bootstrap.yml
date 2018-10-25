@@ -10,7 +10,7 @@ spring:
     config:
       uri: ${CONFIG_SERVER_DOMAIN:http://config.mas.letv.cn/}
       failFast: true #the client will halt with an Exception
-      enabled: true
+      enabled: false
       # boostrap.yml配置优先于启动参数变量--spring.profiles.active
       profile: ${spring.profiles.active:${CLIENT_PROFILE:default}}
       label: master
@@ -19,7 +19,7 @@ spring:
       password: config2018
       # 激活定时任务，当GIT版本发生变更后加载最新配置上下文
       watcher:
-        enabled: true
+        enabled: false
 security:
   user:
     name: config
