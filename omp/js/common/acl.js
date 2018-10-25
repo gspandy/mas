@@ -1,9 +1,10 @@
+var url = 'http://10.124.65.234:8901';
 $(function () {
     $('#acl').datagrid({
         loader:function(param,success,error){
             //跨域请求数据
             $.ajax({
-                url:"http://omp.mas.letv.cn:8901/acl/allAcls",
+                url: url+"/acl/allAcls",
                 type:"get",
                 dataType: 'jsonp',
                 jsonp:"jsoncallback",
@@ -49,7 +50,7 @@ $(function () {
             //发送ajax请求，将改后的数据提交到服务器，修改数据库
             $.ajax({
                 async:false,
-                url:"http://omp.mas.letv.cn:8901/acl/updateAcl",
+                url:url+"/acl/updateAcl",
                 type:"post",
                 dataType: 'jsonp',
                 jsonp:"jsoncallback",
@@ -110,7 +111,7 @@ $(function () {
                                 if(row.id != undefined){
                                     $.ajax({
                                         async:false,
-                                        url:"http://omp.mas.letv.cn:8901/acl/deleteAcl",
+                                        url:url+"/acl/deleteAcl",
                                         type:"post",
                                         dataType: 'jsonp',
                                         jsonp:"jsoncallback",

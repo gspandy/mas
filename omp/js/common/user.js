@@ -1,8 +1,9 @@
+var url = 'http://10.124.65.234:8901';
 $(function () {
     $('#ss').searchbox({
         searcher:function(value,name){
             $.ajax({
-                url: "http://omp.mas.letv.cn:8901/acl/findUsersByMail",
+                url: url+"/acl/findUsersByMail",
                 type: "get",
                 dataType: 'jsonp',
                 jsonp:"jsoncallback",
@@ -25,7 +26,7 @@ $(function () {
         loader:function(param,success,error){
             //跨域请求数据
             $.ajax({
-                url:"http://omp.mas.letv.cn:8901/acl/allUsers",
+                url:url+"/acl/allUsers",
                 type:"get",
                 dataType: 'jsonp',
                 jsonp:"jsoncallback",
@@ -116,7 +117,7 @@ $(function () {
 
                         //跨域请求数据
                         $.ajax({
-                            url:'http://omp.mas.letv.cn:8901/acl/allAclsAsTree',
+                            url:url+'/acl/allAclsAsTree',
                             type:"get",
                             dataType: 'jsonp',
                             jsonp:"jsoncallback",
@@ -184,7 +185,7 @@ function saveAcl() {
         }
     });
     $.ajax({
-        url:"http://omp.mas.letv.cn:8901/acl/updateUserAcl",
+        url:url+"/acl/updateUserAcl",
         type:"post",
         dataType: 'jsonp',
         jsonp:"jsoncallback",

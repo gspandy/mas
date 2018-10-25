@@ -1,10 +1,11 @@
+var url = 'http://10.124.65.234:8901';
 $(function () {
     window.setTimeout(checkLogin, 1);
 });
 function checkLogin() {
     var m_tk= getRequest().m_tk;
     $.ajax({
-        url: "http://omp.mas.letv.cn:8901/checkLogin",
+        url: url+"/checkLogin",
         type: 'get',
         dataType: 'jsonp',
         jsonp:"jsoncallback",
@@ -16,7 +17,7 @@ function checkLogin() {
             document.getElementById("span_username").innerText = data.split("@")[0];
             document.getElementById("p_username").innerText = "Hello,"+data.split("@")[0];
             $.ajax({
-                url: "http://omp.mas.letv.cn:8901/loadPageByAcl",
+                url: url+"/loadPageByAcl",
                 type: 'get',
                 dataType: 'jsonp',
                 jsonp:"jsoncallback",
@@ -93,7 +94,7 @@ function getRequest() {
 }
 function logout() {
     $.ajax({
-        url: "http://omp.mas.letv.cn:8901/logout",
+        url: url+"/logout",
         type: 'get',
         dataType: 'jsonp',
         jsonp:"jsoncallback",
@@ -112,7 +113,7 @@ function login() {
     var mail = $(" input[ name='mail' ] ").val();
     var password = $(" input[ name='password' ] ").val();
     $.ajax({
-        url: "http://omp.mas.letv.cn:8901/login",
+        url: url+"/login",
         type: 'get',
         data:{
             mail:mail,
