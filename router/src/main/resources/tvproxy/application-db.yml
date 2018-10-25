@@ -9,7 +9,7 @@ spring:
       password:
       # 数据库驱动
       driver-class-name: com.mysql.jdbc.Driver
-      # 拦截器设置：监控统计-stat, 日志-log4j, 防御sql注入-wall, 自定义过滤器
+      # 拦截器设置：监控统计-stat, 日志-log4j, 防御sql注入-wall
       # 监控统计用的filter:stat
       filters: stat, wall, com.letv.mas.router.iptv.tvproxy.interceptor.DruidLogFilter
       # 连接池中最小空闲连接数

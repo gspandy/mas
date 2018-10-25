@@ -11,7 +11,7 @@ spring:
       driver-class-name: com.mysql.jdbc.Driver
       # 拦截器设置：监控统计-stat, 日志-log4j, 防御sql注入-wall, 自定义过滤器
       # 监控统计用的filter:stat
-      filters: stat, wall, com.letv.mas.router.iptv.tvproxy.interceptor.DruidLogFilter
+      filters: stat, wall
       # 连接池中最小空闲连接数
       minIdle: 1
       # 连接池中最大活动连接数
@@ -81,9 +81,7 @@ server:
 #    enabled: true
 
 mybatis:
-  #  mybatis主配置文件所在路径
-  #config-location: classpath:mybatis/mybatis.cfg.xml
   #  定义所有操作类的别名所在包
-  type-aliases-package: com.letv.mas.client.demo.model.dto
+  type-aliases-package: com.letv.mas.client.omp.model.dao
   #  所有的mapper映射文件
-  mapperLocations: com.letv.mas.mapper/*.xml
+  mapperLocations: classpath:com.letv.mas.mapper/**/*.xml

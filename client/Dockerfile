@@ -46,7 +46,7 @@ ENV JAVA_OPTS=
 
 # Set the default command to execute
 # when creating a new container
-CMD [ "/bin/bash", "-c", "java $JAVA_OPTS -jar  -Djava.security.auth.login.config=/letv/app/mas/kafka_client_jaas.conf  /letv/app/mas/client-1.0-SNAPSHOT.jar" ]
+#CMD [ "/bin/bash", "-c", "java $JAVA_OPTS -jar  -Djava.security.auth.login.config=/letv/app/mas/kafka_client_jaas.conf  /letv/app/mas/client-1.0-SNAPSHOT.jar" ]
 
 COPY ./target/client-1.0-SNAPSHOT.jar /letv/app/mas/
 ADD http://j.itv.letv.cn/kafka_client_jaas.conf /letv/app/mas/
