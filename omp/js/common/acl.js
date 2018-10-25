@@ -1,4 +1,4 @@
-var url = 'http://10.124.65.234:8901';
+var url = 'http://10.112.32.141:8901';
 $(function () {
     $('#acl').datagrid({
         loader:function(param,success,error){
