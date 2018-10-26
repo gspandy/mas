@@ -31,7 +31,7 @@ public class SSOLoginService {
     public String logout(String jsoncallback, HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
 
-        if(cookies.length != 0){
+        if(cookies != null && cookies.length != 0){
             for (Cookie cookie:cookies){
                 if("loginUser".equals(cookie.getName())){
                     cookie.setMaxAge(0);

@@ -1,6 +1,7 @@
 package com.letv.mas.client.omp.model.dao;
 
 import com.letv.mas.client.omp.model.xdo.UserDo;
+import com.letv.mas.client.omp.service.dto.AclDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,5 +23,9 @@ public interface AuthorityManagementMapper {
     int updateAcl(@Param("id")String id,@Param("name") String name,@Param("path") String path,@Param("_parentId") String parentId);
 
     int insertAcl(@Param("id")String id,@Param("name") String name,@Param("path") String path,@Param("_parentId") String parentId);
+
+    int findAllAcls();
+
+    List<AclDto> findPageAcls(@Param("startIndex")int i, @Param("size") int pageSize);
 }
 

@@ -28,8 +28,8 @@ public class AuthorityManagementController {
      * @param jsoncallback
      */
     @RequestMapping("/allAcls")
-    public String allAcls(@RequestParam String jsoncallback){
-        return authorityManagementService.allAcls(jsoncallback);
+    public String allAcls(@RequestParam String jsoncallback,@RequestParam int pageSize,@RequestParam int pageNum){
+        return authorityManagementService.allAcls(jsoncallback,pageSize,pageNum);
     }
 
     /**

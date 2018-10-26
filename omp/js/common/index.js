@@ -1,6 +1,6 @@
 var url = 'http://10.112.32.141:8901';
 $(function () {
-    window.setTimeout(checkLogin, 1);
+    window.setTimeout(checkLogin, 10);
 });
 function checkLogin() {
     var m_tk= getRequest().m_tk;

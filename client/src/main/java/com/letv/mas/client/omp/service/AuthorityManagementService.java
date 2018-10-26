@@ -61,8 +61,16 @@ public class AuthorityManagementService {
     }
 
 
-    public String allAcls(String jsoncallback) {
-        return jsoncallback+"(" + new Gson().toJson(callbackService.redisUtil().lGet("AllAcl", 0, -1)) + ")";
+    public String allAcls(String jsoncallback, int pageSize, int pageNum) {
+        if(pageNum<1){
+            pageNum = 1;
+        }
+        Map map = new HashMap();
+        List<AclDto> allAcls = authorityManagementMapper.findPageAcls(pageSize*(pageNum-1),pageSize);
+        int total = authorityManagementMapper.findAllAcls();
+        map.put("total",total);
+        map.put("rows",allAcls);
+        return jsoncallback+"(" + new Gson().toJson(map) + ")";
     }
 
     public String updateAcl(String jsoncallback, String id, String name, String path, String _parentId) {
@@ -83,6 +91,29 @@ public class AuthorityManagementService {
     public String deleteAcl(String jsoncallback, int id) {
         int i = authorityManagementMapper.deleteAcl(id);
         callbackService.reloadAllAcl();
+        List<UserDo> allUsers = ssoLoginMapper.findAllUsers();
+        if(allUsers != null){
+            for(UserDo user : allUsers){
+                String[] code = user.getCode().split(",");
+                if(code.length != 0){
+                    List<String> list = new ArrayList<>();
+                    for (int j = 0,end = code.length; j < end; j++) {
+                        if(!code[j].equals(id+"")){
+                            list.add(code[j]);
+                        }
+                    }
+                    String newCode = "";
+                    for (int j = 0,end = list.size(); j < end; j++) {
+                        if(j == end -1){
+                            newCode += list.get(j);
+                        }else{
+                            newCode += list.get(j) + ",";
+                        }
+                    }
+                    authorityManagementMapper.updateUserAcl(user.getId(),user.getType(),newCode);
+                }
+            }
+        }
         return jsoncallback+"(" + new Gson().toJson(i) + ")";
     }
 

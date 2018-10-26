@@ -31,6 +31,10 @@
          resultMap输出类型里写映射标签里的id
          parameterType：输入类型，规范输入数据类型，指明查询时使用的参数类型-->
     <!-- 验证登录 -->
+    <select id="findAllUsers" resultMap="userInfoMap">
+        select <include refid="user"/> from user
+    </select>
+
     <select id="findUserByMail" resultMap="userInfoMap" parameterType="com.letv.mas.client.omp.model.xdo.UserDo">
         <!-- 用include标签引入sql片段，refid写定义sql片段的id，where标签不要写在片段里 -->
         select <include refid="user"/> from user

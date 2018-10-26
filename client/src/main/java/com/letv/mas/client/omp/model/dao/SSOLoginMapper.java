@@ -14,4 +14,6 @@ public interface SSOLoginMapper {
     List<AclDto> findAllAcls();
 
     void insertUser(String loginUser);
+
+    List<UserDo> findAllUsers();
 }

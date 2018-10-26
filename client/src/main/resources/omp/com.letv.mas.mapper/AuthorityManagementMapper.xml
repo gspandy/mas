@@ -46,8 +46,12 @@
         id,name,path,parent_id,checked,seq,status
     </sql>
 
-    <select id="findAllAcls" resultMap="AllAcls">
-        SELECT <include refid="acl"/> FROM auth_data
+    <select id="findAllAcls" resultType="java.lang.Integer">
+        select count(id) from auth_data
+    </select>
+
+    <select id="findPageAcls" resultMap="AllAcls">
+        select <include refid="acl"/> from auth_data limit #{startIndex},#{size}
     </select>
 
     <delete id="deleteAcl">
