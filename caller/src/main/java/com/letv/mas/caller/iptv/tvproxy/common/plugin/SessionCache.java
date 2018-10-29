@@ -71,14 +71,18 @@ public class SessionCache {
 
     public static SessionCache getSession() {
         //return null;
-        if (SessionCache.sessionCache.get() == null) {
-            return null;
-        } else {
-            if (!SessionCache.sessionCache.get().isWrite) {
+        try {
+            if (SessionCache.sessionCache.get() == null) {
                 return null;
+            } else {
+                if (!SessionCache.sessionCache.get().isWrite) {
+                    return null;
+                }
             }
+            return SessionCache.sessionCache.get();
+        } catch (Exception e) {
+            return null;
         }
-        return SessionCache.sessionCache.get();
     }
 
     public boolean isWrite = true;

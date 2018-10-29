@@ -1,16 +1,16 @@
 package com.letv.mas.caller.iptv.tvproxy.user;
 
-import com.letv.mas.caller.iptv.tvproxy.common.bean.DeviceBindConentV2;
-import com.letv.mas.caller.iptv.tvproxy.common.bean.SubscribeInfo;
-import com.letv.mas.caller.iptv.tvproxy.common.bean.SubscribeInfoV2;
-import com.letv.mas.caller.iptv.tvproxy.common.bean.UserStatus;
+import com.letv.mas.caller.iptv.tvproxy.common.model.bean.DeviceBindConentV2;
+import com.letv.mas.caller.iptv.tvproxy.common.model.bean.SubscribeInfo;
+import com.letv.mas.caller.iptv.tvproxy.common.model.bean.SubscribeInfoV2;
+import com.letv.mas.caller.iptv.tvproxy.common.model.bean.UserStatus;
 import com.letv.mas.caller.iptv.tvproxy.common.constant.*;
-import com.letv.mas.caller.iptv.tvproxy.common.dao.tp.UserTpDao;
-import com.letv.mas.caller.iptv.tvproxy.common.dto.LetvUserDto;
-import com.letv.mas.caller.iptv.tvproxy.common.dto.LetvUserInfoDto;
-import com.letv.mas.caller.iptv.tvproxy.common.dto.Response;
-import com.letv.mas.caller.iptv.tvproxy.common.dto.UserAccountDto;
-import com.letv.mas.caller.iptv.tvproxy.common.dto.response.*;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dao.tp.UserTpDao;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dto.LetvUserDto;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dto.LetvUserInfoDto;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dto.Response;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dto.UserAccountDto;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dto.response.*;
 import com.letv.mas.caller.iptv.tvproxy.common.plugin.CommonParam;
 import com.letv.mas.caller.iptv.tvproxy.common.service.BaseService;
 import com.letv.mas.caller.iptv.tvproxy.common.util.*;
@@ -69,7 +69,7 @@ public class UserService extends BaseService {
         }
 
         // 切乐购测试vendors
-        Boolean switcher = ConfigOperationUtil.getBoolean(ApplicationConstants.IPTV_USER_LEPAY_ISTEST);
+        Boolean switcher = ApplicationUtils.getBoolean(ApplicationConstants.IPTV_USER_LEPAY_ISTEST);
         boolean isTest = (null != switcher && switcher.booleanValue());
 
         if (errorCode == null) {

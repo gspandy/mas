@@ -38,13 +38,14 @@ public class CustomMybatisInterceptor implements Interceptor {
         String sqlId = mappedStatement.getId();
         long begin = System.currentTimeMillis();
         String sql = "";
+        System.out.print("------------------------------");
         if (mappedStatement.getSqlCommandType() == SqlCommandType.SELECT) {
             invocation.getArgs()[0] = this.rebuildMappedStatement(mappedStatement);
             sql = this.getSql(invocation);
         } else {
             sql = sqlId;
         }
-
+        System.out.print("++++++++++++"+sql);
         String logPrefix = "CustomMybatisInterceptor|intercept|sql=" + sql;
         Object returnValue = null;
         try {

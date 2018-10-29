@@ -8,6 +8,7 @@ import com.letv.mas.caller.iptv.tvproxy.common.plugin.SessionCache;
 import com.letv.mas.caller.iptv.tvproxy.common.util.HystrixUtil;
 import com.letv.mas.caller.iptv.tvproxy.common.util.IpAddrUtil;
 import com.letv.mas.caller.iptv.tvproxy.common.util.StringUtil;
+import com.letv.mas.caller.iptv.tvproxy.common.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,8 +30,8 @@ import java.util.*;
 public class DRewriteFilter implements Filter {
     private final static ArrayList<String> DEBUG_IP_WHITELIST = new ArrayList<String>(
             Arrays.asList("10.58.*.*", "10.124.66.210", "10.124.66.211"));
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(RewriteFilter.class);
+    private static final Logger slowLog = LoggerFactory.getLogger("slowLog");
+    private final static Logger LOGGER = LoggerFactory.getLogger("hostAccessLog");
 
     /*@Autowired(required = false)
     private SessionCache sessionCache;*/
@@ -73,9 +74,36 @@ public class DRewriteFilter implements Filter {
                 chain.doFilter(request, response);
             }
         }
+        this.logSlowLog(request, response, stime);
         this.loghostAccess(request, response, stime);
         HystrixUtil.logHystrix();
         HystrixUtil.shutdown();
+    }
+
+    private void logSlowLog(HttpServletRequest request,
+                            HttpServletResponse response, long stime) {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        StringBuffer sb = new StringBuffer();
+        if (parameterMap != null && parameterMap.size() > 0) {
+            sb.append("?");
+            for (String key : parameterMap.keySet()) {
+                sb.append("&").append(key).append("=");
+                String[] values = parameterMap.get(key);
+                if (values != null && values.length > 0) {
+                    for (int i = 0; i < values.length; i++) {
+                        if (i != 0) {
+                            sb.append(",");
+                        }
+                        sb.append(values[i]);
+                    }
+                }
+            }
+        }
+
+        if (System.currentTimeMillis() - stime > 1) {
+            slowLog.info(this.getIP(request) + "," + request.getRequestURI() + sb.toString() + ",请求耗时:"
+                    + (System.currentTimeMillis() - stime));
+        }
     }
 
     @Override
@@ -168,7 +196,7 @@ public class DRewriteFilter implements Filter {
     }
 
     private void loghostAccess(HttpServletRequest request,
-                     HttpServletResponse response, long stime) {
+                               HttpServletResponse response, long stime) {
         // 默认不输出日志
         if (!enableLogfile) {
             return;
@@ -182,7 +210,7 @@ public class DRewriteFilter implements Filter {
         if (StringUtil.isNotBlank(queryStr)) {
             requestUrl += "?" + queryStr;
         }
-        sb.append(this.getISO8601Timestamp(new Date())).append(splitSymbol)
+        sb.append(TimeUtil.getISO8601Timestamp(new Date())).append(splitSymbol)
                 .append(IpAddrUtil.getRequestIP(request)).append(splitSymbol)
                 .append(this.handleEmpty(request.getHeader("x-forwarded-for"))).append(splitSymbol)
                 .append(this.handleEmpty(request.getRemoteUser())).append(splitSymbol)
@@ -202,18 +230,19 @@ public class DRewriteFilter implements Filter {
         LOGGER.info(sb.toString());
     }
 
-    /**
-     * 传入Data类型日期，返回字符串类型时间（ISO8601标准时间）
-     *
-     * @param date
-     * @return
-     */
-    private String getISO8601Timestamp(Date date) {
-        TimeZone tz = TimeZone.getTimeZone("Asia/Shanghai");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-        df.setTimeZone(tz);
-        String nowAsISO = df.format(date);
-        return nowAsISO;
+    public String getIP(HttpServletRequest request) {
+
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 
     private String handleEmpty(String str) {

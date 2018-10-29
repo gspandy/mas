@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: letv-mas-caller-tvproxy-daemon-dev
+  profiles:
+    include: app,redis,db,config,httpurl,rabbitmq,trace

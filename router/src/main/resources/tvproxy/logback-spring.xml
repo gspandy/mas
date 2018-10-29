@@ -2,7 +2,7 @@
 <configuration debug="false">
     <contextName>Logback for letv-mas-router</contextName>
     <springProperty scope="context" name="logPath" source="logout.path" defaultValue="/letv/logs/mas/router"/>
-    <springProperty scope="context" name="logLevel" source="logout.level" defaultValue="INFO"/>
+    <springProperty scope="context" name="logLevel" source="logout.level" defaultValue="DEBUG"/>
     <springProperty scope="context" name="logCapacity" source="logout.capacity" defaultValue="30GB"/>
 
     <!-- 控制台输出 -->

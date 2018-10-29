@@ -1,6 +1,6 @@
 package com.letv.mas.caller.iptv.tvproxy.common.constant;
 
-import com.letv.mas.caller.iptv.tvproxy.common.util.ConfigOperationUtil;
+import com.letv.mas.caller.iptv.tvproxy.common.util.ApplicationUtils;
 import com.letv.mas.caller.iptv.tvproxy.common.util.StringUtil;
 
 public class UserConstants {
@@ -37,7 +37,7 @@ public class UserConstants {
             + "/querylepoint/";*/
 
     public static String getUserInfoGetUrl(){
-        String baseUrl = ConfigOperationUtil.get(ApplicationConstants.USERCENTER_API_SSO_LETV_COM_BASEURL);
+        String baseUrl = ApplicationUtils.get(ApplicationConstants.USERCENTER_API_SSO_LETV_COM_BASEURL);
         if(StringUtil.isNotBlank(baseUrl)){
             return baseUrl + "/api/getUserByName/username/{username}/dlevel/total";
         }
@@ -45,7 +45,7 @@ public class UserConstants {
     }
 
     public static String getUserLepointBalanceGetUrl(){
-        String baseUrl = ConfigOperationUtil.get(ApplicationConstants.BOSS_API_ZHIFU_LETV_COM_BASEURL);
+        String baseUrl = ApplicationUtils.get(ApplicationConstants.BOSS_API_ZHIFU_LETV_COM_BASEURL);
         if(StringUtil.isNotBlank(baseUrl)){
             return baseUrl + "/querylepoint/";
         }

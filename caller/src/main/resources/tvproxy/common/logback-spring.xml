@@ -199,6 +199,28 @@
     <appender name="SERVICE_STATUS_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000000" discardingThreshold="0" includeCallerData="false">
         <appender-ref ref="SERVICE_STATUS_ROLLING_FILE" />
     </appender>
+
+    <appender name="MYSQL_ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/mysql.log</file>
+        <!-- 按照每天生成日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logPath}/mysql.log.%d{yyyy-MM-dd}.gz</FileNamePattern>
+            <!--日志文件保留天数 -->
+            <MaxHistory>7</MaxHistory>
+            <!-- 日志总保存量大小 -->
+            <!--<totalSizeCap>${logCapacity}</totalSizeCap>-->
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 立即IO输出，关闭走流缓存8K -->
+            <immediateFlush>true</immediateFlush>
+            <pattern>%m%n</pattern>
+        </encoder>
+        <!-- 追加方式记录日志 -->
+        <append>true</append>
+    </appender>
+    <appender name="MYSQL_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000000" discardingThreshold="0" includeCallerData="false">
+        <appender-ref ref="MYSQL_ROLLING_FILE" />
+    </appender>
     <appender name="API_SWITCH_MONITOR_STATUS_ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${logPath}/apiSwitchMonitor.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -268,22 +290,45 @@
     <appender name="HYSTRIX_DETAIL_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000000" discardingThreshold="0" includeCallerData="false">
         <appender-ref ref="HYSTRIX_DETAIL_ROLLING_FILE" />
     </appender>
+    <appender name="SLOW_LOG_ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/slowTime.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logPath}/slowTime.log.%d{yyyy-MM-dd}.gz</FileNamePattern>
+            <!--日志文件保留天数 -->
+            <MaxHistory>7</MaxHistory>
+            <!-- 日志总保存量大小 -->
+            <!--<totalSizeCap>${logCapacity}</totalSizeCap>-->
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--日志输出编码格式化-->
+            <!--<encoder>-->
+            <charset>UTF-8</charset>
+            <!-- 立即IO输出，关闭走流缓存8K -->
+            <immediateFlush>false</immediateFlush>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %m%n</pattern>
+        </encoder>
+        <!-- 追加方式记录日志 -->
+        <append>true</append>
+    </appender>
+    <appender name="SLOW_LOG_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000000" discardingThreshold="0" includeCallerData="false">
+        <appender-ref ref="SLOW_LOG_ROLLING_FILE" />
+    </appender>
     <root level="${logLevel}">
         <appender-ref ref="console"/>
         <appender-ref ref="SERVER-API_ASYNC"/>
         <appender-ref ref="errorLog_ASYNC"/>
     </root>
 
-    <logger name="com.letv.mas.caller.iptv.tvproxy.common.interceptor.RewriteFilter" level="INFO" additivity="false">
+    <logger name="hostAccessLog" level="INFO" additivity="false">
         <appender-ref ref="CALLER_ROLLING_FILE_ASYNC" />
     </logger>
     <logger name="cacheDataLog" level="INFO" additivity="false">
         <appender-ref ref="CACHE_ROLLING_FILE_ASYNC" />
     </logger>
-    <logger name="com.letv.mas.caller.iptv.tvproxy.common.util.HttpClientUtil" level="INFO" additivity="false">
+    <logger name="httpClientLog" level="INFO" additivity="false">
         <appender-ref ref="HTTP_ROLLING_FILE_ASYNC" />
     </logger>
-    <logger name="serviceStatusLoger" level="INFO" additivity="false">
+    <logger name="serviceStatusLog" level="INFO" additivity="false">
         <appender-ref ref="SERVICE_STATUS_ROLLING_FILE_ASYNC" />
     </logger>
     <logger name="apiSwitchMonitorLog" level="INFO" additivity="false">
@@ -292,8 +337,13 @@
     <logger name="hystrixMonitorLog" level="INFO" additivity="false">
         <appender-ref ref="HYSTRIX_ROLLING_FILE_ASYNC" />
     </logger>
+    <logger name="sqlLog" level="INFO">
+        <appender-ref ref="MYSQL_ROLLING_FILE_ASYNC"/>
+    </logger>
     <logger name="resourceMonitorLog" level="INFO" additivity="false">
         <appender-ref ref="HYSTRIX_DETAIL_ROLLING_FILE_ASYNC" />
     </logger>
-
+    <logger name="slowLog" level="INFO" additivity="false">
+        <appender-ref ref="SLOW_LOG_ROLLING_FILE_ASYNC" />
+    </logger>
 </Configuration>

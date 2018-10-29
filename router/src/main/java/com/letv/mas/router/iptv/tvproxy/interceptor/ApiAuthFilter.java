@@ -1,4 +1,4 @@
-package interceptor;
+package com.letv.mas.router.iptv.tvproxy.interceptor;
 
 import com.letv.mas.router.iptv.tvproxy.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;

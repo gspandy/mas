@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: letv-mas-router-tvproxy
+    index: ${SERVER_IP}:${SERVER_PORT}
+  cloud:
+    client:
+      ipAddress: ${SERVER_IP}
+    loadbalancer:
+      retry:
+        enabled: true
+
+app:
+  id: letv-mas-router-tvproxy
+
+apollo:
+  bootstrap:
+    enabled: true
+    # 该配置文件指定多namespaces 或通过 @EnabledApolloConfig({"application","operation-config"}) 激活
+    namespaces: application-tvproxy,dpms.application-manager,dpms.application-trace,dpms.application-omp
+  cluster: router
+  #meta: http://config.apollo.letv.com
+  meta: http://10.112.33.35:8080
+  cacheDir: /letv/app/mas/router/apollo-cache
+
+server:
+  port: ${SERVER_PORT}
+  tomcat: 
+    accept-count: 1000 
+    max-threads: 1000
+    max-connections: 1000
+
+security:
+  basic:
+    # 启用基本身份认证
+    enabled: false
+  user:
+    name: letvMasRouter
+    password: admin20180806
+    role: USER
+
+management:
+  security:
+    enabled: false
+# /info 显示全部git版控相关信息
+#  info:
+#    git:
+#      mode: full
+
+endpoints:
+  refresh:
+    enabled: true
+    # 安全验证
+    sensitive: false
+  shutdown:
+    # curl -d "" http://letvMasRouter:admin20180806@127.0.0.1:9000/shutdown
+    enabled: true
+    # 安全验证
+    sensitive: true

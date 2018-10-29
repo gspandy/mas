@@ -1,8 +1,8 @@
 package com.letv.mas.caller.iptv.tvproxy.user;
 
 import com.letv.mas.caller.iptv.tvproxy.common.controller.BaseController;
-import com.letv.mas.caller.iptv.tvproxy.common.dto.Response;
-import com.letv.mas.caller.iptv.tvproxy.common.dto.UserAccountDto;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dto.Response;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dto.UserAccountDto;
 import com.letv.mas.caller.iptv.tvproxy.common.plugin.CommonParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

@@ -1,29 +1,29 @@
 eureka:
   instance:
     # 全网服务实例唯一标识
-    instance-id: ${ROUTER_SERVER_IP:127.0.0.1}:${server.port}
+    instance-id: ${SERVER_IP:127.0.0.1}:${server.port}
     # 服务实例的meta数据键值对集合，可由注册中心进行服务实例间传递
     metadata-map:
       # [HA-P配置]-当前服务实例的zone
-      zone: ${ROUTER_SERVER_ZONE:sjs-1}
+      zone: ${SERVER_ZONE:sjs-1}
       #config bus refresh index
       index: ${spring.application.index:127.0.0.1}
       #config bus refresh profiles
       profiles: ${spring.profiles.include},${spring.profiles.active}
     # 开启ip，默认为false＝》hostname
     prefer-ip-address: true
-    ip-address: ${ROUTER_SERVER_IP:127.0.0.1}
+    ip-address: ${SERVER_IP:127.0.0.1}
     # [服务续约]-心跳检查之服务失效时间，默认为90s，这个配置一般为lease-renewal-interval-in-seconds的三倍！eureka server bug,失效为2倍时间，故设置1/2
     lease-expiration-duration-in-seconds: 15
     # [服务续约]-服务续约任务调用的间隔时间，默认为30s
     lease-renewal-interval-in-seconds: 10
     # [服务监控]-当前实例的服务信息地址
-    status-page-url: http://${ROUTER_SERVER_IP:127.0.0.1}:${server.port}/info
+    status-page-url: http://${SERVER_IP:127.0.0.1}:${server.port}/info
     # [服务监控]-当前实例的服务健康状态地址
-    health-check-url: http://${ROUTER_SERVER_IP:127.0.0.1}:${server.port}/health
+    health-check-url: http://${SERVER_IP:127.0.0.1}:${server.port}/health
   client:
     # [HA-P配置]-当前服务实例的region
-    region: ${ROUTER_SERVER_REGION:cn-bj}
+    region: ${SERVER_REGION:cn-bj}
     # [HA-P配置]-开启当前服务实例优先发现同zone的注册中心，默认为true
     prefer-same-zone-eureka: true
     # [服务注册]-允许当前服务实例注册，默认为true

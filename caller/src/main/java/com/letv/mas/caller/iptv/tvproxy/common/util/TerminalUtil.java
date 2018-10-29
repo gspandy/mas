@@ -36,7 +36,7 @@ public class TerminalUtil {
     public static boolean supportAntiReport(CommonParam commonParam) {
         boolean ret = false;
 
-        Boolean switcher = ConfigOperationUtil.getBoolean(ApplicationConstants.IPTV_PLAY_ANTIREPORT_SWITCH);
+        Boolean switcher = ApplicationUtils.getBoolean(ApplicationConstants.IPTV_PLAY_ANTIREPORT_SWITCH);
         if (null == switcher || !switcher) {
             return ret;
         }

@@ -1,26 +1,14 @@
 spring:
   application:
     name: letv-mas-router-tvproxy
-    index: ${ROUTER_SERVER_IP:127.0.0.1}:${ROUTER_SERVER_PORT}
-#  profiles:
-#    active: ${ROUTER_SERVER_PROFILE:default}
+    index: ${SERVER_IP:127.0.0.1}:${SERVER_PORT}
+  profiles:
+    active: ${SERVER_PROFILE:apollo}
   cloud:
     config:
       enabled: false
       watcher:
         enabled: false
-app:
-  id: letv-mas-tvproxy
-
-apollo:
-  bootstrap:
-    enabled: true
-    # 该配置文件指定多namespaces 或通过 @EnabledApolloConfig({"application","operation-config"}) 激活
-    namespaces: application-tvproxy,dpms.application-manager,dpms.application-trace,dpms.application-omp
-  cluster: router
-  #meta: http://config.apollo.letv.com
-  meta: http://10.112.33.35:8080
-  cacheDir: /letv/app/mas/router/apollo-cache
 
 info:
   app:
@@ -32,7 +20,7 @@ info:
 
 logging:
   level:
-    root: info
+    root: DEBUG
     org.apache.kafka: error
     org.apache.kafka.clients: error
     org.apache.kafka.common: error

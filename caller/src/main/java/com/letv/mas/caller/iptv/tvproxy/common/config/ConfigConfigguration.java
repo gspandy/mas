@@ -1,6 +1,6 @@
 package com.letv.mas.caller.iptv.tvproxy.common.config;
 
-import com.letv.mas.caller.iptv.tvproxy.common.util.ConfigOperationUtil;
+import com.letv.mas.caller.iptv.tvproxy.common.util.ApplicationUtils;
 import com.letv.mas.caller.iptv.tvproxy.common.util.MessageUtils;
 import org.apache.log4j.Logger;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -17,9 +17,9 @@ public class ConfigConfigguration {
     private static final Logger logger = Logger.getLogger(ConfigConfigguration.class);
 
     @Bean
-    ConfigOperationUtil getConfigOperationUtil() {
+    ApplicationUtils getConfigOperationUtil() {
         logger.info(" ConfigBean init .... ");
-        ConfigOperationUtil configOperationUtil = new ConfigOperationUtil();
+        ApplicationUtils configOperationUtil = new ApplicationUtils();
         return configOperationUtil;
     }
 

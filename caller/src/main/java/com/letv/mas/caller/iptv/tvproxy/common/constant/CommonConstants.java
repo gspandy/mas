@@ -1,6 +1,6 @@
 package com.letv.mas.caller.iptv.tvproxy.common.constant;
 
-import com.letv.mas.caller.iptv.tvproxy.common.util.ConfigOperationUtil;
+import com.letv.mas.caller.iptv.tvproxy.common.util.ApplicationUtils;
 
 public class CommonConstants {
 
@@ -45,7 +45,7 @@ public class CommonConstants {
     /*public static final String DEFAULT_WCODE = ApplicationUtils.get(ApplicationConstants.IPTV_WCODE_DEFAULT_VALUE);*/
 
     public static final String getDefaultWcode(){
-        return ConfigOperationUtil.get(ApplicationConstants.IPTV_WCODE_DEFAULT_VALUE);
+        return ApplicationUtils.get(ApplicationConstants.IPTV_WCODE_DEFAULT_VALUE);
     }
 
     /**

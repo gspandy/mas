@@ -2,12 +2,12 @@ package com.letv.mas.caller.iptv.tvproxy.search;
 
 import com.letv.mas.caller.iptv.tvproxy.common.plugin.CommonParam;
 import com.letv.mas.caller.iptv.tvproxy.common.service.BaseService;
-import com.letv.mas.caller.iptv.tvproxy.search.tp.SearchTpDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import serving.GenericServingResponse;
+import com.letv.mas.caller.iptv.tvproxy.search.model.dao.tp.SearchTpDao;
 
 @Component(value = "v2.SearchService")
 @SuppressWarnings("all")
@@ -17,6 +17,7 @@ public class SearchService extends BaseService {
 
     @Autowired
     private SearchTpDao searchTpDao;
+
     /**
      * 复合检索
      * @param channelId

@@ -1,10 +1,10 @@
 spring:
   application:
     name: letv-mas-router-tvproxy
-    index: ${ROUTER_SERVER_IP}:${ROUTER_SERVER_PORT}
+    index: ${SERVER_IP}:${SERVER_PORT}
   cloud:
     client:
-      ipAddress: ${ROUTER_SERVER_IP}
+      ipAddress: ${SERVER_IP}
     loadbalancer:
       retry:
         enabled: true
@@ -12,7 +12,7 @@ spring:
     include: manager,omp,config,zuul,trace,biz,db
 
 server:
-  port: ${ROUTER_SERVER_PORT}
+  port: ${SERVER_PORT}
   tomcat: 
     accept-count: 1000 
     max-threads: 1000
@@ -49,5 +49,5 @@ endpoints:
 # 自定义系统日志输出
 logout:
   path: /letv/logs/mas/router
-  level: INFO
+  level: ERROR
   capacity: 30GB

@@ -28,9 +28,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HttpClientUtil extends RestTemplate {
-    private final Log logger = LogFactory.getLog(HttpClientUtil.class);
+    private final Log logger = LogFactory.getLog("httpClientLog");
     private final Log apiSwitchMonitor = LogFactory.getLog("apiSwitchMonitorLog");
-    private final Log serviceStatusLoger = LogFactory.getLog("serviceStatusLoger");
+    private final Log serviceStatusLoger = LogFactory.getLog("serviceStatusLog");
 
     //@Autowired
     //private SessionCache sessionCache;

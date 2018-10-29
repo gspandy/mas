@@ -4,12 +4,12 @@ spring:
     # 数据库连接池
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      url: jdbc:mysql://localhost:3306/omp?useUnicode=true&characterEncoding=UTF8
-      username: root
-      password:
+      url: jdbc:mysql://m3509i.bjgh.db.lecloud.com:3509/omp?useUnicode=true&characterEncoding=UTF8
+      username: omp_admin
+      password: xu8fZJJg8d9zXZd5
       # 数据库驱动
       driver-class-name: com.mysql.jdbc.Driver
-      # 拦截器设置：监控统计-stat, 日志-log4j, 防御sql注入-wall
+      # 拦截器设置：监控统计-stat, 日志-log4j, 防御sql注入-wall, 自定义过滤器
       # 监控统计用的filter:stat
       filters: stat, wall, com.letv.mas.router.iptv.tvproxy.interceptor.DruidLogFilter
       # 连接池中最小空闲连接数

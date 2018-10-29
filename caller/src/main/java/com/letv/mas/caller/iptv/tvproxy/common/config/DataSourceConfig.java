@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.io.Serializable;
 
-@ConfigurationProperties(prefix = "datasource.mysql")
+//@ConfigurationProperties(prefix = "datasource.mysql")
 public class DataSourceConfig implements Serializable {
 
     private static final long serialVersionUID = 1L;

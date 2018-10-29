@@ -1,7 +1,7 @@
 package com.letv.mas.caller.iptv.tvproxy.common.constant;
 
 import com.letv.mas.caller.iptv.tvproxy.common.plugin.CommonParam;
-import com.letv.mas.caller.iptv.tvproxy.common.util.ConfigOperationUtil;
+import com.letv.mas.caller.iptv.tvproxy.common.util.ApplicationUtils;
 import com.letv.mas.caller.iptv.tvproxy.common.util.StringUtil;
 
 import java.util.HashMap;
@@ -50,7 +50,7 @@ public class VipConstants {
     public static final int BOSS_DEVICE_BIND_V2_DEVICE_STATUS_6 = 6;
 
     public static String GET_PACKAGE_INFO_BY_ID() {
-        String baseUrl = ConfigOperationUtil.get(ApplicationConstants.BOSS_YUANXIAN_BASEURL);
+        String baseUrl = ApplicationUtils.get(ApplicationConstants.BOSS_YUANXIAN_BASEURL);
         if(StringUtil.isNotBlank(baseUrl)){
             return baseUrl + "/letv/vip2.ldo";
         }
@@ -58,7 +58,7 @@ public class VipConstants {
     }
 
     public static String getLepayVipGettimeUrl(){
-        String baseUrl = ConfigOperationUtil.get(ApplicationConstants.LEPAY_BASEURL);
+        String baseUrl = ApplicationUtils.get(ApplicationConstants.LEPAY_BASEURL);
         if(StringUtil.isNotBlank(baseUrl)){
             return baseUrl + "/open_api/vip/m/get_time_new.json";
         }
@@ -67,7 +67,7 @@ public class VipConstants {
 
 
     public static String getBossYuanxianV2DeviceBindBaseUrl(){
-        String baseUrl = ConfigOperationUtil.get(ApplicationConstants.BOSS_YUANXIAN_BASEURL);
+        String baseUrl = ApplicationUtils.get(ApplicationConstants.BOSS_YUANXIAN_BASEURL);
         if(StringUtil.isNotBlank(baseUrl)){
             return baseUrl + "/letv/v2/deviceBind.ldo?";
         }
@@ -75,7 +75,7 @@ public class VipConstants {
     }
 
     public static String getVipDeviceBindInfoGetUrl(){
-        String baseUrl = ConfigOperationUtil.get(ApplicationConstants.BOSS_YUANXIAN_BASEURL);
+        String baseUrl = ApplicationUtils.get(ApplicationConstants.BOSS_YUANXIAN_BASEURL);
         if(StringUtil.isNotBlank(baseUrl)){
             return baseUrl + "/letv/deviceBind.ldo?";
         }

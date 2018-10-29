@@ -1,0 +1,8 @@
+iptv:
+  httpUrls:
+    boss.yuanxian.baseurl: http://yuanxian.cp21.ott.cibntv.net
+    boss.api.zhifu.letv.com.baseurl: http://api.zhifu.cp21.ott.cibntv.net
+    usercenter.api.sso.letv.com.baseurl: http://api.sso.cp21.ott.cibntv.net
+    lepay.baseurl: http://vip.open.cp21.ott.cibntv.net
+    act.report.anti.set.uri: http://act-report-itv.letv.com/api/action/report.json
+    act.report.anti.opt.uri: http://act-report-itv.letv.com/api/op.json

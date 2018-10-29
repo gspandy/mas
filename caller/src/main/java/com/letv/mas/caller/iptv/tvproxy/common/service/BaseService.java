@@ -1,9 +1,9 @@
 package com.letv.mas.caller.iptv.tvproxy.common.service;
 
 
-import com.letv.mas.caller.iptv.tvproxy.common.dao.FacadeCacheDao;
-import com.letv.mas.caller.iptv.tvproxy.common.dao.FacadeMysqlDao;
-import com.letv.mas.caller.iptv.tvproxy.common.dao.FacadeTpDao;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dao.FacadeCacheDao;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dao.FacadeMysqlDao;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dao.FacadeTpDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

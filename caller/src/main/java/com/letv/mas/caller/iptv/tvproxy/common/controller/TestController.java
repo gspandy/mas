@@ -1,7 +1,7 @@
 package com.letv.mas.caller.iptv.tvproxy.common.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.letv.mas.caller.iptv.tvproxy.common.dao.sql.pojo.ChannelDataMysqlTable;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.pojo.ChannelDataMysqlTable;
 import com.letv.mas.caller.iptv.tvproxy.common.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

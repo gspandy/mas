@@ -1,9 +1,8 @@
 package com.letv.mas.caller.iptv.tvproxy.common.config;
 
-import com.github.pagehelper.Dialect;
-import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInterceptor;
 import com.letv.mas.caller.iptv.tvproxy.common.interceptor.CustomMybatisInterceptor;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+//import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
@@ -11,20 +10,18 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+//import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
-@Configuration
-@EnableTransactionManagement
+//@Configuration
+//@EnableTransactionManagement
 // 开启注解事务支持
 public class MybatisConfig implements TransactionManagementConfigurer {
 
@@ -40,7 +37,7 @@ public class MybatisConfig implements TransactionManagementConfigurer {
 	}
 
 
-	@Bean(name = "dataSource")
+	/*@Bean(name = "dataSource")
 	@Primary
 	public DataSource getDataSource(DataSourceConfig dataSourceConfig){
 		ComboPooledDataSource dataSource = new ComboPooledDataSource();
@@ -71,18 +68,18 @@ public class MybatisConfig implements TransactionManagementConfigurer {
 		}
 
 		return dataSource;
-	}
+	}*/
 
 	@Bean(name = "sqlSessionFactory")
 	public SqlSessionFactory sqlSessionFactoryBean() {
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 		bean.setDataSource(dataSource);
-		bean.setTypeAliasesPackage("com.letv.mas.caller.iptv.tvproxy.common.dao.sql.pojo");
+		bean.setTypeAliasesPackage("com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.pojo");
 
 		// 分页插件
-		PageHelper pageHelper = new PageHelper();
+        PageInterceptor pageHelper = new PageInterceptor();
 		Properties properties = new Properties();
-		properties.setProperty("dialect",Dialect.mysql.name());
+		properties.setProperty("helperDialect","mysql");
 		properties.setProperty("reasonable", "true");
 		properties.setProperty("supportMethodsArguments", "true");
 		properties.setProperty("offsetAsPageNum", "true");
