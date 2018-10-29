@@ -68,7 +68,7 @@ public class SSOLoginService {
     public String loadPageByAcl(String jsoncallback, HttpServletRequest request, HttpServletResponse response) {
         String loginUser = (String) request.getAttribute("loginUser");
         UserDo userByMail = ssoLoginMapper.findUserByMail(loginUser);
-        if(userByMail==null){
+        if(StringUtils.isNotBlank(loginUser) && userByMail==null){
             ssoLoginMapper.insertUser(loginUser);
             userByMail = ssoLoginMapper.findUserByMail(loginUser);
         }
