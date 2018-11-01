@@ -54,7 +54,7 @@ public class ApiAuthFilter extends OncePerRequestFilter {
         if (null != this.zuulProperties) {
             for (ZuulProperties.ZuulRoute route : this.zuulProperties.getRoutes().values()) {
                 if (pathMatcher.match(route.getPath(), request.getServletPath())) {
-                    ret = true;
+//                    ret = true;
                     break;
                 }
             }

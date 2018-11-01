@@ -12,19 +12,14 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.cloud.context.refresh.ContextRefresher;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
-import org.springframework.core.type.classreading.MetadataReader;
-import org.springframework.core.type.classreading.MetadataReaderFactory;
-import org.springframework.util.ClassUtils;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 /**
  * Appolo config context refresher, support application config and public application config updates
@@ -38,7 +33,7 @@ public class ApolloConfigRefresher {
 
   private static final Splitter NAMESPACE_SPLITTER = Splitter.on(",").omitEmptyStrings().trimResults();
   private static final String APPLICATION = "application";
-  private static final String APP_PATTERN = ".*\\.application{1}.*";
+  private static final String APP_PATTERN = ".*application{1}.*";
   private static final String BASE_PACKAGE = "com.letv";
   private static final String RESOURCE_PATTERN = "/**/*.class";
 
@@ -68,7 +63,6 @@ public class ApolloConfigRefresher {
 
   private List<String> getNamespaceAnnotations() {
     List<Class<?>> classList = loadAnnotationClasses(EnableApolloConfig.class);
-
     for (Class<?> clazz : classList) {
       EnableApolloConfig apolloAnnotation = clazz.getAnnotation(EnableApolloConfig.class);
       return Lists.newArrayList(apolloAnnotation.value());
@@ -76,27 +70,19 @@ public class ApolloConfigRefresher {
     return Lists.newArrayList();
   }
 
-  private List<Class<?>> loadAnnotationClasses(Class annotationClass) {
-    ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-    List<Class<?>> classes = Lists.newArrayList();
-    try {
-      String pattern = new StringBuilder(ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX)
-          .append(ClassUtils.convertClassNameToResourcePath(BASE_PACKAGE)).append(RESOURCE_PATTERN).toString();
-      Resource[] resources = resourcePatternResolver.getResources(pattern);
-      MetadataReaderFactory readerFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
-      for (Resource resource : resources) {
-        if (resource.isReadable()) {
-          MetadataReader reader = readerFactory.getMetadataReader(resource);
-          String className = reader.getClassMetadata().getClassName();
-          Class<?> clazz = Class.forName(className);
-          Annotation annotation = clazz.getAnnotation(annotationClass);
-          if (annotation != null) {
-            classes.add(clazz);
-          }
-        }
+  private List<Class<?>> loadAnnotationClasses(Class annotation) {
+    ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
+    scanner.addIncludeFilter(new AnnotationTypeFilter(annotation));
+    Set<BeanDefinition> beanDefinitions = scanner.findCandidateComponents(BASE_PACKAGE);
+    List<Class<?>> classes = Lists.newArrayListWithCapacity(beanDefinitions.size());
+    for (BeanDefinition beanDefinition : beanDefinitions) {
+      try {
+        Class<?> modelClass = Class.forName(beanDefinition.getBeanClassName());
+        log.info("Scan annotation:{} class {}", annotation.getName(), modelClass);
+        classes.add(modelClass);
+      } catch (ClassNotFoundException e) {
+        log.error("Scan basepackage {} class failed", BASE_PACKAGE, e);
       }
-    } catch (Exception e) {
-      log.error("Scan basepackage {} class failed", BASE_PACKAGE, e);
     }
     return classes;
   }

@@ -33,6 +33,10 @@ public class LetvCASAgent implements Filter {
     public void doFilter(ServletRequest req, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
+        String referer = request.getHeader("Referer");
+        if(StringUtils.isBlank(referer)){
+            return;
+        }
         String mtk = req.getParameter("m_tk");
 //        System.err.println(mtk);
         if(StringUtils.isNotBlank(mtk)){
@@ -42,14 +46,14 @@ public class LetvCASAgent implements Filter {
             prop.setProperty("SSO_SITE", LETV_SSO_PORTAL_APP_SITE);
             String userid = decode(mtk, prop);
             if(StringUtils.isNotBlank(userid)){
-                request.setAttribute("loginUser",userid);
+                request.setAttribute("OMP_LOGIN_USER",userid);
             }
         }
         Cookie[] cookies = request.getCookies();
         if(cookies != null && cookies.length != 0){
             for (Cookie cookie: cookies){
-                if("loginUser".equals(cookie.getName())){
-                    request.setAttribute("loginUser",cookie.getValue());
+                if("OMP_LOGIN_USER".equals(cookie.getName())){
+                    request.setAttribute("OMP_LOGIN_USER",cookie.getValue());
                 }
             }
         }

@@ -33,34 +33,22 @@ public class SSOLoginController {
     /**
      * 退出登录
      * @param jsoncallback
-     * @param request
-     * @param response
+     * @param user
      */
     @RequestMapping("/logout")
-    public String logout(@RequestParam String jsoncallback,HttpServletRequest request,HttpServletResponse response){
-        return ssoLoginService.logout(jsoncallback,request,response);
+    public String logout(@RequestParam String jsoncallback,@RequestParam String user){
+        return ssoLoginService.logout(jsoncallback,user);
     }
 
     /**
-     * 检查是否登录
+     * 检查是否登录并查询权限
      * @param jsoncallback
      * @param request
      * @param response
      */
     @RequestMapping("/checkLogin")
-    public String checkLogin(@RequestParam String jsoncallback, HttpServletRequest request,HttpServletResponse response){
-        return ssoLoginService.checkLogin(jsoncallback,request,response);
-    }
-
-    /**
-     * 根据登录用户查询权限
-     * @param jsoncallback
-     * @param request
-     * @param response
-     */
-    @RequestMapping("/loadPageByAcl")
-    public String loadPageByAcl(@RequestParam String jsoncallback,HttpServletRequest request,HttpServletResponse response){
-        return ssoLoginService.loadPageByAcl(jsoncallback,request,response);
+    public String checkLogin(@RequestParam String jsoncallback,String user, HttpServletRequest request,HttpServletResponse response){
+        return ssoLoginService.checkLogin(jsoncallback,user,request,response);
     }
 
 }

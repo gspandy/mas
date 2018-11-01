@@ -2,4 +2,4 @@ spring:
   application:
     name: letv-mas-caller-tvproxy-user-dev
   profiles:
-    include: app,redis,db,config,httpurl,trace
+    include: app,redis,db,config,httpurl,trace,hystrix,stream,manager,omp

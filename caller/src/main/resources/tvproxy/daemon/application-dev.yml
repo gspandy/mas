@@ -2,4 +2,8 @@ spring:
   application:
     name: letv-mas-caller-tvproxy-daemon-dev
   profiles:
-    include: app,redis,db,config,httpurl,rabbitmq,trace
+    include: app,redis,db,config,httpurl,hystrix,stream,manager,omp,rabbitmq,trace
+
+# 自定义系统日志输出
+logout:
+  path: /letv/logs/mas/caller/tvproxy/daemon

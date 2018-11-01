@@ -1,12 +1,12 @@
 jedis:
   redis:
     master:
-      ip: 10.58.89.189
-      port: 6379
+      ip: ${REDIS_M_IP:10.58.89.189}
+      port: ${REDIS_M_PORT:6379}
       socket-timeout: 2000
     slave:
-      ip: 10.58.89.189
-      port: 6379
+      ip: ${REDIS_S_IP:10.58.89.189}
+      port: ${REDIS_S_PORT:6379}
       socket-timeout: 2000
     pool:
       max-active: 60

@@ -36,7 +36,7 @@ spring:
 #          # 消费者所需socket缓冲区大小
 #          socket-buffer-size: 2097152
   zipkin:
-    enabled: ${ROUTER_ZIPKIN_ENABLED:true}
+    enabled: ${ZIPKIN_ENABLED:true}
     kafka:
       topic: tvvideo.springcloud.trace
     sender:

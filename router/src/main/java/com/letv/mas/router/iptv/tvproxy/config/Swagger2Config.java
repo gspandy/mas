@@ -1,6 +1,7 @@
-package config;
+package com.letv.mas.router.iptv.tvproxy.config;
 
 import com.fasterxml.classmate.TypeResolver;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
@@ -73,22 +74,43 @@ public class Swagger2Config extends WebMvcConfigurerAdapter implements Environme
 
     /**
      * 定制upsteam服务
+     * http://host/swagger-resources
+     *
      * @return
      */
-//    @Primary
-//    @Bean
-    public SwaggerResourcesProvider swaggerResourcesProvider() {
+    @Primary
+    @Bean
+    public SwaggerResourcesProvider swaggerResourcesProvider(InMemorySwaggerResourcesProvider defaultResourcesProvider) {
         return () -> {
-            List<SwaggerResource> resources = new ArrayList<>();
+            List<SwaggerResource> resources = new ArrayList<>(defaultResourcesProvider.get());
+            String name = null;
+            for (SwaggerResource swaggerResource : resources) {
+                if (StringUtils.isBlank(swaggerResource.getName())
+                        || swaggerResource.getName().equals("default")) {
+                    name = swaggerResource.getLocation();
+                    if (StringUtils.isBlank(name)) {
+                        name = swaggerResource.getUrl();
+                    }
+                    if (StringUtils.isBlank(name)) {
+                        name = swaggerResource.getName();
+                    }
+                    swaggerResource.setName(name);
+                }
+            }
             zuulProperties.getRoutes().values().stream()
-                    .forEach(route ->
-                            resources.add(createResource(route.getServiceId(), route.getServiceId(), "2.0", route)));
+                    .forEach(route -> {
+                        SwaggerResource swaggerResource = createResource(route.getServiceId(), route.getServiceId(), "2.0", route);
+                        if (null != swaggerResource) {
+                            resources.add(swaggerResource);
+                        }
+                    });
             return resources;
         };
     }
 
     /**
      * 定制UI界面
+     *
      * @return
      */
     @Bean
@@ -126,7 +148,20 @@ public class Swagger2Config extends WebMvcConfigurerAdapter implements Environme
         if (route.getPath().contains("api-docs")) {
             swaggerResource = new SwaggerResource();
             swaggerResource.setName(name);
-            swaggerResource.setLocation("/" + location + "/v2/api-docs");
+            if (StringUtils.isBlank(location)) {
+                if (StringUtils.isNotBlank(route.getUrl())) {
+                    String url = route.getUrl();
+                    if (url.lastIndexOf("/") == url.length() - 1) {
+                        url = url.substring(0, url.length() - 1);
+                    }
+                    location = route.getPath().replaceAll("/\\*\\*", "");
+//                    if (url.startsWith("http")) {
+//                        swaggerResource.setUrl(url);
+//                    }
+                }
+            }
+            swaggerResource.setName(location);
+            swaggerResource.setLocation(location + "/v2/api-docs");
             swaggerResource.setSwaggerVersion(version);
         }
         return swaggerResource;

@@ -3,7 +3,7 @@ spring:
     name: letv-mas-router-tvproxy
     index: ${SERVER_IP:127.0.0.1}:${SERVER_PORT}
   profiles:
-    active: ${SERVER_PROFILE:apollo}
+    active: apollo
   cloud:
     config:
       enabled: false
@@ -20,7 +20,7 @@ info:
 
 logging:
   level:
-    root: DEBUG
+    root: INFO
     org.apache.kafka: error
     org.apache.kafka.clients: error
     org.apache.kafka.common: error

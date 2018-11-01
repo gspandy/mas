@@ -3,38 +3,38 @@ spring:
     stream:
       # 自定义开关
       enabled: true
-      kafka:
-        binder:
-          # brokers列表
-          brokers: ${KAFKA_BROKERS:k9001i.bjxy.db.lecloud.com:9001}
-          # zookeeper列表
-          zk-nodes: ${ZK_NODES:zk2001i.bjxy.db.lecloud.com:2001/kafka/kafka9001}
-          # 配置Kafka使用SASL_PLAINTEXT方式认证
-          configuration:
-            security:
-              # 配置Kafka认证使用SASL_PLAINTEXT方式
-              protocol: SASL_PLAINTEXT
-            sasl:
-              mechanism: PLAIN
-          # JAAS认证配置，该配置可以从外部传入，也可以配置JAAS文件，见说明。目前推荐大家统一按这种简单方式进行配置。
-          jaas:
-            login-module: org.apache.kafka.common.security.plain.PlainLoginModule
-            options:
-              username: tvvideo
-              password: tvvideo-secret
-          # 生产者确认，0、1、-1，默认为1。
-          # 0为不确认，1为leader单确认，-1为同步副本确认。-1的情况下消息可靠性更高。
-          required-acks: -1
-          # 是否自动创建topic，默认为true。
-          # 设为false的情况下，依赖手动配置broker相关topic配置，如果topic不存在binder则无法启动。
-          auto-create-topics: false
-          # autoCreateTopics=true时生效，ISR同步副本数量，数值越高消息可靠性越高。
-          replication-factor: 2
-          # 当需要的时候是否自动创建分区，默认false。
-          # 当配置为false时，如果topic期望的分区数量大于topic配置的数量时，binder无法启动。
-          auto-add-partitions: true
-          # 消费者所需socket缓冲区大小
-          socket-buffer-size: 2097152
+#      kafka:
+#        binder:
+#          # brokers列表
+#          brokers: ${KAFKA_BROKERS:k9001i.bjxy.db.lecloud.com:9001}
+#          # zookeeper列表
+#          zk-nodes: ${ZK_NODES:zk2001i.bjxy.db.lecloud.com:2001/kafka/kafka9001}
+#          # 配置Kafka使用SASL_PLAINTEXT方式认证
+#          configuration:
+#            security:
+#              # 配置Kafka认证使用SASL_PLAINTEXT方式
+#              protocol: SASL_PLAINTEXT
+#            sasl:
+#              mechanism: PLAIN
+#          # JAAS认证配置，该配置可以从外部传入，也可以配置JAAS文件，见说明。目前推荐大家统一按这种简单方式进行配置。
+#          jaas:
+#            login-module: org.apache.kafka.common.security.plain.PlainLoginModule
+#            options:
+#              username: tvvideo
+#              password: tvvideo-secret
+#          # 生产者确认，0、1、-1，默认为1。
+#          # 0为不确认，1为leader单确认，-1为同步副本确认。-1的情况下消息可靠性更高。
+#          required-acks: -1
+#          # 是否自动创建topic，默认为true。
+#          # 设为false的情况下，依赖手动配置broker相关topic配置，如果topic不存在binder则无法启动。
+#          auto-create-topics: false
+#          # autoCreateTopics=true时生效，ISR同步副本数量，数值越高消息可靠性越高。
+#          replication-factor: 2
+#          # 当需要的时候是否自动创建分区，默认false。
+#          # 当配置为false时，如果topic期望的分区数量大于topic配置的数量时，binder无法启动。
+#          auto-add-partitions: true
+#          # 消费者所需socket缓冲区大小
+#          socket-buffer-size: 2097152
   zipkin:
     enabled: ${ZIPKIN_ENABLED:true}
     kafka:

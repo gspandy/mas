@@ -4,9 +4,9 @@ spring:
     # 数据库连接池
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      url: jdbc:mysql://10.110.94.219:3406/iptv?useUnicode=true&amp;characterEncoding=UTF-8
-      username: dengliwei
-      password: OThiMDY5OGY3OGM
+      url: ${DB_URL:jdbc:mysql://10.110.94.219:3406/iptv?useUnicode=true&amp;characterEncoding=UTF-8}
+      username: ${DB_NAME:dengliwei}
+      password: ${DB_PASSWORD:OThiMDY5OGY3OGM}
       # 数据库驱动
       driver-class-name: com.mysql.jdbc.Driver
       # 拦截器设置：监控统计-stat, 日志-log4j, 防御sql注入-wall, 自定义过滤器

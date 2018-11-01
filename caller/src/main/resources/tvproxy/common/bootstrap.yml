@@ -2,9 +2,9 @@
 spring:
   application:
     name: letv-mas-caller-tvproxy-common
-    index: ${CALLER_SERVER_IP:127.0.0.1}
+    index: ${SERVER_IP:127.0.0.1}
   profiles:
-    active: ${CALLER_PROFILE:default}
+    active: ${PROFILE:dev}
     #include: app,config,db,httpurl,redis
 #  profiles:
 #    active: ${CALLER_PROFILE:iptvpre}
@@ -22,14 +22,19 @@ spring:
 #      # 激活定时任务，当GIT版本发生变更后加载最新配置上下文
 #      watcher:
 #        enabled: false
-app:
-  id: letv-mas-caller
 
-apollo:
-  bootstrap:
-    enabled: true
-    # 该配置文件指定多namespaces 或通过 @EnabledApolloConfig({"application","operation-config"}) 激活
-    namespaces: application,application-app,application-config,application-db,application-httpurl,application-redis,dpms.application-trace
-  cluster: default
-  meta: ${CALLER_APOLLO_META:http://10.112.33.35:8080}
-  cacheDir: /letv/app/mas/caller/apollo-cache
+#app:
+#  id: letv-mas-caller
+#
+#apollo:
+#  bootstrap:
+#    enabled: true
+#    # 该配置文件指定多namespaces 或通过 @EnabledApolloConfig({"application","operation-config"}) 激活
+#    namespaces: application-trace,application-app,application-config,application-db,application-httpurl,application-redis,dpms.application-trace
+#  cluster: default
+#  meta: ${APOLLO_META:http://10.112.33.35:8080}
+#  cacheDir: /letv/app/mas/caller/apollo-cache
+
+# 自定义系统日志输出
+logout:
+  path: /letv/logs/mas/caller/tvproxy

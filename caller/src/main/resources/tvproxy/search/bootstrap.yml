@@ -2,26 +2,9 @@
 spring:
   application:
     name: letv-mas-caller-tvproxy-search
-    index: ${CALLER_SERVER_IP:127.0.0.1}
+    index: ${SERVER_IP:127.0.0.1}
   profiles:
-    active: ${CALLER_PROFILE:dev}
-    #include: app,config,db,httpurl,redis
-#  profiles:
-#    active: ${CALLER_PROFILE:iptvpre}
-#  cloud:
-#    config:
-#      uri: ${CONFIG_SERVER_DOMAIN:http://config.mas.letv.cn}
-#      failFast: false #the client will halt with an Exception
-#      enabled: false
-#      # boostrap.yml配置优先于启动参数变量--spring.profiles.active
-#      profile: ${spring.profiles.active:${CLIENT_PROFILE:default}}
-#      label: master
-#      # 访问配置中心，用户安全认证
-#      username: config
-#      password: config2018
-#      # 激活定时任务，当GIT版本发生变更后加载最新配置上下文
-#      watcher:
-#        enabled: false
+    active: ${PROFILE:dev}
 app:
   id: letv-mas-caller
 
@@ -29,8 +12,11 @@ apollo:
   bootstrap:
     enabled: true
     # 该配置文件指定多namespaces 或通过 @EnabledApolloConfig({"application","operation-config"}) 激活
-    namespaces: application,application-app,application-config,application-db,application-httpurl,application-redis,application-thrift,dpms.application-trace
+    namespaces: application,application-thrift,application-app,application-config,application-db,application-httpurl,application-redis,application-hystrix,application-stream,dpms.application-trace,dpms.application-manager,dpms.application-omp
   cluster: search
-  #meta: http://config.apollo.letv.com
-  meta: ${CALLER_APOLLO_META:http://10.112.33.35:8080}
+  meta: ${APOLLO_META:http://10.112.33.35:8080}
   cacheDir: /letv/app/mas/caller/apollo-cache
+
+# 自定义系统日志输出
+logout:
+  path: /letv/logs/mas/caller/tvproxy/search

@@ -50,17 +50,3 @@ spring:
                         options:
                           username: tvvideo
                           password: tvvideo-secret
-    bus:
-      # 是否启用bus
-      enabled: true
-      # Bus使用的队列或Topic，kafka中的topic，rabbitmq中的queue
-      destination: tvvideo.springcloud.config
-      trace:
-        # 是否启用bus事件跟踪，可以通过/trace页面查看
-        enabled: true
-      refresh:
-        # 是否发送refresh事件，开启时支持基于config文件变更的动态配置
-        enabled: true
-      env:
-        # 是否开启env事件，开启时支持直接动态配置相应环境变量，如/bus/env?arg1=value1&arg2=value2
-        enabled: true

@@ -1,4 +1,8 @@
 spring:
+  mvc:
+    favicon:
+      # 禁止默认springboot的ico下发
+      enabled: false
   application:
     name: letv-mas-router-tvproxy
     index: ${SERVER_IP}:${SERVER_PORT}
@@ -56,3 +60,4 @@ endpoints:
     enabled: true
     # 安全验证
     sensitive: true
+

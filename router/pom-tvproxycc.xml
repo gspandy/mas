@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>mas-router-tvproxy</name>
-    <description>Project for the tvproxy based on mas router</description>
+    <description>Project for the tvproxy based on mas router with SC-config</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -217,12 +217,17 @@
                 </configuration>
             </plugin>
             <plugin>
+                <!--http://maven.apache.org/plugins/maven-compiler-plugin/usage.html-->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.plugin}</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
+                    <!--剔除包内部分包含外部差异化依赖的类文件-->
+                    <excludes>
+                        <exclude>**/config/ZuulConfig.java</exclude>
+                    </excludes>
                     <showWarnings>true</showWarnings>
                     <skip>true</skip>
                 </configuration>

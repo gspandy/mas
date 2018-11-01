@@ -22,6 +22,8 @@
     utils.loadScript("js/jquery-2.0.2.min.js", function () {
         utils.loadScript("js/jquery-ui-1.10.3.min.js", function () {
             utils.loadScript("js/bootstrap.min.js", function () {
+                utils.loadScript("js/common/jquery.cookie.js", function () {
+                    utils.loadScript("js/common/jquery.base64.js", function () {
                 // way1: 存在时序问题，若通过callback相对繁琐！
 //                utils.loadScript("js/plugins/morris/raphael-min.js");
 //                utils.loadScript("js/plugins/morris/morris.min.js");
@@ -94,7 +96,7 @@
 //                    async: true
 //                });
 
-            });
+            })})});
         });
     });
 </script>

@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>mas-router-tvproxy</name>
-    <description>Project for the tvproxy based on mas router</description>
+    <description>Project for the tvproxy based on mas router with apollo-config</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -69,7 +69,6 @@
             <groupId>com.letv.micro.apollo</groupId>
             <artifactId>micro-apollo-spring-boot-starter</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -95,6 +94,12 @@
             <version>${mas.common}</version>
             <!--<scope>system</scope>-->
             <!--<systemPath>${project.basedir}/../common/target/common-1.0-SNAPSHOT.jar</systemPath>-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-config</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--letv工具包（E）-->
         <dependency>
@@ -223,6 +228,7 @@
                 </configuration>
             </plugin>
             <plugin>
+                <!--http://maven.apache.org/plugins/maven-compiler-plugin/usage.html-->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.plugin}</version>
