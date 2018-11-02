@@ -135,9 +135,9 @@ hystrix:
   threadpool:
     default:
       # 核心线程数量 =｛CPU资源角度｝［（线程等待时间与线程CPU时间之比 + 1）* CPU数目 ］或者 ｛qps角度｝［ 最大qps * (99%平均响应时间 + 预留缓存)］
-      coreSize: 10
+      coreSize: 2
       # 最大线程数量
-      maximumSize: 50
+      maximumSize: 10
       # 当设为-1，会使用SynchronousQueue; 值为正则使用LinkedBlcokingQueue；该设置只会在初始化时有效，之后不能修改
       maxQueueSize: -1
     # $thread-pool-key-prefix + $commandKey

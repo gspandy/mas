@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>mas-router-tvproxy</name>
-    <description>Project for the tvproxy based on mas router with SC-config</description>
+    <description>Project for the tvproxy based on mas router with apollo-config</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -61,9 +61,14 @@
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.cloud</groupId>-->
+            <!--<artifactId>spring-cloud-starter-config</artifactId>-->
+        <!--</dependency>-->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
+            <groupId>com.letv.micro.apollo</groupId>
+            <artifactId>micro-apollo-spring-boot-starter</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -89,6 +94,12 @@
             <version>${mas.common}</version>
             <!--<scope>system</scope>-->
             <!--<systemPath>${project.basedir}/../common/target/common-1.0-SNAPSHOT.jar</systemPath>-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-config</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--letv工具包（E）-->
         <dependency>
@@ -223,10 +234,6 @@
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
-                    <!--剔除包内部分包含外部差异化依赖的类文件-->
-                    <excludes>
-                        <exclude>**/config/ZuulConfig.java</exclude>
-                    </excludes>
                     <showWarnings>true</showWarnings>
                     <skip>true</skip>
                 </configuration>

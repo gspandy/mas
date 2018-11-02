@@ -26,6 +26,11 @@ apollo:
   meta: http://10.112.33.35:8080
   cacheDir: /letv/app/mas/router/apollo-cache
 
+# apollo敏感信息加密key
+jasypt:
+  encryptor:
+    password: LetvMas@201811
+
 server:
   port: ${SERVER_PORT}
   tomcat: 

@@ -78,10 +78,10 @@ public class ApolloConfigRefresher {
     for (BeanDefinition beanDefinition : beanDefinitions) {
       try {
         Class<?> modelClass = Class.forName(beanDefinition.getBeanClassName());
-        log.info("Scan annotation:{} class {}", annotation.getName(), modelClass);
+        log.info("Scan basepackage:{} class:{}", annotation.getName(), modelClass);
         classes.add(modelClass);
       } catch (ClassNotFoundException e) {
-        log.error("Scan basepackage {} class failed", BASE_PACKAGE, e);
+        log.error("Scan basepackage:{} class failed", BASE_PACKAGE, e);
       }
     }
     return classes;
