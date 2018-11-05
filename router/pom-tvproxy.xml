@@ -38,6 +38,7 @@
         <jjwt.version>0.9.1</jjwt.version>
         <!--idea plugin: https://github.com/mplushnikov/lombok-intellij-plugin/releases-->
         <lombok.version>1.16.20</lombok.version>
+        <mas.apollo>1.1.2-SNAPSHOT</mas.apollo>
     </properties>
 
     <dependencies>
@@ -68,7 +69,7 @@
         <dependency>
             <groupId>com.letv.micro.apollo</groupId>
             <artifactId>micro-apollo-spring-boot-starter</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${mas.apollo}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

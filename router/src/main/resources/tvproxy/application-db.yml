@@ -4,7 +4,7 @@ spring:
     # 数据库连接池
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      url: jdbc:mysql://m3509i.bjgh.db.lecloud.com:3509/omp?useUnicode=true&characterEncoding=UTF8
+      url: jdbc:mysql://m3509i.bjgh.db.lecloud.com:3509/omp?useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull
       username: omp_admin
       password: xu8fZJJg8d9zXZd5
       # 数据库驱动

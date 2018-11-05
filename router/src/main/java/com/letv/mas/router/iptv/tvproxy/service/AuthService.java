@@ -29,4 +29,10 @@ public class AuthService {
         }
         return ret;
     }
+
+    public String getToken(String param) {
+        String token = null;
+
+        return token;
+    }
 }

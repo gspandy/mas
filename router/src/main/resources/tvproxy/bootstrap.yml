@@ -3,13 +3,21 @@ spring:
     name: letv-mas-router-tvproxy
     index: ${SERVER_IP:127.0.0.1}:${SERVER_PORT}
   profiles:
-    active: apollo
+    active: ${SERVER_PROFILE:tvproxy}
   cloud:
     config:
+      uri: ${CONFIG_SERVER_DOMAIN:http://config.mas.letv.cn/}
+      failFast: true #the client will halt with an Exception
       enabled: false
+      # boostrap.yml配置优先于启动参数变量--spring.profiles.active
+      profile: ${spring.profiles.active:${SERVER_PROFILE:default}}
+      label: master
+      # 访问配置中心，用户安全认证
+      username: config
+      password: config2018
+      # 激活定时任务，当GIT版本发生变更后加载最新配置上下文
       watcher:
         enabled: false
-
 info:
   app:
     name: ${spring.application.name}
@@ -20,7 +28,7 @@ info:
 
 logging:
   level:
-    root: INFO
+    root: info
     org.apache.kafka: error
     org.apache.kafka.clients: error
     org.apache.kafka.common: error
