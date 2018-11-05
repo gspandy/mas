@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.router.iptv.tvproxy.model.dao.db.mysql.ClientDao">
+    <select id="getClientById" parameterType="String" resultType="com.letv.mas.router.iptv.tvproxy.model.xdo.ClientDo">
+    <![CDATA[
+
+        select * from omp.oauth_client
+        where user_id = #{user_id} and is_del = 0 limit 1;
+
+        ]]>
+    </select>
+    <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true">
+    </cache>
+</mapper>
