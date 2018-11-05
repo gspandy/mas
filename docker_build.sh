@@ -7,7 +7,7 @@ docker_hub_local=true
 docker_hub_host="reg-sre.lecloud.com"
 docker_hub_path="/test_image/"
 docker_hub_username="letv_monitor"
-docker_hub_password="!@s20180509"
+docker_hub_password="!@s20181105"
 module_prefix="letv-mas-"
 module=$1
 

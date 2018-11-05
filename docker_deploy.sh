@@ -8,7 +8,7 @@ docker_hub_host="reg-sre.lecloud.com"
 docker_hub_path="/test_image/"
 docker_hub_email="letv_monitor@le.com"
 docker_hub_username="letv_monitor"
-docker_hub_password="!@s20180809"
+docker_hub_password="!@s20181105"
 app_base_path=/letv/app/mas
 log_base_path=/letv/logs/mas
 
