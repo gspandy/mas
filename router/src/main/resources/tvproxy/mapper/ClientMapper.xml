@@ -5,7 +5,7 @@
     <![CDATA[
 
         select * from omp.oauth_client
-        where user_id = #{user_id} and is_del = 0 limit 1;
+        where user_id = #{user_id} and flag = 0 limit 1;
 
         ]]>
     </select>

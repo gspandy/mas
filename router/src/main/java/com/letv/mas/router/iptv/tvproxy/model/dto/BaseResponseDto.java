@@ -1,6 +1,7 @@
 package com.letv.mas.router.iptv.tvproxy.model.dto;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -8,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 响应基类
  */
 @ApiModel(value = "BaseResponseDto", description = "响应基类")
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class BaseResponseDto<T> {
 
     /**
