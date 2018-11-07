@@ -1,9 +1,14 @@
 spring:
+  http:
+    converters:
+      preferred-json-mapper: fastjson
+    encoding:
+      force: true
   application:
     name: letv-mas-caller-tvproxy
     index: ${SERVER_IP:127.0.0.1}:${CALLER_SERVER_PORT:5555}
-  profiles:
-    include: app,redis,db,config,httpurl,hystrix,stream,manager,omp,trace
+  #profiles:
+    #include: app,redis,db,hystrix,stream,manager,omp,trace,thrift
   zipkin:
       enabled: false
 #  metrics:
@@ -29,8 +34,9 @@ spring:
         enabled: true
 server:
   port: ${SERVER_PORT:5555}
-  #servlet-path: /api/tv
-  path: '/iptv/api/new'
+  #servlet-path: /iptv/api/new
+  #context-path: /iptv/api/new
+  #path: '/iptv/api/new'
   tomcat:
     accept-count: 1000
     max-threads: 1000
@@ -69,3 +75,7 @@ logging:
     org.apache.kafka: info
     org.apache.kafka.clients: info
     org.apache.kafka.common: info
+
+jasypt:
+  encryptor:
+    password: LetvMas@201811

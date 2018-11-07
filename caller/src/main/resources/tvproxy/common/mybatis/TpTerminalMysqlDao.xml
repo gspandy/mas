@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.TpTerminalMysqlDao">
+	<select id="getSeriesAppInfo" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SeriesAppRelationMysqlTable">
+        SELECT
+            sar.id as series_app_id,sar.play_format_ls_ts,sar.broadcastId,sar.config
+        FROM
+            terminal.SERIES s,
+            terminal.SERIES_APPLICATION sa,
+            terminal.SERIES_APPLICATION_RELATION sar,
+            terminal.BRAND b,
+            terminal.PLATFORM p
+        WHERE
+            s.brand_id =b.id
+            AND sar.series_id = s.id
+            AND sar.platform_id = p.id
+            AND sar.app_id = sa.id
+            AND s.hardware_code =  #{terminalSeriesCode}
+            AND b.hardware_code =  #{terminalBrandCode}
+            AND p.hardware_code =  #{platformCode}
+            AND sa.app_code =  #{terminalApplicationCode}
+    </select>
+    <select id="getTerminalByUuidAndSeriesAppId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.TpTerminalMysqlTable">
+        select * from terminal.Terminal_Mobile where terminalUUId = #{terminalUUId} and series_app_id = #{series_app_id} limit 1
+    </select>
+    <insert id="insertTerminal" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.TpTerminalMysqlTable" useGeneratedKeys="true" keyProperty="id">
+        insert into terminal.Terminal_Mobile set
+        terminalUUId=#{terminalUUId},seriesId=#{seriesId},
+        mac=#{mac},ip=#{ip},status=#{status},activateTime=#{activateTime},
+        validTime=#{validTime},userName=#{userName},userLoginTime=#{userLoginTime},createTime=#{createTime},createdBy=#{createdBy},
+        updateTime=#{updateTime},updatedBy=#{updatedBy},expireTime=#{expireTime},provid=#{provid},series_app_id=#{series_app_id},versionName=#{versionName},
+        brandName=#{brandName},seriesName=#{seriesName}
+    </insert>
+    <update id="updateTerminalUpdateTimeById" >
+        update terminal.Terminal_Mobile set updateTime = now(),versionName=#{versionName},brandName=#{brandName},seriesName=#{seriesName} where id = #{id}
+    </update>
+</mapper>

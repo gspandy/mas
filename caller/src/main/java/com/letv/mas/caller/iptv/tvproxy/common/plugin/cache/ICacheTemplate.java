@@ -69,6 +69,8 @@ public interface ICacheTemplate {
      */
     public <T> T get(String key, LetvTypeReference<T> typeReference);
 
+
+
     /**
      * 一次性读多个key；其中，针对数据存储和获取过程中，对类型信息的要求不用；如果使用Java序列化存取数据，
      * 则使用Class即可；如果使用org.codehaus.jackson.map.ObjectMapper存取数据，则针对普通Object
@@ -82,6 +84,8 @@ public interface ICacheTemplate {
      * @return
      */
     public <T> Map<String, T> mget(List<String> keys, Class<T> c);
+
+    public <T> Map<String, T> mget(List<String> keys, Class<T> c, int batchSize);
 
     /**
      * 一次性读多个key；其中，存储的数据是包含Collection、Map等封装类型，而不能是普通Object

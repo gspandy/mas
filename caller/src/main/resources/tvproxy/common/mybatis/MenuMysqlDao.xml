@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.MenuMysqlDao">
+	<resultMap type="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.Itv_Menu" id="menuMap">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="channelCode" property="channelCode" />
+		<result column="url" property="url" />
+		<result column="icon" property="icon" />
+		<result column="request_type" property="requestType" />
+		<result column="parentid" property="parentId" />
+		<result column="isRank" property="isRank" />
+		<result column="terminal_type" property="terminal_type" />
+		<result column="terminal_brand" property="terminal_brand" />
+		<result column="terminal_series" property="terminal_series" />
+		<result column="broadcastid" property="broadcastid" />
+		<result column="status" property="status" />
+		<result column="ordernum" property="ordernum" />
+		<result column="categoryid" property="categoryid" />
+		<result column="vnum" property="vnum" />
+		<result column="createdate" property="createdate" />
+		<result column="updatedate" property="updatedate" />
+		<result column="createby" property="createby" />
+		<result column="updateby" property="updateby" />
+		<result column="relationId" property="relationId" />
+		<result column="big_pic" property="bigPic" />
+		<result column="small_pic" property="smallPic" />
+		<result column="focus" property="focus" />
+		<result column="focus1" property="focus1" />
+		<result column="focus2" property="focus2" />
+		<result column="color" property="color" />
+		<result column="order_2p5" property="order2p5" />
+	</resultMap>
+	<select id="findById" resultMap="menuMap">
+		select * from iptv.ITV_MENU
+		where id=#{id}
+	</select>
+	<select id="getMainMenu" resultMap="menuMap">
+		select * from iptv.ITV_MENU where
+		vnum=#{vnum} and status=1 and
+		parentid=#{fid}
+		<if test="broadcastId!=null">
+			<choose>
+				<when test="broadcastId==1">
+					and cntv = 1
+				</when>
+				<when test="broadcastId==2">
+					and cibn = 1
+				</when>
+				<when test="broadcastId==3">
+					and wasu = 1
+				</when>
+			</choose>
+		</if>
+		<choose>
+            <when test="orderBy!=null">
+                order by ${orderBy}
+            </when>
+            <otherwise>
+                order by ordernum
+            </otherwise>
+        </choose>
+	</select>
+	<select id="getMainMenuByCategoryId" resultMap="menuMap">
+		select * from iptv.ITV_MENU where
+		vnum=#{vnum} and status=1 and
+		parentid=0 and categoryid=#{categoryId}
+		<if test="broadcastId!=null">
+			<choose>
+				<when test="broadcastId==1">
+					and cntv = 1
+				</when>
+				<when test="broadcastId==2">
+					and cibn = 1
+				</when>
+				<when test="broadcastId==3">
+					and wasu = 1
+				</when>
+			</choose>
+		</if>
+		limit 1
+	</select>
+	<select id="getMenusByRequestType" resultMap="menuMap">
+		select * from
+		iptv.ITV_MENU where
+		status=1 and request_type=#{requestTypeId} order by
+		ordernum
+	</select>
+	<select id="listItvMenuByFatherId" resultMap="menuMap">
+		select * from iptv.ITV_MENU s where 1=1
+		<choose>
+			<when test="broadcastId != null and broadcastId == 1">
+				and s.cntv = 1
+			</when>
+			<when test="broadcastId != null and broadcastId == 2">
+				and s.wasu = 1
+			</when>
+			<when test="broadcastId != null and broadcastId == 3">
+				and s.cibn = 1
+			</when>
+		</choose>
+		<if test="clientType != null and clientType != ''">
+			and s.terminal_type = #{clientType}
+		</if>
+		<if test="channelCode != null">
+			and s.channelcode = #{channelCode}
+		</if>
+		<if test="requestType != null">
+			and s.request_type = #{requestType}
+		</if>
+		<if test="parentId ==0 and vnum == '2.0'">
+            and s.parentid = #{parentId}
+        </if>
+        <if test="parentId ==0 and vnum == '2.5'">
+            and s.parentid = 795
+        </if>
+        <if test="parentId !=null and parentId != 0">
+            and s.parentid = #{parentId}
+        </if>
+		<if test="menuName != null and menuName != ''">
+			and s.`name` like CONCAT('%', #{menuName},'%')
+		</if>
+		order by s.ordernum asc ,s.channelcode asc
+		limit #{start},#{pageSize}
+	</select>
+	<select id="listItvMenuByFId" resultMap="menuMap">
+		select * from
+		iptv.ITV_MENU where parentid = #{fid}
+	</select>
+	<select id="listItvMenuCountByFatherId" resultType="integer">
+		select count(*) from iptv.ITV_MENU s where 1=1
+		<choose>
+			<when test="broadcastId != null and broadcastId == 1">
+				and s.cntv = 1
+			</when>
+			<when test="broadcastId != null and broadcastId == 2">
+				and s.wasu = 1
+			</when>
+			<when test="broadcastId != null and broadcastId == 3">
+				and s.cibn = 1
+			</when>
+		</choose>
+		<if test="clientType != null and clientType != ''">
+			and s.terminal_type = #{clientType}
+		</if>
+		<if test="channelCode != null">
+			and s.channelcode = #{channelCode}
+		</if>
+		<if test="parentId ==0 and vnum == '2.0'">
+			and s.parentid = #{parentId}
+		</if>
+		<if test="parentId ==0 and vnum == '2.5'">
+            and s.parentid = 795
+        </if>
+        <if test="parentId !=null and parentId != 0">
+            and s.parentid = #{parentId}
+        </if>
+		<if test="requestType != null">
+			and s.request_type = #{requestType}
+		</if>
+		<if test="menuName != null and menuName!='' ">
+			and s.`name` like CONCAT('%', #{menuName},'%')
+		</if>
+         
+	</select>
+	<insert id="saveItvMenu" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.Itv_Menu">
+		insert into iptv.ITV_MENU set
+		<include refid="itvMenuCommonParameter" />
+	</insert>
+	<update id="updateItvMenu" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.Itv_Menu">
+		update iptv.ITV_MENU set
+		<include refid="itvMenuCommonParameter" />
+		where id=#{id}
+	</update>
+	<sql id="itvMenuCommonParameter">
+		id=#{id},terminal_type=#{terminal_type},terminal_brand=#{terminal_brand},terminal_series=#{terminal_series},broadcastid=#{broadcastid},
+		vnum=#{vnum},name=#{name},channelcode=#{channelCode},icon=#{icon},url=#{url},request_type=#{requestType},status=#{status},
+		ordernum=#{ordernum},parentid=#{parentId},categoryid=#{categoryid},createdate=#{createdate},updatedate=#{updatedate},
+		createby=#{createby},updateby=#{updateby},isRank=#{isRank},relationId=#{relationId},big_pic=#{bigPic},small_pic=#{smallPic},focus=#{focus},
+		focus1=#{focus1},focus2=#{focus2},color=#{color},cibn=#{cibn},cntv=#{cntv},wasu=#{wasu}
+	</sql>
+	<delete id="deleteItvMenu">
+		delete from iptv.ITV_MENU where id=#{id}
+	</delete>
+
+	<select id="getSearchTypeMenu" resultMap="menuMap">
+		select * from ITV_MENU
+		where id in (SELECT parentid from ITV_MENU where request_type=3 )
+		order by ordernum
+	</select>
+	<select id="listItvMenuByNewest" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.Itv_Menu">
+        select im.* from iptv.ITV_MENU im order by im.id DESC limit 10;
+    </select>
+</mapper>

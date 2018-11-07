@@ -1,17 +1,22 @@
 package com.letv.mas.caller.iptv.tvproxy.common.util;
 
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 @Component
 public class IpAddrUtil {
@@ -21,10 +26,10 @@ public class IpAddrUtil {
     private final static int per = 100; // 跳表每N个抽一个
     private static volatile String localIP = null;
 
-//    static {
-//        initIPLibrary();
-//        localIP = getIPAddr();
-//    }
+    // static {
+    // initIPLibrary();
+    // localIP = getIPAddr();
+    // }
 
     /**
      * 获得本机IP地址

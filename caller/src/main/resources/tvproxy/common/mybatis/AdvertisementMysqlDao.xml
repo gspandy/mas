@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.AdvertisementMysqlDao">
+    
+	<select id="getStartupAdvertisePic" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.AdvertisementPicture">
+		select * from iptv.IPTV_ADVERTISEMENTPICTURE
+		where 1=1
+		<if test="pos!=null">
+		    and showPosition=#{pos}
+        </if>
+        <if test="type!=null">
+            and type=#{type}
+        </if>
+		order by aOrder limit #{start},#{pageSize}
+	</select>
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.ChannelDataExtendMysqlDao">
+
+    <select id="getChannelMapData"
+        resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChannelDataExtendMysqlTable">
+        select * from iptv.ITV_CHANNEL_DATA_EXTEND where
+        parent_block_id=#{blockId} 
+        and age = #{age} 
+        and gender= #{gender}
+        and week= #{week}
+    </select>
+    <select id="getBlockIdByAge"
+        resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChannelDataExtendMysqlTable">
+        select * from iptv.ITV_CHANNEL_DATA_EXTEND where
+        parent_block_id=#{blockId} 
+        and age = #{age} 
+    </select>
+    
+    <select id="getBlockIdByAgeGender"
+        resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChannelDataExtendMysqlTable">
+        select * from iptv.ITV_CHANNEL_DATA_EXTEND where
+        parent_block_id=#{blockId} 
+        and age = #{age} and gender= #{gender}
+    </select>
+    <select id="getBlockIdByAgeWeek"
+        resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChannelDataExtendMysqlTable">
+        select * from iptv.ITV_CHANNEL_DATA_EXTEND where
+        parent_block_id=#{blockId} 
+        and age = #{age} and week= #{week}
+    </select>
+</mapper>

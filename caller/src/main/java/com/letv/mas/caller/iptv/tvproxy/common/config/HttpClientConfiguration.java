@@ -3,6 +3,7 @@ package com.letv.mas.caller.iptv.tvproxy.common.config;
 import com.letv.mas.caller.iptv.tvproxy.common.plugin.HttpClientFactoryBean;
 import com.letv.mas.caller.iptv.tvproxy.common.util.HttpClientUtil;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ public class HttpClientConfiguration {
 
     @Bean
     @RefreshScope
+    @Qualifier("restTemplate")
     HttpClientUtil getHttpClientUtil(RestConfig config) {
         logger.info("HttpClientUtil init ...."+config);
         try {

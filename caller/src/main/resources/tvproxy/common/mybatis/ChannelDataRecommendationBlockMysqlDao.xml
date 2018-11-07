@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.ChannelDataRecommendationBlockMysqlDao">
+
+    <select id="getList"
+        resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChannelDataRecommendationBlockMysqlTable">
+        select * from iptv.ITV_CHANNELDATA_RECOMMENDATIONBLOCK
+    </select>
+
+    <insert id="save"
+        parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChannelDataRecommendationBlockMysqlTable">
+        insert into iptv.ITV_CHANNELDATA_RECOMMENDATIONBLOCK set
+        rc_blockkey=#{rc_blockkey},
+        title_bgcolor=#{title_bgcolor},
+        title_channelid=#{title_channelid},
+        title_searchcondition=#{title_searchcondition}
+    </insert>
+</mapper>

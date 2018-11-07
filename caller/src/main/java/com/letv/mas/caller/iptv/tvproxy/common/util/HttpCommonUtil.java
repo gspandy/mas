@@ -1,10 +1,10 @@
 package com.letv.mas.caller.iptv.tvproxy.common.util;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
 
 public class HttpCommonUtil {
 

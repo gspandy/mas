@@ -1,9 +1,5 @@
 package com.letv.mas.caller.iptv.tvproxy.common.util;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -11,6 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class TimeUtil {
 
@@ -116,6 +116,43 @@ public class TimeUtil {
     }
 
     /**
+     * date2比date1多的天数
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static int daysBetween(long date1, long date2) {
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTimeInMillis(date1);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTimeInMillis(date2);
+        int day1 = cal1.get(Calendar.DAY_OF_YEAR);
+        int day2 = cal2.get(Calendar.DAY_OF_YEAR);
+
+        int year1 = cal1.get(Calendar.YEAR);
+        int year2 = cal2.get(Calendar.YEAR);
+        if (year1 != year2) // 同一年
+        {
+            int timeDistance = 0;
+            for (int i = year1; i < year2; i++) {
+                if (i % 4 == 0 && i % 100 != 0 || i % 400 == 0) // 闰年
+                {
+                    timeDistance += 366;
+                } else // 不是闰年
+                {
+                    timeDistance += 365;
+                }
+            }
+
+            return timeDistance + (day2 - day1);
+        } else // 不同年
+        {
+            return day2 - day1;
+        }
+    }
+
+    /**
      * 根据传入的日期格式化pattern将传入的日期格式化成字符串�??
      * @param date
      *            要格式化的日期对�?
@@ -134,7 +171,7 @@ public class TimeUtil {
     }
 
     public static Date getDate(String time, String strFormat) {
-        Date date = null;
+        java.util.Date date = null;
         if (time == null || time.equals("")) {
             return date = null;
         }
@@ -428,10 +465,10 @@ public class TimeUtil {
         if (StringUtil.isNotBlank(dateString) && StringUtil.isNotBlank(pattern)) {
             Calendar cal = parseCalendar(dateString, pattern);
             // Time Offset
-            int zoneOffset = cal.get(Calendar.ZONE_OFFSET);
+            int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
             // Daylight saving time difference
-            int dstOffset = cal.get(Calendar.DST_OFFSET);
-            cal.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));
+            int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
+            cal.add(java.util.Calendar.MILLISECOND, -(zoneOffset + dstOffset));
             return cal.getTimeInMillis();
         } else {
             return 0;
@@ -449,10 +486,10 @@ public class TimeUtil {
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             // Time Offset
-            int zoneOffset = cal.get(Calendar.ZONE_OFFSET);
+            int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
             // Daylight saving time difference
-            int dstOffset = cal.get(Calendar.DST_OFFSET);
-            cal.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));
+            int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
+            cal.add(java.util.Calendar.MILLISECOND, -(zoneOffset + dstOffset));
             return cal.getTimeInMillis();
         } else {
             return 0;

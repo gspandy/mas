@@ -70,6 +70,8 @@
             <groupId>com.letv.micro.apollo</groupId>
             <artifactId>micro-apollo-spring-boot-starter</artifactId>
             <version>${mas.apollo}</version>
+            <!--<scope>system</scope>-->
+            <!--<systemPath>${project.basedir}/../micro-apollo-spring-boot-starter/target/micro-apollo-spring-boot-starter-1.1.2-SNAPSHOT.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.SeriesDao">
+    <select id="getSeriesApplicationByCode" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SeriesApplication">
+        select * from terminal.SERIES_APPLICATION where app_code = #{code}
+    </select>
+    <select id="getSeriesByCodeAndBranId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.Series">
+        select * from terminal.SERIES where brand_id = #{brand_id} and hardware_code = #{code}
+    </select>
+    <select id="getSeriesApplicationRelationBySidAndSAidAndPid" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SeriesApplicationRelation">
+        select * from terminal.SERIES_APPLICATION_RELATION where series_id = #{series_id} and app_id = #{app_id} and platform_id = #{platform_id}
+    </select>
+    <select id="getSeriesByBrandId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.Series">
+    	select * from terminal.SERIES where brand_id = #{brand_id}
+    </select>
+    <select id="getSeriesApplicationList" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SeriesApplication">
+        select * from terminal.SERIES_APPLICATION
+    </select>
+</mapper>

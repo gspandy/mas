@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.CibnNotificationErrorDao">
+
+    <resultMap type="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.CibnNotificationError" id="errorResultMap">
+        <result property="id" column="id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="itemType" column="item_type"/>
+        <result property="errorCode" column="error_code"/>
+        <result property="errorMessage" column="error_message"/>
+    </resultMap>
+
+
+    <insert id="insertCibnNotificationError" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO iptv.CIBN_NOTIFICATION_ERROR(item_id, item_type, error_code, error_message)
+        VALUES (#{itemId}, #{itemType}, #{errorCode}, #{errorMessage})
+    </insert>
+
+    <select id="getCibnNotificationErrors" resultMap="errorResultMap">
+        SELECT id, item_id, item_type, error_code, error_message
+        FROM iptv.CIBN_NOTIFICATION_ERROR
+        WHERE error_code NOT IN (0, 105, 201, 202, 203)
+        LIMIT #{start}, #{size}
+    </select>
+
+    <delete id="deleteCibnNotificationError">
+        DELETE from iptv.CIBN_NOTIFICATION_ERROR WHERE id = #{id}
+    </delete>
+</mapper>

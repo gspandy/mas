@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.MusicNavMysqlDao">
+
+    <select id="getList" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.MusicNavMysqlTable">
+        select * from iptv.ITV_MUSIC_NAV
+        where status=1 and vnum=#{vnum}
+        and parent_id=#{parent_id}
+        <if test="broadcastId!=null">
+            <choose>
+                <when test="broadcastId==1">
+                    and cntv = 1
+                </when>
+                <when test="broadcastId==2">
+                    and cibn = 1
+                </when>
+                <when test="broadcastId==3">
+                    and wasu = 1
+                </when>
+            </choose>
+        </if>
+        order by
+        order_num
+    </select>
+</mapper>

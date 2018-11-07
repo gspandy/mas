@@ -1,10 +1,10 @@
 package com.letv.mas.caller.iptv.tvproxy.common.util;
 
-import org.apache.log4j.PropertyConfigurator;
-
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
+
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  * Properties文件加载工具

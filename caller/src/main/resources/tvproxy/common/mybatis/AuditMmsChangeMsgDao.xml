@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.AuditMmsChangeMsgDao">
+
+    <resultMap type="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.AuditMmsChangeMsg" id="changeMsgResultMap">
+        <result property="id" column="id"/>
+        <result property="objectId" column="object_id"/>
+        <result property="consumerId" column="consumer_id"/>
+        <result property="actionType" column="action_type"/>
+        <result property="processStatus" column="process_status"/>
+        <result property="priority" column="priority"/>
+        <result property="pushFlag" column="push_flag"/>
+        <result property="operator" column="operator"/>
+    </resultMap>
+
+    <insert id="insertMsg" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.AuditMmsChangeMsg">
+        INSERT INTO
+        iptv.AUDIT_MMS_CHANGE_MSG
+        (id, object_id, consumer_id, action_type, process_status, priority, push_flag, operator)
+        VALUES
+        (UUID(), #{objectId}, #{consumerId}, #{actionType}, #{processStatus}, #{priority}, #{pushFlag}, #{operator})
+    </insert>
+
+    <select id="fetchUnprocessedMsg" resultMap="changeMsgResultMap">
+        SELECT id, object_id, consumer_id, action_type, process_status, priority, push_flag, operator
+        FROM iptv.AUDIT_MMS_CHANGE_MSG
+        WHERE process_status = 0 AND consumer_id = #{consumerId}
+        LIMIT 500
+    </select>
+
+    <update id="updateAllMsgStatus">
+        UPDATE iptv.AUDIT_MMS_CHANGE_MSG
+        SET process_status = #{newStatus}
+        WHERE process_status = #{oldStatus} AND consumer_id = #{consumerId}
+    </update>
+
+    <update id="updateMsgStatusById">
+        UPDATE iptv.AUDIT_MMS_CHANGE_MSG
+        SET process_status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateMsgStatusByIdList">
+        UPDATE iptv.AUDIT_MMS_CHANGE_MSG
+        SET process_status = #{status}
+        WHERE id IN
+        <foreach item="id" collection="idList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <delete id="deleteMsgById">
+        DELETE FROM iptv.AUDIT_MMS_CHANGE_MSG WHERE id = #{id}
+    </delete>
+
+    <select id="findUnprocessedMsg" resultMap="changeMsgResultMap">
+        SELECT id
+        FROM iptv.AUDIT_MMS_CHANGE_MSG
+        WHERE object_id = #{objectId} AND action_type = #{actionType} AND process_status = 0
+    </select>
+</mapper>

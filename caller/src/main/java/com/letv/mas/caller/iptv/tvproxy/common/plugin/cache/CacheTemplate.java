@@ -311,7 +311,7 @@ public class CacheTemplate implements ICacheTemplate {
         return result;
     }
 
-    @Override
+    /*@Override
     public <T> Map<String, T> mget(List<String> keys, Class<T> c) {
         if (!cacheValid) {
             throw new LetvCacheExcepton(CacheConstants.NO_CACHE_AVAILABLE_EXCEPTION_MSG);
@@ -330,7 +330,7 @@ public class CacheTemplate implements ICacheTemplate {
         }
 
         return result;
-    }
+    }*/
 
     @Override
     public <T> T get(String key, LetvTypeReference<T> typeReference) {
@@ -361,6 +361,32 @@ public class CacheTemplate implements ICacheTemplate {
         String logPrefix = "CacheDao|mget";
         long begin = System.currentTimeMillis();
         Map<String, T> result = defaultCacheDao.mget(keys, typeReference);
+
+        long end = System.currentTimeMillis();
+        String logInfo = logPrefix + "|result=1|timeCost=" + (end - begin);
+        if (null != SessionCache.getSession()) {
+            SessionCache.getSession().setResponse("cache://", result, logInfo);
+        }
+        if (end - begin >= 500) {
+            logger.info("CacheDao|mget|key=" + StringUtils.join(keys, ",") + "|timeCost=" + (end - begin));
+        }
+
+        return result;
+    }
+
+    @Override
+    public <T> Map<String, T> mget(List<String> keys, Class<T> c) {
+        return mget(keys, c, 0);
+    }
+
+    @Override
+    public <T> Map<String, T> mget(List<String> keys, Class<T> c, int batchSize) {
+        if (!cacheValid) {
+            throw new LetvCacheExcepton(CacheConstants.NO_CACHE_AVAILABLE_EXCEPTION_MSG);
+        }
+        String logPrefix = "CacheDao|mget";
+        long begin = System.currentTimeMillis();
+        Map<String, T> result = defaultCacheDao.mget(keys, c, batchSize);
 
         long end = System.currentTimeMillis();
         String logInfo = logPrefix + "|result=1|timeCost=" + (end - begin);

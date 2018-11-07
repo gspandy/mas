@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.MmsHotAlbumMonitorMysqlDao">
+	<select id="getList" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.MmsHotAlbumMonitorMysqlTable">
+		select * from iptv.MMS_HOT_ALBUM_MONITOR t where t.deleted = 0 and t.start_time <![CDATA[ <= ]]> NOW()
+	</select>
+	
+	<update id="del">
+	   update iptv.MMS_HOT_ALBUM_MONITOR set deleted = 1 where album_id=#{album_id}
+	</update>
+	
+	<select id="getNewPushTime" resultType="String">
+	   select max(push_time) from iptv.IPTV_VIDEO_INFO where pid=#{album_id} and video_attr =1
+	</select>
+</mapper>

@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Order(1)
-@WebFilter(filterName = "rewrite", urlPatterns = "/iptv/api/new/*")
+@WebFilter(filterName = "rewrite", urlPatterns = "/iptv/api/*")
 public class DRewriteFilter implements Filter {
     private final static ArrayList<String> DEBUG_IP_WHITELIST = new ArrayList<String>(
             Arrays.asList("10.58.*.*", "10.124.66.210", "10.124.66.211"));

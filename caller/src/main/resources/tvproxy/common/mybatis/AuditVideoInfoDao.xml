@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.AuditVideoInfoDao">
+
+    <resultMap type="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.AuditVideoInfo" id="auditVideoInfoResultMap">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="mid" column="mid"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="nameCn" column="name_cn"/>
+        <result property="remark" column="remark"/>
+        <result property="storePaths" column="store_paths"/>
+        <result property="playStreams" column="play_streams"/>
+        <result property="cibnContentSync" column="cibn_content_sync"/>
+        <result property="wasuContentSync" column="wasu_content_sync"/>
+        <result property="tvPlayPlatform" column="tv_play_platform"/>
+    </resultMap>
+
+    <select id="getAuditVideoInfo" resultMap="auditVideoInfoResultMap">
+        SELECT
+        id, pid, mid, category_id, name_cn, remark, store_paths, play_streams, cibn_content_sync, wasu_content_sync,
+        tv_play_platform
+        FROM iptv.AUDIT_VIDEO_INFO
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertAuditVideoInfo">
+        INSERT INTO iptv.AUDIT_VIDEO_INFO
+        (id, pid, mid, category_id, name_cn, remark, store_paths, play_streams, cibn_content_sync, wasu_content_sync,
+        tv_play_platform)
+        VALUES
+        (#{id}, #{pid}, #{mid}, #{categoryId}, #{nameCn}, #{remark}, #{storePaths}, #{playStreams}, #{cibnContentSync},
+        #{wasuContentSync}, #{tvPlayPlatform})
+    </insert>
+
+    <update id="updateAuditVideoInfo">
+        UPDATE iptv.AUDIT_VIDEO_INFO
+        SET pid = #{pid}, mid = #{mid}, category_id = #{categoryId}, name_cn = #{nameCn}, remark = #{remark}, store_paths = #{storePaths},
+        play_streams = #{playStreams}, cibn_content_sync = #{cibnContentSync}, wasu_content_sync = #{wasuContentSync}, tv_play_platform =
+        #{tvPlayPlatform}
+        WHERE id = #{id}
+    </update>
+
+    <!--<sql id="columns">id, pid, mid, name_cn, remark, store_paths, cibn_content_sync, wasu_content_sync, tv_play_platform</sql>-->
+</mapper>

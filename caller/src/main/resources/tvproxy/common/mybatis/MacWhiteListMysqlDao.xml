@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.MacWhiteListMysqlDao">
+    
+    <select id="getMacWhiteList" resultType="String">
+        select mac from iptv.ITV_INTERCEPT_MAC where 1=1
+        <if test="area != null">
+            and area = #{area}
+        </if>
+        <if test="device != null">
+            and device = #{device}
+        </if>
+    </select>
+</mapper>

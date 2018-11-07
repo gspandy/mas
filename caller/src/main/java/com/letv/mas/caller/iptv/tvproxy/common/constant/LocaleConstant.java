@@ -1,5 +1,12 @@
 package com.letv.mas.caller.iptv.tvproxy.common.constant;
 
+import com.letv.mas.caller.iptv.tvproxy.common.util.ApplicationUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class LocaleConstant {
     /**
      ************************************************* 国家代号/区域值
@@ -108,5 +115,35 @@ public class LocaleConstant {
 
         /** 美式英语 */
         public static final String EN_US = "en_us";
+    }
+
+    /** 系统默认地域(服务器所在的地区) */
+    public static final String DEFAULT_WCODE;
+
+    /** 默认语言 */
+    public static final String DEFAULT_LANGUAGE;
+
+    /** 支持语言的列表 */
+    public static final List<String> LANGUAGE_LIST = new ArrayList<String>();
+
+    /** 地域和对应默认语言的map */
+    public static final Map<String, String> DEFAULT_LANGUAGE_MAP = new HashMap<String, String>();
+
+    static {
+        LANGUAGE_LIST.add(Langcode.ZH_CN);
+        LANGUAGE_LIST.add(Langcode.ZH_HK);
+        LANGUAGE_LIST.add(Langcode.EN_US);
+        LANGUAGE_LIST.add(Langcode.HI_IN);
+
+        DEFAULT_LANGUAGE_MAP.put(Wcode.CN, Langcode.ZH_CN);
+        DEFAULT_LANGUAGE_MAP.put(Wcode.HK, Langcode.ZH_HK);
+        DEFAULT_LANGUAGE_MAP.put(Wcode.US, Langcode.EN_US);
+        DEFAULT_LANGUAGE_MAP.put(Wcode.IN, Langcode.HI_IN);
+        DEFAULT_LANGUAGE_MAP.put(Wcode.OTHER, Langcode.ZH_CN);
+
+        String configDefaultWcode = ApplicationUtils.get(ApplicationConstants.IPTV_WCODE_DEFAULT_VALUE);// 获取默认地域
+        DEFAULT_WCODE = configDefaultWcode == null ? Wcode.CN : configDefaultWcode;
+        DEFAULT_LANGUAGE = DEFAULT_LANGUAGE_MAP.get(DEFAULT_WCODE) == null ? Langcode.ZH_CN : DEFAULT_LANGUAGE_MAP
+                .get(DEFAULT_WCODE);
     }
 }

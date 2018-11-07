@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.StatRankWeekDataDao">
+    <select id="listByStatDateAndType" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.StatRankWeekData">
+        select * from iptv.STAT_RANK_WEEK_DATA 
+          where stat_date=#{stat_date} 
+        <if test="type != null">
+            and cid=#{type} 
+        </if>
+          order by rank
+        <if test="start != null and end != null">
+            limit #{start}, #{end}
+        </if>
+    </select>
+
+    <select id="listLatestByStatDateAndType" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.StatRankWeekData">
+        select * from iptv.STAT_RANK_WEEK_DATA
+        where stat_date=(select MAX(CONVERT(stat_date, UNSIGNED)) from iptv.STAT_RANK_WEEK_DATA)
+        <if test="type != null">
+            and cid=#{type}
+        </if>
+        order by rank
+        <if test="start != null and end != null">
+            limit #{start}, #{end}
+        </if>
+    </select>
+    
+    <select id="listByStatDateAndMultiType" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.StatRankWeekData">
+        select * from iptv.STAT_RANK_WEEK_DATA s
+          where stat_date=#{stat_date} 
+          <if test="types != null">
+            and cid in <foreach item="type" index="index" collection="types" open="(" separator="," close=")">#{type}</foreach>
+          </if>
+          order by vv desc
+        <if test="start != null and end != null">
+            limit #{start}, #{end}
+        </if>
+    </select>
+    
+    <select id="listSoaring" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.StatRankWeekData">
+      <![CDATA[
+        select currentRank.id as id, currentRank.pid as pid, currentRank.cid as cid, currentRank.vv as vv, currentRank.uv as uv, 
+          currentRank.stat_date as stat_date, IFNULL(previousRank.rank, 100) - IFNULL(currentRank.rank, 100) as rank 
+            from iptv.STAT_RANK_WEEK_DATA currentRank 
+            left join (select pid, rank from iptv.STAT_RANK_WEEK_DATA where stat_date = #{previousStatDate} and cid = 0) previousRank
+              on currentRank.pid = previousRank.pid
+                where currentRank.stat_date = #{currentStatData} and currentRank.rank is not null and previousRank.rank is not null and currentRank.cid = 0
+                 and (select MIN(CONVERT(stat_date, UNSIGNED)) from iptv.STAT_RANK_WEEK_DATA where pid = currentRank.pid and stat_date is not null) < ${tPreviousStatDate}
+                  order by rank desc
+                    limit #{start}, #{end}
+      ]]>
+    </select>
+    
+    <select id="getFirstStatisticsDateByAlbumId" resultType="Integer">
+        select MIN(CONVERT(stat_date, UNSIGNED)) from iptv.STAT_RANK_WEEK_DATA where pid=#{albumId} and stat_date is not null
+    </select>
+    
+    <select id="getLatestStatisticsDate" resultType="String">
+        select MAX(CONVERT(stat_date, UNSIGNED)) from iptv.STAT_RANK_WEEK_DATA where  stat_date is not null
+    </select>
+
+    <select id="getLatestRankStatByAlbumId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.StatRankWeekData">
+        select * from iptv.STAT_RANK_WEEK_DATA where pid=#{albumId} and
+            stat_date=(select MAX(CONVERT(stat_date, UNSIGNED)) from iptv.STAT_RANK_WEEK_DATA) and cid=#{type}
+    </select>
+</mapper>

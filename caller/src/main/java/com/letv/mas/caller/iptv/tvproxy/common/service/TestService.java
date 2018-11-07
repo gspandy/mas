@@ -3,8 +3,7 @@ package com.letv.mas.caller.iptv.tvproxy.common.service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.pojo.ChannelDataMysqlTable;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChannelDataMysqlTable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

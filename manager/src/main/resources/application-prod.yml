@@ -147,7 +147,10 @@ management:
   security:
     enabled: false
 #    role: TODO
-
+#netflix:
+   #metrics:
+      #servo:
+        #registry-class: ''
 endpoints:
   refresh:
     enabled: true
@@ -157,9 +160,15 @@ endpoints:
     enabled: true
     # 安全验证
     sensitive: false
+  jolokia:
+    enabled: true
+    path: '/jolokia'
 logging:
   level:
     root: 'info'
   file: /letv/logs/mas/manager/manager.log
   max-size: '100M'
   max-history: 3
+jolokia:
+  config:
+    debug: false

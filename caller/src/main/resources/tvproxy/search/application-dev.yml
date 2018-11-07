@@ -1,9 +1,0 @@
-spring:
-  application:
-    name: letv-mas-caller-tvproxy-search-dev
-  profiles:
-    include: app,redis,db,config,httpurl,trace,thrift,hystrix,stream,manager,omp
-
-# 自定义系统日志输出
-logout:
-  path: /letv/logs/mas/caller/tvproxy/search

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.SpecialVideoMysqlDao">
+    <sql id="insertOrUpdateSpecialVideo">
+        videoid=#{videoid},pid=#{pid},play_streams=#{play_streams},mid_streams=#{mid_streams},update_time=#{update_time},type=#{type}
+    </sql>
+    <select id="getSpecialStreamVideo" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SpecialVideoMysqlTable"> 
+        select * from iptv.ITV_SPECIAL_STREAM_VIDEO where 
+        type=#{type} and update_time &gt;= #{near} 
+    </select>
+    <insert id="insertSpecialVideo" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SpecialVideoMysqlTable">
+        insert into iptv.ITV_SPECIAL_STREAM_VIDEO set
+        <include refid="insertOrUpdateSpecialVideo" /> 
+    </insert>
+    <update id="updateSpecialVideo" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SpecialVideoMysqlTable">
+        update iptv.ITV_SPECIAL_STREAM_VIDEO set 
+        <include refid="insertOrUpdateSpecialVideo" /> 
+        where videoid=#{videoid} and type=#{type}
+    </update>
+    <delete id="deleteSpecialVideo">
+        delete from iptv.ITV_SPECIAL_STREAM_VIDEO where videoid = #{videoid} 
+        <if test="type != null"> and type = #{type} 
+        </if>
+    </delete>
+    <select id="getSpecialStreamVideoByVideoId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SpecialVideoMysqlTable">
+        select * from iptv.ITV_SPECIAL_STREAM_VIDEO where videoid = #{videoid}
+        <if test="type != null">
+        and type = #{type}
+        </if>
+    </select>
+</mapper>

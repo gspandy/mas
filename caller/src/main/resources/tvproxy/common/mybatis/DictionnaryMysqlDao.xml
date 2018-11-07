@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.DictionnaryMysqlDao">
+	<select id="getAllSubCategoryByFid" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.IptvDictionnaryInfo">
+		select * from
+		iptv.IPTV_DICTIONNARY_INFO where CONCAT(',',channel_id,',') like
+		CONCAT('%,', #{fid},',%') and type_id=3 and deleted=0
+	</select>
+	<select id="getAllCategoryBychannelId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.IptvDictionnaryInfo">
+		select * from
+		iptv.IPTV_DICTIONNARY_INFO where channel_id=#{channelId} and type_id=3
+		and deleted=0
+	</select>
+	<select id="getIptvDictionnaryInfoById" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.IptvDictionnaryInfo">
+		select * from
+		iptv.IPTV_DICTIONNARY_INFO where id = #{id}
+	</select>
+	<select id="getIptvDictionnaryInfoByOldId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.IptvDictionnaryInfo">
+		select *
+		from iptv.IPTV_DICTIONNARY_INFO where old_id = #{id}
+	</select>
+	<insert id="insertIptvDictionnaryInfo" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.IptvDictionnaryInfo">
+		insert into iptv.IPTV_DICTIONNARY_INFO set
+		<include refid="insertOrUpdateDictionnaryCommonParameter" />
+	</insert>
+
+	<update id="updateIptvDictionnaryInfo" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.IptvDictionnaryInfo">
+		update iptv.IPTV_DICTIONNARY_INFO set
+		<include refid="insertOrUpdateDictionnaryCommonParameter" />
+		where id =#{id}
+	</update>
+	<sql id="insertOrUpdateDictionnaryCommonParameter">
+		id=#{id},old_id=#{old_id},name=#{name},type_id=#{type_id},type_name=#{type_name},fid=#{fid},
+		channel_id=#{channel_id},property_type=#{property_type},deleted=#{deleted}
+	</sql>
+
+	<delete id="deleteIptvDictionnaryInfoById">
+		delete from iptv.IPTV_DICTIONNARY_INFO where id
+		=#{id}
+	</delete>
+</mapper>

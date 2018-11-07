@@ -1,9 +1,10 @@
 package com.letv.micro.apollo;
 
+import com.ctrip.framework.apollo.core.dto.ApolloConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.context.refresh.ContextRefresher;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -15,7 +16,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
  * Created by David.Liu on 2018/8/27.
  */
 @Configuration
-@ConditionalOnProperty(value = {"micro.apollo.config.enabled"}, havingValue = "true", matchIfMissing = true)
 public class MicroApolloAutoConfiguration {
 
   @Configuration

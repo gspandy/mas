@@ -7,6 +7,21 @@ import io.micrometer.core.instrument.MeterRegistry;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.concurrent.FutureCallback;
+import org.apache.http.entity.AbstractHttpEntity;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.*;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -18,12 +33,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1017,5 +1031,333 @@ public class HttpClientUtil extends RestTemplate {
         }
         return sign.toString();
 //        return MD5Util.md5(basestring.toString());
+    }
+
+    public Map<String, String> multiHttpRequests(String[] urls, String type, Object data, Map<String, String> headers) {
+        return this.multiHttpRequests(urls, type, data, headers, true);
+    }
+
+    /**
+     * 支持并发打包请求处理
+     * @param urls
+     *            : 如果post请求多组时url一样，需要特殊处理，eg.加一个url参数唯一标志
+     * @param type
+     * @param data
+     * @param headers
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public Map<String, String> multiHttpRequests(String[] urls, String type, Object data, Map<String, String> headers,
+                                                 final boolean enableDownService) {
+        final Map<String, String> ret = new HashMap<String, String>();
+
+        if (null != urls && urls.length > 0) {
+            if (null == type) {
+                type = "GET";
+            } else {
+                type = type.toUpperCase();
+            }
+            AbstractHttpEntity entity = null;
+            if (null != data) {
+                if (data instanceof String) {
+                    entity = new StringEntity((String) data, Charset.forName("UTF-8"));
+                } else if (data instanceof Map) {
+                    List<NameValuePair> list = new ArrayList<NameValuePair>();
+                    Iterator iterator = ((Map) data).entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry<String, String> elem = (Map.Entry<String, String>) iterator.next();
+                        list.add(new BasicNameValuePair(elem.getKey(), elem.getValue()));
+                    }
+                    if (list.size() > 0) {
+                        entity = new UrlEncodedFormEntity(list, Charset.forName("UTF-8"));
+                    }
+                } else {
+                    // TODO
+                }
+            }
+
+            RequestConfig requestConfig = RequestConfig.custom()
+                    .setConnectionRequestTimeout((int) INTERFACE_RESPONSE_TIME)
+                    .setSocketTimeout((int) INTERFACE_RESPONSE_TIME).setConnectTimeout((int) INTERFACE_RESPONSE_TIME)
+                    .build();
+
+            if (urls.length > 1) {
+                // TODO:待调整合理的并发数!!!
+                CloseableHttpAsyncClient closeableHttpAsyncClient = HttpAsyncClients.custom()
+                        .setDefaultRequestConfig(requestConfig).setMaxConnTotal(urls.length)
+                        .setMaxConnPerRoute(urls.length).build();
+                try {
+                    closeableHttpAsyncClient.start();
+
+                    if ("POST".equals(type)) {
+                        HttpPost[] requests = new HttpPost[urls.length];
+                        for (int i = 0; i < urls.length; i++) {
+                            requests[i] = new HttpPost(urls[i]);
+                            if (null != entity) {
+                                requests[i].setEntity(entity);
+                            }
+                        }
+
+                        final CountDownLatch latch = new CountDownLatch(requests.length);
+
+                        for (final HttpPost request : requests) {
+                            /*
+                             * 第三方服务可用，执行请求
+                             */
+                            final String domain = this.getUrlTemplate(request.getURI().toString());
+                            final long stime = System.currentTimeMillis();
+                            final TpServiceStatus tpServerStatus = getTpServiceStatus(domain);
+
+                            if (enableDownService
+                                    && ((System.currentTimeMillis() - tpServerStatus.getCloseTime()) < INTERFACE_AUTO_NORMAL_TIME)) {// 距离最近一次关闭不到设定的时间间隔，直接返回
+                                handleMultiHttpResponses(request.getURI().toString(), null, ret, stime,
+                                        System.currentTimeMillis() - stime);
+                                continue;
+                            }
+
+                            closeableHttpAsyncClient.execute(request, new FutureCallback<HttpResponse>() {
+
+                                public void completed(final HttpResponse response) {
+                                    latch.countDown();
+                                    long wasteTime = System.currentTimeMillis() - stime;
+                                    try {
+                                        handleMultiHttpResponses(request.getURI().toString(), response, ret, stime,
+                                                wasteTime);
+                                    } catch (Exception e) {
+                                        String logInfo = "|500|0|" + +(System.currentTimeMillis() - stime) + "|1";
+                                        logger.warn(request.getURI().toString() + logInfo);
+                                        if (null != SessionCache.getSession()) {
+                                            SessionCache.getSession().setResponse(request.getURI().toString(), "", logInfo);
+                                        }
+                                    }
+                                    /*
+                                     * 验证第三方服务状态
+                                     */
+                                    if (enableDownService) {
+                                        checkTpServiceStatus(domain, tpServerStatus, wasteTime);
+                                    }
+                                }
+
+                                public void failed(final Exception ex) {
+                                    latch.countDown();
+                                    long wasteTime = System.currentTimeMillis() - stime;
+                                    String logInfo = "|500|0|" + wasteTime + "|1";
+                                    logger.warn(request.getURI().toString() + logInfo);
+                                    if (null != SessionCache.getSession()) {
+                                        SessionCache.getSession().setResponse(request.getURI().toString(), "", logInfo);
+                                    }
+
+                                    /*
+                                     * 验证第三方服务状态
+                                     */
+                                    if (enableDownService) {
+                                        checkTpServiceStatus(domain, tpServerStatus, wasteTime);
+                                    }
+                                }
+
+                                public void cancelled() {
+                                    latch.countDown();
+                                    String logInfo = "|500|0|" + (System.currentTimeMillis() - stime) + "|-1";
+                                    logger.warn(request.getURI().toString() + logInfo);
+                                    if (null != SessionCache.getSession()) {
+                                        SessionCache.getSession().setResponse(request.getURI().toString(), "", logInfo);
+                                    }
+                                }
+
+                            });
+                        }
+                        latch.await();
+                    } else {
+                        HttpGet[] requests = new HttpGet[urls.length];
+                        for (int i = 0; i < urls.length; i++) {
+                            requests[i] = new HttpGet(urls[i]);
+                        }
+                        final CountDownLatch latch = new CountDownLatch(requests.length);
+                        for (final HttpGet request : requests) {
+                            /*
+                             * 第三方服务可用，执行请求
+                             */
+                            final String domain = this.getUrlTemplate(request.getURI().toString());
+                            final long stime = System.currentTimeMillis();
+                            final TpServiceStatus tpServerStatus = getTpServiceStatus(domain);
+
+                            if (enableDownService
+                                    && ((System.currentTimeMillis() - tpServerStatus.getCloseTime()) < INTERFACE_AUTO_NORMAL_TIME)) {// 距离最近一次关闭不到设定的时间间隔，直接返回
+                                handleMultiHttpResponses(request.getURI().toString(), null, ret, stime,
+                                        System.currentTimeMillis() - stime);
+                                continue;
+                            }
+
+                            closeableHttpAsyncClient.execute(request, new FutureCallback<HttpResponse>() {
+
+                                public void completed(final HttpResponse response) {
+                                    latch.countDown();
+                                    long wasteTime = System.currentTimeMillis() - stime;
+                                    try {
+                                        handleMultiHttpResponses(request.getURI().toString(), response, ret, stime,
+                                                wasteTime);
+                                    } catch (Exception e) {
+                                        String logInfo = "|500|0|" + wasteTime + "|1";
+                                        logger.warn(request.getURI().toString() + logInfo);
+                                        if (null != SessionCache.getSession()) {
+                                            SessionCache.getSession().setResponse(request.getURI().toString(), "", logInfo);
+                                        }
+                                    }
+
+                                    /*
+                                     * 验证第三方服务状态
+                                     */
+                                    if (enableDownService) {
+                                        checkTpServiceStatus(domain, tpServerStatus, wasteTime);
+                                    }
+                                }
+
+                                public void failed(final Exception ex) {
+                                    latch.countDown();
+                                    long wasteTime = System.currentTimeMillis() - stime;
+                                    String logInfo = "|500|0|" + wasteTime + "|1";
+                                    logger.warn(request.getURI().toString() + logInfo);
+                                    if (null != SessionCache.getSession()) {
+                                        SessionCache.getSession().setResponse(request.getURI().toString(), "", logInfo);
+                                    }
+
+                                    /*
+                                     * 验证第三方服务状态
+                                     */
+                                    if (enableDownService) {
+                                        checkTpServiceStatus(domain, tpServerStatus, wasteTime);
+                                    }
+                                }
+
+                                public void cancelled() {
+                                    latch.countDown();
+                                    String logInfo = "|500|0|" + (System.currentTimeMillis() - stime) + "|-1";
+                                    logger.warn(request.getURI().toString() + logInfo);
+                                    if (null != SessionCache.getSession()) {
+                                        SessionCache.getSession().setResponse(request.getURI().toString(), "", logInfo);
+                                    }
+                                }
+
+                            });
+                        }
+                        latch.await();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    CloseUtil.close(closeableHttpAsyncClient);
+                }
+            } else {
+                /*
+                 * 初始化第三方服务状态对象
+                 */
+                long stime = System.currentTimeMillis();
+                long wasteTime = 0;
+                String completeUrl = urls[0]; // 已经拼接好的完整url，用于日志
+                String domain = this.getUrlTemplate(completeUrl);// this.getDomain(url);
+                TpServiceStatus tpServerStatus = getTpServiceStatus(domain);
+                /*
+                 * 验证第三方服务是否可用
+                 */
+                if (enableDownService
+                        && ((System.currentTimeMillis() - tpServerStatus.getCloseTime()) < INTERFACE_AUTO_NORMAL_TIME)) {// 距离最近一次关闭不到设定的时间间隔，直接返回
+                    try {
+                        handleMultiHttpResponses(completeUrl, null, ret, stime, System.currentTimeMillis() - stime);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return ret;
+                }
+
+                CloseableHttpClient httpClient = HttpClientBuilder.create()
+                        .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())
+                        .setRedirectStrategy(new DefaultRedirectStrategy())
+                        .setDefaultCookieStore(new BasicCookieStore()).setDefaultRequestConfig(requestConfig).build();
+                CloseableHttpResponse response = null;
+                try {
+                    if (type.equals("POST")) {
+                        HttpPost request = new HttpPost(completeUrl);
+                        if (null != entity) {
+                            request.setEntity(entity);
+                        }
+                        if (null != headers) {
+                            Set<String> keys = headers.keySet();
+                            for (Iterator<String> i = keys.iterator(); i.hasNext();) {
+                                String key = (String) i.next();
+                                request.addHeader(key, headers.get(key));
+                            }
+                        }
+                        response = httpClient.execute(request);
+                    } else {
+                        HttpGet request = new HttpGet(completeUrl);
+                        if (null != headers) {
+                            Set<String> keys = headers.keySet();
+                            for (Iterator<String> i = keys.iterator(); i.hasNext();) {
+                                String key = (String) i.next();
+                                request.addHeader(key, headers.get(key));
+                            }
+                        }
+                        response = httpClient.execute(request);
+                    }
+                    wasteTime = System.currentTimeMillis() - stime;
+                    handleMultiHttpResponses(completeUrl, response, ret, stime, wasteTime);
+                } catch (Exception e) {
+                    // #debug
+                    e.printStackTrace();
+                    String logInfo = "|500|0|" + wasteTime + "|1";
+                    logger.warn(completeUrl + logInfo);
+                    if (null != SessionCache.getSession()) {
+                        SessionCache.getSession().setResponse(completeUrl, "", logInfo);
+                    }
+                } finally {
+                    CloseUtil.close(response);
+                    CloseUtil.close(httpClient);
+                }
+
+                /*
+                 * 验证第三方服务状态
+                 */
+                if (enableDownService) {
+                    this.checkTpServiceStatus(domain, tpServerStatus, wasteTime);
+                }
+            }
+        }
+        return ret;
+    }
+
+    private void handleMultiHttpResponses(String url, final HttpResponse response, Map<String, String> ret, long stime,
+                                          long wasteTime) throws Exception {
+        if (response != null) {
+            String result = null;
+            try {
+                if (response.getEntity() != null) {
+                    result = EntityUtils.toString(response.getEntity(), Charset.forName("UTF-8"));
+                }
+                if (StringUtil.isNotBlank(result)) {
+                    ret.put(url, result);
+                    String logInfo = "|" + response.getStatusLine().getStatusCode() + "|" + result.getBytes().length
+                            + "|" + wasteTime + "|0";
+                    this.logger.warn(url + logInfo);
+                    if (null != SessionCache.getSession()) {
+                        SessionCache.getSession().setResponse(url.toString(), result, logInfo);
+                    }
+                } else {
+                    String logInfo = "|100|0|" + wasteTime + "|0";
+                    this.logger.warn(url + logInfo);
+                    if (null != SessionCache.getSession()) {
+                        SessionCache.getSession().setResponse(url.toString(), "", logInfo);
+                    }
+                }
+            } catch (Exception e) {
+                throw e;
+            }
+        } else { // handle the case of down service => 505
+            ret.put(url, ""); // TODO
+            String logInfo = "|" + 505 + "|" + 0 + "|" + wasteTime + "|0";
+            this.logger.warn(url + logInfo);
+            if (null != SessionCache.getSession()) {
+                SessionCache.getSession().setResponse(url.toString(), "", logInfo);
+            }
+        }
     }
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.UserMysqlDao">
+	
+	<resultMap type="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.UserChildLockTable" id="childlock">  
+        <result property="userId" column="id"/>  
+        <result property="md5Pin" column="pin"/>  
+    </resultMap>
+	<update id="updateStatus">
+		update iptv.USER_PROMOTIONS set
+		status=#{status},updateTime=now() where
+		orderId=#{orderId}
+	</update>
+	<insert id="insertChildLock">
+		insert into
+		iptv.USER_CHILD_LOCK(id,mac,pin,status,update_time)
+		values(#{userChildLockTable.userId},#{userChildLockTable.mac},#{userChildLockTable.md5Pin},#{userChildLockTable.status},now())
+	</insert>
+	<update id="updateChildLock">
+		update iptv.USER_CHILD_LOCK set mac=#{userChildLockTable.mac},pin=#{userChildLockTable.md5Pin},status=#{userChildLockTable.status},update_time=now() where id=#{userChildLockTable.userId}
+	</update>
+	<select id="getChildLockByUserId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.UserChildLockTable" resultMap="childlock">
+		select * from
+		iptv.USER_CHILD_LOCK where id=#{userId}
+	</select>
+</mapper>

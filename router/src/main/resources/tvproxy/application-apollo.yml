@@ -22,8 +22,7 @@ apollo:
     # 该配置文件指定多namespaces 或通过 @EnabledApolloConfig({"application","operation-config"}) 激活
     namespaces: application-tvproxy,dpms.application-manager,dpms.application-trace,dpms.application-omp
   cluster: router
-  #meta: http://config.apollo.letv.com
-  meta: http://10.112.33.35:8080
+  meta: ${APOLLO_SERVER_DOMAIN:http://10.112.33.35:8080}
   cacheDir: /letv/app/mas/router/apollo-cache
 
 # apollo敏感信息加密key

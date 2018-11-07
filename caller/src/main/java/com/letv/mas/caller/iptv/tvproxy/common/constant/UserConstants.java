@@ -3,6 +3,9 @@ package com.letv.mas.caller.iptv.tvproxy.common.constant;
 import com.letv.mas.caller.iptv.tvproxy.common.util.ApplicationUtils;
 import com.letv.mas.caller.iptv.tvproxy.common.util.StringUtil;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class UserConstants {
 
     /**
@@ -51,5 +54,31 @@ public class UserConstants {
         }
         return null;
     }
+
+    /**
+     * get user info from type.
+     */
+    public static String USER_FAVORITE_ALBUM = "USER_FAVORITE_ALBUM";
+    public static String USER_FAVORITE_COLLECT = "USER_FAVORITE_COLLECT";
+    public static String USER_FAVORITE_ALBUM_COLLECT = "USER_FAVORITE_ALBUM_COLLECT";
+
+    private static final String[] hignStreamDeviceArray = { "Letv Max3-65", "Letv X3-55", "Letv X3-65", "X4-40",
+            "X4-50Pro", "X4-50", "X4-55", "X4-65" };
+    public static final List<String> hignStreamDeviceList = Arrays.asList(hignStreamDeviceArray);
+
+    public static final int USER_CHILD_LOCK_STATUS_UNSET = -1;
+    public static final int USER_CHILD_LOCK_STATUS_OFF = 0;
+    public static final int USER_CHILD_LOCK_STATUS_ON = 1;
+
+    public static final int USER_CHILD_LOCK_CHECK_ACTION_TYPE_CHECK_STATUS = 1;
+    public static final int USER_CHILD_LOCK_CHECK_ACTION_TYPE_VERIFY_PASSOWRD = 2;
+    public static final int USER_CHILD_LOCK_CHECK_ACTION_TYPE_VERIFY_PIN = 3;
+
+    public static final int USER_CHILD_LOCK_SET_ACTION_TYPE_CREATE = 1;
+    public static final int USER_CHILD_LOCK_SET_ACTION_TYPE_RESET_WITH_PIN = 2;
+    public static final int USER_CHILD_LOCK_SET_ACTION_TYPE_RESET_WITH_LOCALTOKEN = 3;
+
+    public static final long USER_CHILD_LOCK_SET_TOKEN_EXPIRE_TIME = 5 * 60 * 1000L;
+
 
 }

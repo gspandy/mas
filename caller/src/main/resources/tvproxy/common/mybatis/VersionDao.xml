@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.VersionDao">
+    <!-- 
+    <select id="getVersionInfoBySAPPIdAndName" resultType="com.letv.itv.v2.mysql.table.SeriesAppVersionInfo">
+        select * from terminal.SERIES_APP_VERSION as sv join terminal.VERSION as v on sv.version_id = v.id
+        where sv.enable=1 and sv.series_app_id = #{series_app_id} and v.version_name = #{version_name}
+    </select>
+     
+    <select id="getVersionInfoByName" resultType="com.letv.itv.v2.mysql.table.SeriesAppVersionInfo">
+      select * from terminal.VERSION as v   where  v.version_name = #{version_name} and is_common=1 limit 1
+    </select>
+    <select id="getAllVersionBySAPPId" resultType="com.letv.itv.v2.mysql.table.SeriesAppVersionInfo">
+        select * from terminal.SERIES_APP_VERSION as sv join terminal.VERSION as v on sv.version_id = v.id
+        where sv.enable=1 and sv.series_app_id = #{series_app_id} order by v.version_code desc
+    </select>
+    <select id="getCanAllVersionBySAPPIdAndCode" resultType="com.letv.itv.v2.mysql.table.SeriesAppVersionInfo">
+        select * from terminal.SERIES_APP_VERSION as sv join terminal.VERSION as v on sv.version_id = v.id
+        where sv.enable=1 and sv.series_app_id = #{series_app_id} and v.version_code > #{version_code} order by v.version_code desc
+    </select>
+           <select id="getCommonVersionByCode" resultType="com.letv.itv.v2.mysql.table.SeriesAppVersionInfo">
+        select * from  terminal.VERSION as v
+        
+        where is_common=1 and   v.version_code >
+        #{version_code} order by v.version_code desc
+    </select>
+    <select id="getDownLoadAppVersion" resultType="com.letv.itv.v2.mysql.table.TerminalDownLoadAppVersion">
+        select * from  terminal.Terminal_Download_AppVersion WHERE terminalId = #{terminalId} limit 1
+    </select>
+    <delete id="delDownLoadAppVersion">
+        DELETE FROM terminal.Terminal_Download_AppVersion WHERE terminalId = #{terminalId} and appVersionId = #{appVersionId}
+    </delete>
+    <insert id="saveDownLoadAppVersion">
+        insert into terminal.Terminal_Download_AppVersion(`terminalId`,`appVersionId`,`create_date`)
+        values (#{terminalId},#{appVersionId},now())
+    </insert>
+     -->
+    <select id="getVersionInfoBySAPPId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SeriesAppVersionInfo">
+        select * from terminal.SERIES_APP_VERSION as sv join terminal.VERSION as v on sv.version_id = v.id
+        where sv.enable=1 and sv.series_app_id = #{series_app_id} order by v.version_code desc
+    </select>
+</mapper>

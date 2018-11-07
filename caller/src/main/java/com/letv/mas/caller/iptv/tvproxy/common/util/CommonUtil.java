@@ -5,7 +5,7 @@
 package com.letv.mas.caller.iptv.tvproxy.common.util;
 
 import com.letv.mas.caller.iptv.tvproxy.common.constant.TerminalCommonConstant;
-import com.letv.mas.caller.iptv.tvproxy.common.constant.VipConstants;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dao.tp.vip.VipTpConstant;
 import com.letv.mas.caller.iptv.tvproxy.common.plugin.CommonParam;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -158,6 +158,15 @@ public class CommonUtil {
         return decode;
     }
 
+    public static VipTpConstant.Country getCountryInfo(CommonParam commonParam) {
+        if (useCnCountryApp.contains(commonParam.getTerminalApplication())) {
+            return VipTpConstant.Country.CN;
+        }
+        String eara = StringUtils.isNotEmpty(commonParam.getSalesArea()) ? commonParam.getSalesArea() : commonParam
+                .getWcode();
+        return VipTpConstant.Country.findType(eara);
+    }
+
     /**
      * 获取精确到秒的时间戳
      * @return
@@ -170,14 +179,5 @@ public class CommonUtil {
         } else {
             return "0";
         }
-    }
-
-    public static VipConstants.Country getCountryInfo(CommonParam commonParam) {
-        if (useCnCountryApp.contains(commonParam.getTerminalApplication())) {
-            return VipConstants.Country.CN;
-        }
-        String eara = StringUtils.isNotEmpty(commonParam.getSalesArea()) ? commonParam.getSalesArea() : commonParam
-                .getWcode();
-        return VipConstants.Country.findType(eara);
     }
 }

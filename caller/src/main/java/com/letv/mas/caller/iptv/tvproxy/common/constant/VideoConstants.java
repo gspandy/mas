@@ -78,4 +78,66 @@ public class VideoConstants {
     public static int CDE_VIDEO_PLAY_SPLATID_LETV_LECHILD_TV = 531;
     public static int CDE_VIDEO_PLAY_SPLATID_LETV_LECHILD_BOX = 532;
     public static int CDE_VIDEO_PLAY_SPLATID_LETV_CIBN_OPERATORS_PC = 601;
+
+    /**
+     * 内容类型分类
+     * @author wanglonghu
+     */
+    public interface Category {
+
+        public static final int FILM = 1;// 电影
+
+        public static final int TV = 2;// 电视剧
+
+        public static final int ENT = 3;// 娱乐
+
+        public static final int SPORT = 4;// 体育
+
+        public static final int CARTOON = 5;// 动漫
+
+        public static final int ZIXUN = 1009;// 资讯
+
+        public static final int YUAN_CHUANG = 7;// 原创
+
+        public static final int OTHER = 8;// 其他
+
+        public static final int MUSIC = 9;// 音乐
+
+        public static final int FUNNY = 10;// 搞笑
+
+        public static final int VARIETY = 11;// 综艺
+
+        public static final int KE_JIAO = 12;// 科教
+
+        public static final int SHENG_HUO = 13;// 生活
+
+        public static final int CAR = 14;// 汽车
+
+        public static final int DFILM = 16;// 纪录片
+
+        public static final int GONG_KAI_KE = 17;// 公开课
+
+        public static final int LETV_MADE = 19;// 乐视制造
+
+        public static final int FENG_SHANG = 20;// 风尚
+
+        public static final int CAI_JING = 22;// 财经
+
+        public static final int TRAVEL = 23;// 旅游
+
+        public static final int HOTSPOT = 30;// 热点
+
+        public static final int QU_YI = 32;// 曲艺
+
+        public static final int XI_QU = 33;// 戏曲
+
+        public static final int PARENTING = 34;// 亲子
+
+        public static final int AD = 36;// 广告
+
+        public static final int TEACH = 1021;// 教育
+
+        public static final int TEACH_CHILD = 542015;// 教育频道下的幼儿用作乐视儿童
+
+    }
 }

@@ -2,6 +2,7 @@ package com.letv.mas.caller.iptv.tvproxy.common.constant;
 
 import com.letv.mas.caller.iptv.tvproxy.common.plugin.CommonParam;
 import com.letv.mas.caller.iptv.tvproxy.common.util.ApplicationUtils;
+import com.letv.mas.caller.iptv.tvproxy.common.util.MessageUtils;
 import com.letv.mas.caller.iptv.tvproxy.common.util.StringUtil;
 
 import java.util.HashMap;
@@ -20,6 +21,16 @@ public class VipConstants {
     public static final int DEVICE_BIND_DEVICE_TYPE_LETV_BOX = 3;
 
     //public static final String LEPAY_VIP_GETTIME_URL = ApplicationConstants.LEPAY_BASE_HOST+"/open_api/vip/m/get_time_new.json";
+
+    /**
+     * 直播SDK专用通用参数
+     */
+    // public static final String TERMINAL_APPLICATION_TPSDK = "letv_live_sdk";
+    public static final String BSCHANNEL_TPSDK = "hisense";
+    public static final String TPSDK_BSCHANNEL_COMMON_PREFIX = "TPSDK_BSCHANNEL_";
+    public static final String APPTYPE_LETV_LIVE_SDK = "tpsdk";// 第三方直播SDK
+    public static final String APPTYPE_LETV = "letv";// 乐视TV
+
 
     /**
      * 机卡绑定需求第三方接口sign计算key
@@ -454,4 +465,50 @@ public class VipConstants {
         PRODUCT_ID_AND_VIP_ID_MAP.put(PRODUCT_ID_CN.SUPERTV.getCode(), 3);
     }
 
+    public static final String TRIAL_FIELD_MONTH_TP_RESPONSE = "month"; // boss返回的单位月
+    public static final String TRIAL_FIELD_DATE_TP_RESPONSE = "date"; // boss返回的单位天
+    public static final String TRIAL_FIELD_YEAR_TP_RESPONSE = "year"; // boss返回的单位年
+    public static final String TRIAL_FIELD_DAY_TEXT = "VIP.VALIDATE.TRIAL.FIELD.DAY";
+    public static final String TRIAL_FIELD_DAY_COMPLEX_TEXT = "VIP.VALIDATE.TRIAL.FIELD.DAY.COMPLEX";
+    public static final String TRIAL_FIELD_MONTH_TEXT = "VIP.VALIDATE.TRIAL.FIELD.MONTH";
+    public static final String TRIAL_FIELD_MONTH_COMPLEX_TEXT = "VIP.VALIDATE.TRIAL.FIELD.MONTH.COMPLEX";
+    public static final String TRIAL_FIELD_YEAR_TEXT = "VIP.VALIDATE.TRIAL.FIELD.YEAR";
+    public static final String TRIAL_FIELD_YEAR_COMPLEX_TEXT = "VIP.VALIDATE.TRIAL.FIELD.YEAR.COMPLEX";
+
+
+    /**
+     * 返回试用的单位
+     * @param field
+     * @param duration
+     * @param commonParam
+     * @return
+     */
+    public static String getTrialField(String field, Integer duration, CommonParam commonParam) {
+        String finalField = null;
+        String message = null;
+        if (VipConstants.TRIAL_FIELD_DATE_TP_RESPONSE.equalsIgnoreCase(field)) {
+            if (duration != null && duration > 1) {
+                message = VipConstants.TRIAL_FIELD_DAY_COMPLEX_TEXT;
+            } else {
+                message = VipConstants.TRIAL_FIELD_DAY_TEXT;
+            }
+        } else if (VipConstants.TRIAL_FIELD_MONTH_TP_RESPONSE.equalsIgnoreCase(field)) {
+            if (duration != null && duration > 1) {
+                message = VipConstants.TRIAL_FIELD_MONTH_COMPLEX_TEXT;
+            } else {
+                message = VipConstants.TRIAL_FIELD_MONTH_TEXT;
+            }
+        } else if (VipConstants.TRIAL_FIELD_YEAR_TP_RESPONSE.equalsIgnoreCase(field)) {
+            if (duration != null && duration > 1) {
+                message = VipConstants.TRIAL_FIELD_YEAR_COMPLEX_TEXT;
+            } else {
+                message = VipConstants.TRIAL_FIELD_YEAR_TEXT;
+            }
+        }
+        finalField = MessageUtils.getMessage(message, commonParam.getLangcode());
+        if (StringUtil.isBlank(finalField)) { // 没找到,则返回传递过来的值
+            finalField = field;
+        }
+        return finalField;
+    }
 }

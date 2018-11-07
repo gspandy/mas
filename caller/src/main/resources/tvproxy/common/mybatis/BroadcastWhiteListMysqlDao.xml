@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.BroadcastWhiteListMysqlDao">
+	<select id="find" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.BroadcastWhiteList">
+		SELECT * FROM iptv.BROADCAST_WHITE_LIST WHERE type = #{type} and
+		object_id=#{rid} and broadcast=#{broadcastId}
+	</select>
+	<insert id="save" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.BroadcastWhiteList">
+		INSERT INTO BROADCAST_WHITE_LIST ( object_id, `level`, `type`, reason,
+		create_by, broadcast,create_time ) VALUES (#{object_id}, #{level}, #{type},
+		#{reason}, #{create_by}, #{broadcast}, #{create_time})
+	</insert>
+	<delete id="delete">
+		DELETE FROM BROADCAST_WHITE_LIST WHERE id = #{id};
+	</delete>
+	
+	<update id="update" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.BroadcastWhiteList">
+		update iptv.BROADCAST_WHITE_LIST set level=#{level}
+		where id=#{id}
+	</update>
+</mapper>

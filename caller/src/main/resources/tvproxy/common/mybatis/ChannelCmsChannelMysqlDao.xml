@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.ChannelCmsChannelMysqlDao">
+
+    <select id="getList"
+        resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChannelCmsChannelMysqlTable">
+        select * from iptv.ITV_CHANNEL_CMSCHANNEL
+    </select>
+
+    <insert id="save"
+        parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChannelCmsChannelMysqlTable">
+        insert into iptv.ITV_CHANNEL_CMSCHANNEL set
+        channel_id=#{channel_id},
+        cms_channelid=#{cms_channelid}
+    </insert>
+</mapper>

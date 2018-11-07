@@ -1,10 +1,12 @@
 package com.letv.mas.router.iptv.tvproxy.interceptor;
 
 import com.letv.mas.router.iptv.tvproxy.constant.ErrorConsts;
+import com.letv.mas.router.iptv.tvproxy.model.dao.db.mysql.UserDao;
+import com.letv.mas.router.iptv.tvproxy.model.xdo.UserDo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -19,6 +21,9 @@ import java.util.Map;
  */
 public class CheckLoginInterceptor extends HandlerInterceptorAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckLoginInterceptor.class);
+
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -36,8 +41,10 @@ public class CheckLoginInterceptor extends HandlerInterceptorAdapter {
         boolean ret = false;
         String uuid = request.getHeader("uuid");
         if (StringUtils.isNotBlank(uuid)) {
-            ret = true;
-            // TODO: 验证uuid
+            UserDo userDo = userDao.getUserById(uuid);
+            if (null != userDo) {
+                ret = 0 == userDo.getIs_del() && 0 == userDo.getStatus();
+            }
         }
         return ret;
     }

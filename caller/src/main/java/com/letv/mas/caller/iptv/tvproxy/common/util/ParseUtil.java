@@ -1,6 +1,7 @@
 package com.letv.mas.caller.iptv.tvproxy.common.util;
 
-import com.letv.mas.caller.iptv.tvproxy.common.plugin.CopyFieldAnnotation;
+import com.letv.mas.caller.iptv.tvproxy.common.annotation.CopyFieldAnnotation;
+import com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.AlbumMysqlTable;
 import com.letv.mas.caller.iptv.tvproxy.common.plugin.LetvCommonException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -336,7 +337,7 @@ public class ParseUtil {
      * 通过构造器进行转换bean
      * @param resultClass
      *            结果class
-     * @param paramClasses
+     * @param classTypes
      *            参数数组
      * @param param
      * @return
@@ -351,5 +352,35 @@ public class ParseUtil {
         }
         return null;
 
+    }
+
+    /**
+     * 将排行榜对象转换
+     * @param ratingAndPlayRankItems
+     * @param resultClass
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    public static <E> PageControl<E> parsePlayRankToPageControlByConstructor(
+            List<AlbumMysqlTable> ratingAndPlayRankItems, Class<E> resultClass, Integer page, Integer pageSize) {
+        if (ratingAndPlayRankItems != null && ratingAndPlayRankItems.size() > 0) {
+            PageControl<E> pageControl = new PageControl<E>(pageSize, page);
+            pageControl.setCount(ratingAndPlayRankItems.size());
+            List<E> list = parseListByConstructor(resultClass, AlbumMysqlTable.class, ratingAndPlayRankItems);
+            int size = list.size();
+            if (size > (page - 1) * pageSize) {
+                if (size < page * pageSize) {
+                    list = list.subList((page - 1) * pageSize, list.size());
+                } else {
+                    list = list.subList((page - 1) * pageSize, page * pageSize);
+                }
+            } else {
+                list.clear();
+            }
+            pageControl.setList(list);
+            return pageControl;
+        }
+        return null;
     }
 }

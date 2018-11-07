@@ -1,12 +1,14 @@
 package com.letv.mas.caller.iptv.tvproxy.common.util;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.letv.mas.caller.iptv.tvproxy.common.model.dao.tp.activity.ActivityTpConstant;
+import com.letv.mas.caller.iptv.tvproxy.common.plugin.CommonParam;
+import org.apache.commons.lang.StringUtils;
 
 public class StringUtil {
     private static final String BLANK = "";
@@ -207,9 +209,12 @@ public class StringUtil {
 
     /**
      * 全部替换字符串里符合指定内容的为其它内容，与String类中不同，它使用的不是正则表达式的。
-     * @param strOriginal,原字符串内容
-     * @param strOld, 需要替换的内容
-     * @param strNew, 用来替换的内容
+     * @param strOriginal
+     *            ,原字符串内容
+     * @param strOld
+     *            , 需要替换的内容
+     * @param strNew
+     *            , 用来替换的内容
      * @return String, 字符串替换后的内容
      */
     public static String replace(String strOriginal, String strOld, String strNew) {
@@ -413,4 +418,27 @@ public class StringUtil {
         }
     }
 
+    // public static void main(String[] args) {
+    // System.out.println(StringTool.EncodedByMD5("1"));
+    // try {
+    // System.out.println(getStringLen("撒打发a%^&sdf3s撒打发士大夫撒阿斯顿飞洒的发生的",16));
+    // } catch (UnsupportedEncodingException e) {
+    // e.printStackTrace();
+    // }
+    // }
+
+    public static boolean isErrorMacForGuanXing(CommonParam commonParam) {
+        if (StringUtil.isBlank(ActivityTpConstant.GET_GUANXING_DATA_ERROR_MAC)
+                || StringUtil.isBlank(ActivityTpConstant.GET_GUANXING_DATA_ERROR_URL)) {
+            return false;
+        }
+        if (StringUtil.isBlank(commonParam.getMac())) {
+            return false;
+        }
+        String mac = StringUtils.trimToEmpty(commonParam.getMac()).toLowerCase();
+        if (StringUtil.isNotBlank(mac) && mac.equals(ActivityTpConstant.GET_GUANXING_DATA_ERROR_MAC)) {
+            return true;
+        }
+        return false;
+    }
 }

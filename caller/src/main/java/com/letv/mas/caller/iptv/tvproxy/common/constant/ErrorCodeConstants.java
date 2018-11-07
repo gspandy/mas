@@ -23,6 +23,17 @@ public class ErrorCodeConstants {
     public static final String ILLEGAL_PARAMETER_USERID = "CSC003_1";
 
     /**
+     * 第三方直播接口返回错误，将直接使用第三方错误信息，不再设置错误码
+     */
+    public static final String LIVE_CHANNEL_SEND_DANMU_CONTENT_ERROR = "SLC003";
+
+    /**
+     * 调用第三放弹幕发送接口失败，“暂无法发送弹幕，请稍后重试！错误码：SLC004”
+     */
+    public static final String LIVE_CHANNEL_SEND_DANMU_FAILED = "SLC004";
+
+
+    /**
      * 通用错误码，“当前版本不支持，请升级超级影视”
      */
     public static final String COMMON_SERVICE_UPGRADE = "CSC004";
@@ -120,4 +131,77 @@ public class ErrorCodeConstants {
     public static final String PAY_ORDER_PAYCODE_WEIXIN_FAILURE = "SPC029"; // 单点支付--获取微信二维码图片失败
     public static final String PAY_ORDER_PAYCODE_LAKALA_FAILURE = "SPC030"; // 单点支付--获取拉卡拉二维码图片失败
     public static final String PAY_ILLEGAL_PARAMETER = "SPC031"; // 请求参数不合法
+    public static final String PAY_LETVPOINT_NOT_SUPPORT_919 = "SPC032"; // 919活动当天不接收乐点支付，敬请谅解
+    public static final String PAY_GET_PRICE_PARCKAGE_FAILURE = "SPC033"; // 获取（单个）产品包失败
+    public static final String PAY_LETVPOINT_AVAILABLE_INSUFFICIENT = "SPC034"; // 可用乐点不足
+    public static final String PAY_PURCHASE_VIP_ALI_PAY_FAILURE = "SPC035"; // 支付宝支付失败（升级后的收银台）
+    public static final String PAY_PURCHASE_VIP_WEIXIN_PAY_FAILURE = "SPC036"; // 微信支付失败（升级后的收银台）
+    public static final String PAY_PURCHASE_VIP_LAKALA_PAY_FAILURE = "SPC037"; // 拉卡拉支付失败（升级后的收银台）
+    public static final String PAY_PURCHASE_VIP_LETVPOINT_PAY_FAILURE = "SPC038"; // 乐点支付失败（升级后的收银台）
+    public static final String PAY_CHECK_VOUCHER_STATUS_FAILURE = "SPC039"; // 校验代金券状态失败
+    public static final String PAY_VOUCHER_NOT_AVAILABLE = "SPC040"; // 代金券不可用
+    public static final String PAY_VOUCHER_NOT_APPLICATIVE = "SPC041"; // 代金券不适用
+    public static final String PAY_GET_USER_AGGREMENT_FAILURE = "SPC042"; // 获取收银台用户协议文案失败
+    public static final String PAY_CHECK_LIVE_FAILURE = "SPC043"; // 直播鉴权失败
+    public static final String PAY_CHECK_ONE_KEY_PAY_FAILURE = "SPC044"; // 一键支付绑定查询失败
+    public static final String PAY_PURCHASE_VIP_PAYPAL_PAY_FAILURE = "SPC045"; // paypal二维码生成失败
+    public static final String PAY_PURCHASE_VIP_ONE_KEY_QUICK_PAY_FAILURE = "SPC046"; // 一键支付请求失败
+    public static final String PAY_RECEIVE_PRESENT_DEVICE_BIND_FAILURE = "SPC048"; // 领取超级手机赠送会员时长失败
+    public static final String PAY_GET_PRESENT_DEVICE_BIND_FAILURE = "SPC049"; // 查询超级手机赠送会员时长失败
+    public static final String PAY_GET_VIP_ACCOUNT_INFO_FAILURE = "SPC052"; // 获取会员账户信息失败
+    public static final String PAY_GET_USER_DEVICE_BIND_FAILURE = "SPC056"; // 查询用户机卡绑定信息失败
+    public static final String PILOT_GET_FAILURE = "SPC057"; // 获取定向引导信息失败
+    public static final String PAY_YEEPAY_GET_BINDINFO_FAILURE = "SPC058"; // 查询绑卡信息失败
+    public static final String PAY_YEEPAY_GET_ONEBIND_FAILURE = "SPC059"; // 查询用户是否可以一元绑卡失败
+    public static final String PAY_YEEPAY_CHECK_BIND_TYPE_ILEGAL = "SPC060"; // 查询卡绑定信息的卡类型非法
+    public static final String PAY_YEEPAY_ORDER_FAILURE = "SPC061"; // 易宝支付下单失败
+    public static final String PAY_YEEPAY_GET_VERIFY_CODE_ERROR = "SPC062";// 易宝支付获取验证码失败
+    public static final String PAY_YEEPAY_CONFIRMPAY_ERROR = "SPC063";// 易宝支付确认支付失败
+    public static final String PAY_YEEPAY_UNBIND_ERROR = "SPC064";// 易宝支付信用卡解绑失败
+    public static final String PAY_GET_RECOMMENDPOP_ERROR = "SPC065";// 获取用户定向弹窗信息失败
+    public static final String PAY_GET_PAYMENTCHANNEL_ERROR = "SPC066";// 获取支付渠道失败
+    public static final String PAY_CHECK_LIVE_ERROR = "SPC067";// 服务器不给力，请重试
+    public static final String PAY_LETV_CARD_VALIDATE_ERROR = "SPC068";// 乐卡校验失败
+    public static final String PAY_HUASHU_ORDER_FAILURE = "SPC069";// 华数下单失败
+    public static final String PAY_LETV_CARD_TYPE_ERROR = "SPC070";// 充值失败，不能使用兑换卡进行充值
+    public static final String TOUCH_USERCENTER_ILLEGAL = "SPC071"; // 触达错误
+    public static final String VIP_TOUCH_ACTIVITY_OFFLINE = "SPC072"; // 活动已下线，敬请期待
+    public static final String VIP_MEMBER_DESK_INFO_USERID = "SPC073"; // 会员桌面-服务位/功能位-userId是非数字字符串
+    public static final String VIP_MEMBER_DESK_INFO_NON_USER = "SPC074"; // 会员桌面-服务位/功能位-userId查询不到用户信息
+    public static final String VIP_MEMBER_DESK_ACTIVITY_NULL_MAC = "SPC075"; // 会员桌面-urm触达位-mac地址为空
+    public static final String VIP_ACTIVE_FREEVIP_ERROR = "SPC076"; // 激活失败，请重试
+    public static final String VIP_GET_FREEVIP_INFO_ERROR = "SPC077"; // 获取数据失败，请重试
+    public static final String VIP_GET_CONTENT_PACKAGE_FAIL = "SPC078"; // 获取会员内容包失败
+    public static final String VIP_GET_PACKAGE_INFO_FAIL = "SPC079"; // 获取会员套餐信息失败
+    public static final String VIP_GET_PRODUCT_INFO_FAIL = "SPC080"; // 获取会员信息失败
+    public static final String VIP_PAY_PRODUCTID_NULL = "SPC081"; // productId为空
+    public static final String PAY_GET_PURCHASE_INFO_FAILURE = "SPC082"; // 获取一键支付支付信息失败
+    public static final String UN_SUB_SCRIBE_PAYMENT_MONTHLY_FAILE = "SPC083";// 取消连续包月失败
+
+
+    /**
+     * 频道相关错误码
+     */
+    public static final String CHANNEL_PARAMETER_ERROR = "SCC001";// 请求参数错误
+    public static final String CHANNEL_GET_TJPACKAGE_ERROR = "SCC002";// 获取特辑包数据错误
+    public static final String CHANNEL_GET_RANK_ERROR = "SCC003";// 排行榜id格式错误
+    public static final String CHANNEL_GET_SUBJECT_PACKAGE_ERROR = "SCC004";// 获取专题下视频包数据错误
+    public static final String CHANNEL_GET_BLOCK_CONTENT_ERROR = "SCC005";// 获取CMS板块数据失败
+    public static final String CHANNEL_GET_SUBJECT_DATA_OFFLINE = "SCC006";// 专题已下线
+
+    /**
+     * 搜索相关错误码(SSC001、SSC002这两个值目前使用SearchConstant中的变量,在这里只是表示已经被使用了)
+     */
+    public final static String SEARCH_ERROR_CONDITION_ERROR = "SSC001"; // 搜索条件异常
+    public final static String SEARCH_ERROR_RESULT_NULL = "SSC002"; // 搜索结果返回空
+    public final static String SEARCH_PARAMETER_ERROR = "SSC003";// 请求参数错误
+
+    public static final String TERMINAL_GET_SERVICE_TERM_FAIL = "STC001";
+
+    public static final String GET_ACTIVITY_FAILURE = "STC005"; // 获取活动信息失败
+
+    public static final String GET_ACTIVITY_PARAM_FAILURE = "STC006"; // 请求参数错误
+
+    public static final String GET_AGREEMENT_FAILURE = "STC007"; // 获取套餐协议错误
+
 }

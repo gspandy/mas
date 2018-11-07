@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.TerminalConfigMysqlDao">
+    
+    <select id="getTerminalConfig" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.TerminalConfigMysqlTable">
+        select * from iptv.ITV_APPLICATION_KEYVALUE where keyName = 'config'
+    </select>
+     
+</mapper>

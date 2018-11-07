@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.ChannelMysqlDao">
+
+	<select id="getList" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChannelMysqlTable">
+		<choose>
+			<when test="mcode==null">
+				select * from iptv.ITV_MENU
+				where status=1 and parentid=#{parentChannelId}
+				<if test="broadcastId!=null and broadcastId > 0">
+					<choose>
+						<when test="broadcastId==1">
+							and cntv = 1
+						</when>
+						<when test="broadcastId==2">
+							and cibn = 1
+						</when>
+						<when test="broadcastId==3">
+							and wasu = 1
+						</when>
+					</choose>
+				</if>
+				<choose>
+					<when test="vnum!=null">
+						<choose>
+							<when test="vnum==7">
+								and vnum in (5,#{vnum})
+								order by
+								order_2p5
+							</when>
+							<otherwise>
+								and vnum = #{vnum}
+								order by
+								ordernum
+							</otherwise>
+						</choose>
+					</when>
+					<otherwise>
+						order by
+						ordernum
+					</otherwise>
+				</choose>
+			</when>
+			<when test="mcode==3">
+				select id,
+				keyWord as name,
+				imgUrl as big_pic,
+				dataUrl as url,
+				albumId as albumId,
+				pid as pid,
+				cid as categoryid
+				from ITV_MENU_ANIME_TEMP
+			</when>
+			<otherwise>
+				select m.* from iptv.ITV_MENU m,ITV_MENU_EXT e
+				where m.id=e.menuId and m.status=1
+				and m.parentid=#{parentChannelId} and e.mcode = #{mcode}
+				<if test="broadcastId!=null and broadcastId > 0">
+                    <choose>
+                        <when test="broadcastId==1">
+                            and cntv = 1
+                        </when>
+                        <when test="broadcastId==2">
+                            and cibn = 1
+                        </when>
+                        <when test="broadcastId==3">
+                            and wasu = 1
+                        </when>
+                    </choose>
+                </if>
+				<choose>
+					<when test="vnum!=null">
+						<choose>
+							<when test="vnum==7">
+								and vnum in (5,#{vnum})
+								order by
+								m.order_2p5
+							</when>
+							<otherwise>
+								and vnum = #{vnum}
+								order by
+								m.ordernum
+							</otherwise>
+						</choose>
+					</when>
+					<otherwise>
+						order by
+						m.ordernum
+					</otherwise>
+				</choose>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="get" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChannelMysqlTable">
+		select * from iptv.ITV_MENU where
+		id=#{channelId}
+	</select>
+	
+</mapper>

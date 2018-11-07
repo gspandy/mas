@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.AuditAlbumPushDao">
+
+    <resultMap type="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.AuditAlbumPush" id="albumPushResultMap">
+        <result property="id" column="id"/>
+        <result property="pushCibn" column="push_cibn"/>
+        <result property="pushWasu" column="push_wasu"/>
+    </resultMap>
+
+    <select id="getAuditAlbumPush" resultMap="albumPushResultMap">
+        SELECT id, push_cibn, push_wasu
+        FROM iptv.AUDIT_ALBUM_PUSH
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertAuditAlbumPush">
+        INSERT INTO iptv.AUDIT_ALBUM_PUSH(id, push_cibn, push_wasu)
+        VALUES (#{id}, #{pushCibn}, #{pushWasu})
+    </insert>
+
+    <update id="updateAuditAlbumPush">
+        UPDATE iptv.AUDIT_ALBUM_PUSH
+        SET push_cibn = #{pushCibn}, push_wasu = #{pushWasu}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteAuditAlbumPush">
+        DELETE FROM iptv.AUDIT_ALBUM_PUSH WHERE id = #{id}
+    </delete>
+</mapper>

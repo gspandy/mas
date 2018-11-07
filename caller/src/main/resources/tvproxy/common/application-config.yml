@@ -1,5 +1,0 @@
-iptv:
-  configs:
-    iptv.user.lepay.istest: true
-    iptv.play.antireport.switch: true
-    iptv.wcode.default.value: cn

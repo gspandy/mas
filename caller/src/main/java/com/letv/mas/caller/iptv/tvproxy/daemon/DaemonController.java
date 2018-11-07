@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("${server.path}/daemon")
+@RequestMapping("daemon")
 public class DaemonController extends BaseController {
 
 

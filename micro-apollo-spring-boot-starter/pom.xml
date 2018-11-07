@@ -6,7 +6,7 @@
 
     <groupId>com.letv.micro.apollo</groupId>
     <artifactId>micro-apollo-spring-boot-starter</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>micro-apollo-spring-boot-starter</name>
@@ -25,7 +25,8 @@
         <spring.cloud.version>Edgware.SR3</spring.cloud.version>
         <apollo.version>1.0.0</apollo.version>
         <lombok.version>1.16.4</lombok.version>
-        <jasypt.version>1.16</jasypt.version>
+        <!--<jasypt.version>1.16</jasypt.version>-->
+        <jasypt.version>2.1.0</jasypt.version>
     </properties>
 
     <dependencyManagement>

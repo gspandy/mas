@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.QrCodeMysqlDao">
+	<select id="getList" parameterType="int"
+		resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.QrCodeMysqlTable">
+		select * from iptv.ITV_QRCODE
+	</select>
+	<delete id="delete">
+		delete from iptv.ITV_QRCODE where id = #{id}
+	</delete>
+	 <select id="getListByCid" parameterType="int"
+        resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.QrCodeMysqlTable">
+        select * from iptv.ITV_QRCODE where channelid=#{channelid} ORDER BY id desc
+    </select>
+     <select id="getListByStream" 
+        resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.QrCodeMysqlTable">
+        select * from iptv.ITV_QRCODE where stream=#{stream} ORDER BY id desc
+    </select>
+    <select id="getQrCode" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.QrCodeMysqlTable">
+        select * from iptv.ITV_QRCODE where
+        id=#{id}
+    </select>
+     <select id="getQrCodeByChannelid" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.QrCodeMysqlTable">
+        select * from iptv.ITV_QRCODE where
+        channelid=#{channelid}
+    </select>
+	<insert id="insert" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.QrCodeMysqlTable">
+		insert into iptv.ITV_QRCODE set
+		<include refid="itvCommonParameter" />
+	</insert>
+	<update id="update" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.QrCodeMysqlTable">
+		update iptv.ITV_QRCODE set
+		<include refid="itvCommonParameter" />
+		where id = #{id}
+	</update>
+	<sql id="itvCommonParameter">
+		id=#{id},type=#{type},channelid=#{channelid},title=#{title},qrCode=#{qrCode},
+		imageUrl=#{imageUrl},beginTime=#{beginTime},endTime=#{endTime},
+		region=#{region},duration=#{duration},intervalue=#{intervalue}
+	</sql>
+</mapper>

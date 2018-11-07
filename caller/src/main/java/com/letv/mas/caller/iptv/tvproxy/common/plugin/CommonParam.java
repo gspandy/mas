@@ -178,6 +178,11 @@ public class CommonParam implements Serializable {
     @ApiModelProperty(value = "(公共参数) 请求来源的platformId", required = false)
     private String displayPlatformId;
 
+    /**
+     * 默认为null-乐视，1-芒果
+     */
+    private String cpid;
+
     public String getDisplayAppId() {
         return displayAppId;
     }
@@ -561,5 +566,14 @@ public class CommonParam implements Serializable {
 
     public void setDevSign(String devSign) {
         this.devSign = devSign;
+    }
+
+
+    public String getCpid() {
+        return cpid;
+    }
+
+    public void setCpid(String cpid) {
+        this.cpid = cpid;
     }
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.ChartsMysqlDao">
+
+    <select id="getListByChannelId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChartsMysqlTable">
+      <![CDATA[
+        select * from iptv.ITV_CHARTS 
+        where channel_id=#{channelId} 
+        and status = 1 
+        order by order_num
+      ]]>
+    </select>
+    
+    <select id="getListById" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChartsMysqlTable">
+        select * from iptv.ITV_CHARTS 
+        where channel_id=#{channelId} 
+        <if test="chartsId!=null and chartsId > 0">
+        and id=#{chartsId}
+        </if>
+        and status = 1 
+        order by order_num
+    </select>
+    
+    <select id="getById" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChartsMysqlTable">
+      <![CDATA[
+        select * from iptv.ITV_CHARTS 
+        where id=#{chartsId} 
+        and status = 1 
+      ]]>
+    </select>
+    
+    <select id="getChartsIdsByStatus" resultType="integer">
+      <![CDATA[
+        select id from iptv.ITV_CHARTS 
+          where status = #{status} 
+      ]]>
+    </select>
+    
+</mapper>

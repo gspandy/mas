@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.ContainerConfMysqlDao">
+
+    <select id="getList"
+        resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ContainerConfMysqlTable">
+        select * from iptv.ITV_CONTAINER_CONF where
+        containerId=#{containerId}
+        order by order_num
+    </select>
+</mapper>

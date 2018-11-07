@@ -74,7 +74,7 @@ public class MybatisConfig implements TransactionManagementConfigurer {
 	public SqlSessionFactory sqlSessionFactoryBean() {
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 		bean.setDataSource(dataSource);
-		bean.setTypeAliasesPackage("com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.pojo");
+		bean.setTypeAliasesPackage("com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table");
 
 		// 分页插件
         PageInterceptor pageHelper = new PageInterceptor();

@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: letv-mas-caller-tvproxy-video
+  profiles:
+    include: app,redis,db,hystrix,stream,manager,omp,trace,thrift

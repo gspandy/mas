@@ -4,8 +4,17 @@ import com.letv.mas.caller.iptv.tvproxy.common.constant.ProductLineConstants;
 import com.letv.mas.caller.iptv.tvproxy.common.constant.TerminalCommonConstant;
 import com.letv.mas.caller.iptv.tvproxy.common.constant.VideoConstants;
 import com.letv.mas.caller.iptv.tvproxy.common.plugin.CommonParam;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
+import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class VideoUtil {
     private static final Logger log = LoggerFactory.getLogger(VideoUtil.class);
@@ -92,5 +101,54 @@ public class VideoUtil {
         }
 
         return splatId;
+    }
+
+    /**
+     * 可多机器登录userId白名单
+     */
+    public static Set<String> MUTIL_MACHINE_LOGIN_USERID_WHITE_SET = new HashSet<String>();
+
+
+    /**
+     * 获取专辑更新期数
+     * @param Num
+     * @param format1
+     * @param format2
+     * @param format3
+     * @return
+     */
+    public static String getFollowNum(Integer Num, String format1, String format2, String format3) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            SimpleDateFormat df = new SimpleDateFormat(format1);
+            SimpleDateFormat df1 = new SimpleDateFormat(format2);
+            SimpleDateFormat df2 = new SimpleDateFormat(format3);
+            Date followDate = sdf.parse(Num.toString());
+            Date nowDate = new Date();
+            String followStr = null;
+            String nowStr = null;
+            String followNum = "";
+            followStr = df.format(followDate);
+            nowStr = df.format(nowDate);
+            if (Integer.parseInt(followStr) < Integer.parseInt(nowStr)) {
+                followNum = df1.format(followDate);
+            } else {
+                followNum = df2.format(followDate);
+            }
+            return followNum;
+        } catch (ParseException e) {
+            log.warn("getFollowNum error", e.getMessage(), e);
+        }
+        return "";
+    }
+
+    /**
+     * mac白名单
+     */
+    private static Set<String> NO_AREA_PLAY_RESTRICT_MAC_SET = new HashSet<String>();
+
+
+    public static void clearMacWhiteList() {
+        NO_AREA_PLAY_RESTRICT_MAC_SET = null;
     }
 }

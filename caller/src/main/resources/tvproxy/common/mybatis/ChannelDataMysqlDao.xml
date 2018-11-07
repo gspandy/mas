@@ -4,7 +4,7 @@
 <mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.ChannelDataMysqlDao">
 
     <select id="getList"
-        resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.pojo.ChannelDataMysqlTable">
+        resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.ChannelDataMysqlTable">
         select * from iptv.ITV_CHANNEL_DATA where
         in_channelid=#{channelId}
         order by order_num

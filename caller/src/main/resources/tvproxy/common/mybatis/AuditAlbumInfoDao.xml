@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.AuditAlbumInfoDao">
+
+    <resultMap type="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.AuditAlbumInfo" id="cibnAuditResultMap">
+        <result property="id" column="id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="nameCn" column="name_cn"/>
+        <result property="remark" column="remark"/>
+        <result property="tvPlayPlatform" column="tv_play_platform"/>
+    </resultMap>
+
+    <select id="getAuditAlbumInfo" resultMap="cibnAuditResultMap">
+        SELECT id, category_id, name_cn, remark, tv_play_platform
+        FROM iptv.AUDIT_ALBUM_INFO
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertAuditAlbumInfo">
+        INSERT INTO iptv.AUDIT_ALBUM_INFO(id, category_id, name_cn, remark, tv_play_platform)
+        VALUES (#{id}, #{categoryId}, #{nameCn}, #{remark}, #{tvPlayPlatform})
+    </insert>
+
+    <update id="updateAuditAlbumInfo">
+        UPDATE iptv.AUDIT_ALBUM_INFO
+        SET category_id = #{categoryId}, name_cn = #{nameCn}, remark = #{remark}, tv_play_platform = #{tvPlayPlatform}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

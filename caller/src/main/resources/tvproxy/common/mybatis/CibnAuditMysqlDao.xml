@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.CibnAuditMysqlDao">
+
+    <resultMap type="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.CibnAuditInfo" id="cibnAuditResultMap">
+        <result property="id" column="id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="itemType" column="item_type"/>
+        <result property="auditResult" column="audit_result"/>
+        <result property="auditMessages" column="audit_messages"/>
+    </resultMap>
+
+    <select id="getCibnAuditInfo" resultMap="cibnAuditResultMap">
+        SELECT id, item_id, item_type, audit_result, audit_messages
+        FROM iptv.CIBN_AUDIT
+        WHERE item_id = #{itemId} AND item_type =#{itemType}
+    </select>
+
+    <insert id="insertCibnAuditInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO iptv.CIBN_AUDIT(item_id, item_type, audit_result, audit_messages)
+        VALUES (#{itemId}, #{itemType}, #{auditResult}, #{auditMessages})
+    </insert>
+
+    <update id="updateCibnAuditInfo">
+        UPDATE iptv.CIBN_AUDIT
+        SET audit_result = #{auditResult}, audit_messages = #{auditMessages}
+        WHERE id=#{id}
+    </update>
+
+</mapper>

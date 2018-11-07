@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.VideoMysqlDao">
+
+    <sql id="insertOrUpdateVideoInfoCommonParameter">
+        id=#{id},video_info_id=#{video_info_id},video_type=#{video_type},video_type_name=#{video_type_name},
+        pid=#{pid},itv_album_id=#{itv_album_id},porder=#{porder},ad_point=#{ad_point},mid=#{mid},name_cn=#{name_cn},
+        name_pinyin_abb=#{name_pinyin_abb},name_en=#{name_en},alias=#{alias},sub_title=#{sub_title},tv_title=#{tv_title},
+        short_desc=#{short_desc},description=#{description},tag=#{tag},category=#{category},category_name=#{category_name},
+        sub_category=#{sub_category},sub_category_name=#{sub_category_name},area=#{area},area_name=#{area_name},
+        episode=#{episode},btime=#{btime},etime=#{etime},watching_focus=#{watching_focus},download_platform=#{download_platform},
+        play_platform=#{play_platform},pay_platform=#{pay_platform},duration=#{duration},status=#{status},deleted=#{deleted},remark=#{remark},
+        score=#{score},pic_all=#{pic_all},pic_original=#{pic_original},relative_content=#{relative_content},release_date=#{release_date},
+        schedule_publish_date=#{schedule_publish_date},
+        first_play_time=#{first_play_time},issue=#{issue},school=#{school},starring=#{starring},starring_play=#{starring_play},directory=#{directory},
+        actor=#{actor},actor_play=#{actor_play},language=#{language},language_name=#{language_name},single_name=#{single_name},style=#{style},
+        style_name=#{style_name},sports_type=#{sports_type},sports_type_name=#{sports_type_name},letv_make_style=#{letv_make_style},
+        letv_make_style_name=#{letv_make_style_name},
+        pop_style=#{pop_style},pop_style_name=#{pop_style_name},letv_produce_style=#{letv_produce_style},letv_produce_style_name=#{letv_produce_style_name},
+        cartoon_style=#{cartoon_style},cartoon_style_name=#{cartoon_style_name},field_type=#{field_type},field_type_name=#{field_type_name},pre=#{pre},
+        pre_name=#{pre_name},instructor=#{instructor},compere=#{compere},guest=#{guest},singer=#{singer},singer_type=#{singer_type},
+        singer_type_name=#{singer_type_name},music_authors=#{music_authors},music_style=#{music_style},
+        music_style_name=#{music_style_name},travel_theme=#{travel_theme},travel_theme_name=#{travel_theme_name},travel_type=#{travel_type},
+        travel_type_name=#{travel_type_name},maker=#{maker},
+        record_company=#{record_company},copyright_company=#{copyright_company},copyright_start=#{copyright_start},copyright_end=#{copyright_end},copyright_type=#{copyright_type},
+        copyright_type_name=#{copyright_type_name},disable_type=#{disable_type},disable_type_name=#{disable_type_name},issue_company=#{issue_company},music_compose=#{music_compose},team=#{team},
+        trans_code_prefix=#{trans_code_prefix},recreation_type=#{recreation_type},recreation_type_name=#{recreation_type_name},cntv=#{cntv},wasu=#{wasu},cibn=#{cibn},play_streams=#{play_streams},carfilm_type=#{carfilm_type},
+        carfilm_type_name=#{carfilm_type_name},create_time=#{create_time},update_time=#{update_time},user_id=#{user_id},style_all_name=#{style_all_name},style_all=#{style_all},video_type_all=#{video_type_all},
+        video_type_all_name=#{video_type_all_name},directory_all=#{directory_all},starring_all=#{starring_all},actor_all=#{actor_all},sub_category_all=#{sub_category_all},sub_category_name_all=#{sub_category_name_all},
+        rcompany_all=#{rcompany_all},category_all=#{category_all},category_name_all=#{category_name_all},mid_streams=#{mid_streams},video_attr=#{video_attr},pushflag=#{pushflag},logonum=#{logonum}, drmFlagId=#{drmFlagId},
+        auditHis=#{auditHis},videoPic=#{videoPic}, pushTVTime=#{pushTVTime}, isPlayLock=#{isPlayLock}, tvFirstOnTime=#{tvFirstOnTime},auditWasu=#{auditWasu},isDanmaku=#{isDanmaku},isPushChild=#{isPushChild},source_id=#{source_id}
+    </sql>  
+    
+    <sql id="insertOrUpdateSearchVideoInfoCommonParameter">
+        id=#{id},video_info_id=#{video_info_id},pid=#{pid},itv_album_id=#{itv_album_id},name_cn=#{name_cn},porder=#{porder},
+        sub_title=#{sub_title},name_en=#{name_en},directory=#{directory},actor=#{actor},starring=#{starring},release_date=#{release_date},
+        language_name=#{language_name},language=#{language},score=#{score},maker=#{maker},description=#{description},short_desc=#{short_desc},
+        tag=#{tag},area_name=#{area_name},area=#{area},category_name=#{category_name},category=#{category},sub_category_name=#{sub_category_name},
+        sub_category=#{sub_category},copyright_type_name=#{copyright_type_name},copyright_type=#{copyright_type},copyright_start=#{copyright_start},
+        copyright_end=#{copyright_end},copyright_company=#{copyright_company},music_authors=#{music_authors},music_compose=#{music_compose},
+        style_name=#{style_name},style=#{style},record_company=#{record_company},issue_company=#{issue_company},video_type_name=#{video_type_name},
+        video_type=#{video_type},deleted=#{deleted},pic_all=#{pic_all},trans_code_prefix=#{trans_code_prefix},duration=#{duration},
+        name_pinyin_abb=#{name_pinyin_abb},play_streams=#{play_streams},update_time=#{update_time},create_time=#{create_time},cntv=#{cntv},wasu=#{wasu},cibn=#{cibn},pushflag=#{pushflag}
+        ,video_attr=#{video_attr}
+    </sql>
+
+	<select id="getVideoListByPorder" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+	  select id,name_cn,name_en,category,sub_category,pid,porder,singer,sub_title,video_type,pic_all,trans_code_prefix,
+	         guest,description,duration,play_platform,play_streams,video_attr,pay_platform,release_date,episode
+		    from iptv.IPTV_VIDEO_INFO where pid = #{pid}
+		<if test="broadcastId != null and broadcastId > 0">
+			<choose>
+				<when test="broadcastId==1">
+					and cntv = 1
+				</when>
+				<when test="broadcastId==2">
+					and cibn = 1
+				</when>
+				<when test="broadcastId==3">
+					and wasu = 1
+				</when>
+			</choose>
+		</if>
+	<![CDATA[
+		and porder >= #{start} and porder <= #{end} order by porder asc, create_time desc
+	]]>
+	</select>
+	
+    <select id="getVideoListByPorderNoLimit" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+        SELECT id,name_cn,name_en,category,sub_category,pid,porder,singer,sub_title,video_type,pic_all,trans_code_prefix,
+		guest,description,duration,play_platform,play_streams,video_attr,pay_platform,release_date,episode
+		 from iptv.IPTV_VIDEO_INFO where pid = #{pid} and isPushChild=#{isPushChild}
+        <choose>
+            <when test="positive==true">
+                and video_attr=1
+            </when>
+            <when test="positive==false">
+                and video_attr=0
+            </when>
+        </choose>
+        <if test="broadcastId != null and broadcastId > 0">
+            <choose>
+                <when test="broadcastId==1">
+                    and cntv = 1
+                </when>
+                <when test="broadcastId==2">
+                    and cibn = 1
+                </when>
+                <when test="broadcastId==3">
+                    and wasu = 1
+                </when>
+            </choose>
+        </if>
+    </select>
+    
+	<select id="getVideoListByLimit" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		SELECT id,name_cn,name_en,category,sub_category,pid,porder,singer,sub_title,video_type,pic_all,trans_code_prefix,
+		guest,description,duration,play_platform,play_streams,video_attr,pay_platform,release_date,episode
+		  from iptv.IPTV_VIDEO_INFO where pid = #{pid}
+		<if test="broadcastId != null and broadcastId > 0">
+			<choose>
+				<when test="broadcastId==1">
+					and cntv = 1
+				</when>
+				<when test="broadcastId==2">
+					and cibn = 1
+				</when>
+				<when test="broadcastId==3">
+					and wasu = 1
+				</when>
+			</choose>
+		</if>
+		<choose>
+			<when test="orderType==1"><!-- 升序 -->
+				order by porder 
+			</when>
+			<otherwise><!-- 降序 -->
+				order by porder desc
+			</otherwise>
+		</choose>
+		limit #{start},#{end}
+	</select>
+
+	<select id="getVideoById" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select *
+		from
+		iptv.IPTV_VIDEO_INFO where id = #{id}
+	</select>
+
+	<select id="getVideoListWithStartByLimit" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select *
+		from iptv.IPTV_VIDEO_INFO where pid = #{albumId}
+		and porder >= #{startIssue}
+		<choose>
+			<when test="positive==true">
+				and video_attr=1
+			</when>
+			<when test="positive==false">
+				and video_attr=0
+			</when>
+		</choose>
+		order by porder,release_date limit 0 ,#{pageSize}
+
+	</select>
+
+	<select id="getVideoMysqlTableListByUpdateTime" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		SELECT id,name_cn,name_en,category,sub_category,pid,porder,singer,sub_title,video_type,pic_all,trans_code_prefix,
+		guest,description,duration,play_platform,play_streams,video_attr,pay_platform,release_date,episode
+		  from iptv.IPTV_VIDEO_INFO where pid = #{albumId}
+		<choose>
+			<when test="positive==true">
+				and video_attr=1
+			</when>
+			<when test="positive==false">
+				and video_attr=0
+			</when>
+		</choose>
+		 <if test="broadcastId!=null and broadcastId > 0">
+            <choose>
+                <when test="broadcastId==1">
+                    and cntv = 1
+                </when>
+                <when test="broadcastId==2">
+                    and cibn = 1
+                </when>
+                <when test="broadcastId==3">
+                    and wasu = 1
+                </when>
+            </choose>
+        </if>
+	<![CDATA[
+		order by porder desc
+	]]>
+	</select>
+
+	<select id="getVideoListByPorderAndCreateTime" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		SELECT id,name_cn,name_en,category,sub_category,pid,porder,singer,sub_title,video_type,pic_all,trans_code_prefix,
+		guest,description,duration,play_platform,play_streams,video_attr,pay_platform,release_date,episode
+		  from iptv.IPTV_VIDEO_INFO where pid = #{pid}
+		<choose>
+			<when test="positive==true">
+				and video_attr=1
+			</when>
+			<when test="positive==false">
+				and video_attr=0
+			</when>
+		</choose>
+		<if test="broadcastId != null and broadcastId > 0">
+            <choose>
+                <when test="broadcastId==1">
+                    and cntv = 1
+                </when>
+                <when test="broadcastId==2">
+                    and cibn = 1
+                </when>
+                <when test="broadcastId==3">
+                    and wasu = 1
+                </when>
+            </choose>
+        </if>
+		<choose>
+			<when test="orderType==0">
+				order by porder desc, create_time desc
+			</when>
+			<when test="orderType==1">
+				order by porder asc, create_time asc
+			</when>
+		</choose>
+		limit #{start},#{end}
+	</select>
+	
+	<select id="getAlbumSeriesCountByPid" resultType="long">
+        select count(*) from
+        iptv.IPTV_VIDEO_INFO where
+        pid=#{pid}
+        <choose>
+            <when test="vtype==0">
+
+            </when>
+            <when test="vtype==1">
+                and video_attr = 1
+            </when>
+            <when test="vtype==2">
+            <![CDATA[
+                and video_attr <> 1 
+                ]]>
+            </when>
+        </choose>
+        <if test="broadcastId!=null and broadcastId > 0">
+            <choose>
+                <when test="broadcastId==1">
+                    and cntv = 1
+                </when>
+                <when test="broadcastId==2">
+                    and cibn = 1
+                </when>
+                <when test="broadcastId==3">
+                    and wasu = 1
+                </when>
+            </choose>
+        </if>
+    </select>
+    
+    <select id="getAlbumSeriesCountByPids" resultType="long">
+        select count(*) from
+        iptv.IPTV_VIDEO_INFO where
+        pid in 
+        <foreach collection="pids" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+        <choose>
+            <when test="vtype==0">
+
+            </when>
+            <when test="vtype==1">
+                and video_attr = 1
+            </when>
+            <when test="vtype==2">
+            <![CDATA[
+                and video_attr <> 1 
+                ]]>
+            </when>
+        </choose>
+        <if test="broadcastId!=null and broadcastId > 0">
+            <choose>
+                <when test="broadcastId==1">
+                    and cntv = 1
+                </when>
+                <when test="broadcastId==2">
+                    and cibn = 1
+                </when>
+                <when test="broadcastId==3">
+                    and wasu = 1
+                </when>
+            </choose>
+        </if>
+    </select>
+    
+    <select id="getVideoListByPid" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+        select * from iptv.IPTV_VIDEO_INFO where pid = #{pid}
+        <choose>
+            <when test="vtype==0">
+
+            </when>
+            <when test="vtype==1">
+                and video_attr = 1
+            </when>
+            <when test="vtype==2">
+            <![CDATA[
+                and video_attr <> 1 
+                ]]>
+            </when>
+        </choose>
+        <if test="broadcastId!=null and broadcastId > 0">
+            <choose>
+                <when test="broadcastId==1">
+                    and cntv = 1
+                </when>
+                <when test="broadcastId==2">
+                    and cibn = 1
+                </when>
+                <when test="broadcastId==3">
+                    and wasu = 1
+                </when>
+            </choose>
+        </if>
+        <choose>
+            <when test="orderType==1"><!-- 升序 -->
+                order by porder,release_date
+            </when>
+            <otherwise><!-- 降序 -->
+                order by porder desc,release_date desc,update_time desc
+            </otherwise>
+        </choose>
+        limit #{start},#{end}
+    </select>
+	
+	<select id="getVideoListByPids" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+        select * from iptv.IPTV_VIDEO_INFO where pid in
+        <foreach collection="pids" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+        <choose>
+            <when test="vtype==0">
+
+            </when>
+            <when test="vtype==1">
+                and video_attr = 1
+            </when>
+            <when test="vtype==2">
+            <![CDATA[
+                and video_attr <> 1 
+                ]]>
+            </when>
+        </choose>
+        <if test="broadcastId!=null and broadcastId > 0">
+            <choose>
+                <when test="broadcastId==1">
+                    and cntv = 1
+                </when>
+                <when test="broadcastId==2">
+                    and cibn = 1
+                </when>
+                <when test="broadcastId==3">
+                    and wasu = 1
+                </when>
+            </choose>
+        </if>
+        <choose>
+            <when test="orderType==1"><!-- 升序 -->
+                order by porder,release_date
+            </when>
+            <otherwise><!-- 降序 -->
+                order by porder desc,release_date desc,update_time desc
+            </otherwise>
+        </choose>
+        limit #{start},#{end}
+    </select>
+	
+	<select id="getVideoInfoIdByVid" resultType="integer">
+		select id from
+		vrs.video_info where vid = #{vid}
+	</select>
+	<select id="getVidByvideoInfoId" resultType="long">
+		select vid from
+		vrs.video_info where id = #{id}
+	</select>
+	<select id="getVideoListLimitByPorder" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where itv_album_id = #{iptvAlbumId}
+		<choose>
+			<when test="vtype==0">
+
+			</when>
+			<when test="vtype==1">
+				and video_attr = 1
+			</when>
+			<when test="vtype==2">
+			<![CDATA[
+  				and video_attr <> 1 
+ 				]]>
+			</when>
+		</choose>
+		<if test="broadcastId!=null and broadcastId > 0">
+			<choose>
+				<when test="broadcastId==1">
+					and cntv = 1
+				</when>
+				<when test="broadcastId==2">
+					and cibn = 1
+				</when>
+				<when test="broadcastId==3">
+					and wasu = 1
+				</when>
+			</choose>
+		</if>
+	<![CDATA[
+		and porder >= #{start_aorder} and porder <= #{end_aorder} order by porder,release_date
+	]]>
+	</select>
+	<select id="getVideoList" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where itv_album_id = #{iptvAlbumId}
+		<choose>
+			<when test="vtype==0">
+
+			</when>
+			<when test="vtype==1">
+				and video_attr = 1
+			</when>
+			<when test="vtype==2">
+			<![CDATA[
+				and video_attr <> 1 
+ 				]]>
+			</when>
+		</choose>
+		<if test="broadcastId!=null and broadcastId > 0">
+			<choose>
+				<when test="broadcastId==1">
+					and cntv = 1
+				</when>
+				<when test="broadcastId==2">
+					and cibn = 1
+				</when>
+				<when test="broadcastId==3">
+					and wasu = 1
+				</when>
+			</choose>
+		</if>
+		<choose>
+			<when test="orderType==1"><!-- 升序 -->
+				order by porder,release_date
+			</when>
+			<otherwise><!-- 降序 -->
+				order by porder desc,release_date desc
+			</otherwise>
+		</choose>
+		limit #{start},#{end}
+	</select>
+
+	<select id="getVideoListByVtype" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where itv_album_id = #{iptvAlbumId}
+		and video_type=#{videoType}
+		<if test="broadcastId!=null and broadcastId > 0">
+			<choose>
+				<when test="broadcastId==1">
+					and cntv = 1
+				</when>
+				<when test="broadcastId==2">
+					and cibn = 1
+				</when>
+				<when test="broadcastId==3">
+					and wasu = 1
+				</when>
+			</choose>
+		</if>
+		<choose>
+			<when test="orderType==1"><!-- 升序 -->
+				order by porder,release_date
+			</when>
+			<otherwise><!-- 降序 -->
+				order by porder desc,release_date desc
+			</otherwise>
+		</choose>
+		limit #{start},#{end}
+	</select>
+	
+	<select id="getVideoListByStream" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where itv_album_id = #{iptvAlbumId}
+		and video_attr = 1
+		<!-- and play_streams like CONCAT('%', #{stream}, '%') -->
+		<if test="broadcastId!=null and broadcastId > 0">
+			<choose>
+				<when test="broadcastId==1">
+					and cntv = 1
+				</when>
+				<when test="broadcastId==2">
+					and cibn = 1
+				</when>
+				<when test="broadcastId==3">
+					and wasu = 1
+				</when>
+			</choose>
+		</if>
+		<choose>
+			<when test="orderType==1"><!-- 升序 -->
+				order by porder,release_date
+			</when>
+			<otherwise><!-- 降序 -->
+				order by porder desc,release_date desc
+			</otherwise>
+		</choose>
+		limit #{start},#{end}
+	</select>
+	<select id="get4KVideoListByStream" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where play_streams like CONCAT('%',
+		#{stream}, '%') and create_time &gt;= #{near}
+	</select>
+	<select id="getDrmVideoList" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where drmFlagId is not null and drmFlagId !='' and create_time &gt;= #{near}
+	</select>
+	<select id="listIptvVideoInfoByLimit" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from
+		iptv.IPTV_VIDEO_INFO limit #{start},#{limit}
+	</select>
+	<select id="getIptvVideoInfoByIptvAlbumIdAndSeries" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where itv_album_id =
+		#{itv_album_id}
+		and porder = #{aorder} and video_attr = 1 limit 1
+	</select>
+	<select id="getAllVideoList" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where itv_album_id = #{iptvAlbumId}
+		and video_attr = 1
+		<if test="cntv!=null and cntv > 0">
+			and cntv =1
+		</if>
+		<choose>
+			<when test="orderType==1"><!-- 升序 -->
+				order by porder
+			</when>
+			<otherwise><!-- 降序 -->
+				order by porder desc
+			</otherwise>
+		</choose>
+
+	</select>
+	<select id="getAllVideoListByPid" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where pid = #{pid}
+		and video_attr = 1
+		<if test="cntv!=null and cntv > 0">
+			and cntv =1
+		</if>
+		<choose>
+			<when test="orderType==1"><!-- 升序 -->
+				order by porder
+			</when>
+			<otherwise><!-- 降序 -->
+				order by porder desc
+			</otherwise>
+		</choose>
+
+	</select>
+	<select id="getAllVideoByPid" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where pid = #{id}
+	</select>
+	<select id="getAllVideoListByStream" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where itv_album_id = #{iptvAlbumId}
+		and video_attr = 1 and play_streams like CONCAT('%', #{stream}, '%')
+		<if test="cntv!=null and cntv > 0">
+			and cntv =1
+		</if>
+		<choose>
+			<when test="orderType==1"><!-- 升序 -->
+				order by porder
+			</when>
+			<otherwise><!-- 降序 -->
+				order by porder desc
+			</otherwise>
+		</choose>
+
+	</select>
+	
+	<select id="getAlbumFollownumByAlbumId" resultType="long">
+		select
+		max(porder) from iptv.IPTV_VIDEO_INFO where pid = #{aid} and
+		video_attr = 1
+	</select>
+	<select id="getAlbumSeriesCount" resultType="long">
+		select count(*) from
+		iptv.IPTV_VIDEO_INFO where
+		itv_album_id=#{itv_album_id}
+		<choose>
+			<when test="vtype==0">
+
+			</when>
+			<when test="vtype==1">
+				and video_attr = 1
+			</when>
+			<when test="vtype==2">
+			<![CDATA[
+ 				and video_attr <> 1 
+ 				]]>
+			</when>
+		</choose>
+		<if test="broadcastId!=null and broadcastId > 0">
+			<choose>
+				<when test="broadcastId==1">
+					and cntv = 1
+				</when>
+				<when test="broadcastId==2">
+					and cibn = 1
+				</when>
+				<when test="broadcastId==3">
+					and wasu = 1
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<insert id="insertVideoInfo" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		insert into iptv.IPTV_VIDEO_INFO set
+		<include refid="insertOrUpdateVideoInfoCommonParameter" />
+	</insert>
+	<update id="updateVideoInfoById" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		update iptv.IPTV_VIDEO_INFO set
+		<include refid="insertOrUpdateVideoInfoCommonParameter" />
+		where id=#{id}
+	</update>
+
+	<delete id="deleteVideoInfoById">
+		delete from iptv.IPTV_VIDEO_INFO where id=#{id}
+	</delete>
+	<select id="getSearchIptvVideoInfoById" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SearchIptvVideoInfo">
+		select * from
+		search.SEARCH_IPTV_VIDEO_INFO where id = #{id}
+	</select>
+
+	<insert id="insertSearchIptvVideoInfo" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SearchIptvVideoInfo">
+		insert into search.SEARCH_IPTV_VIDEO_INFO set
+		<include refid="insertOrUpdateSearchVideoInfoCommonParameter" />
+	</insert>
+	<update id="updateSearchIptvVideoInfoById" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SearchIptvVideoInfo">
+		update search.SEARCH_IPTV_VIDEO_INFO set
+		<include refid="insertOrUpdateSearchVideoInfoCommonParameter" />
+		where id=#{id}
+	</update>
+
+	<delete id="deleteSearchIptvVideoInfoById">
+		delete from search.SEARCH_IPTV_VIDEO_INFO where
+		id=#{id}
+	</delete>
+
+	
+	
+	<select id="getVideoInfoList_New" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select vi.* from iptv.IPTV_VIDEO_INFO vi force index(first_play_time)
+		LEFT JOIN iptv.IPTV_ALBUM_INFO ia on vi.pid=ia.id where 1=1
+		<if test="categoryId!=null">
+			and vi.category_all = #{categoryId}
+		</if>
+		<if test="albumName!=null and albumName!=''">
+			and ia.name_cn like CONCAT('%',#{albumName},'%')
+		</if>
+		<if test="codeVersion!=null">
+			and 1=1 and
+			<foreach collection="codeVersion" index="index" item="stream"
+				open="(" close=")" separator="or">
+				CONCAT(',',vi.play_streams,',') like
+				CONCAT('%,', #{stream}, ',%')
+			</foreach>
+		</if>
+		<if test="name!=null and name != ''">
+			and vi.name_cn like CONCAT('%',#{name},'%')
+		</if>
+		order by vi.first_play_time desc limit #{start},#{limit}
+	</select>
+	<select id="getVideoInfoListCount_New" resultType="Long">
+		select COUNT(*) from iptv.IPTV_VIDEO_INFO vi LEFT JOIN
+		iptv.IPTV_ALBUM_INFO ia on vi.pid=ia.id where 1=1
+		<if test="categoryId!=null">
+			and vi.category_all = #{categoryId}
+		</if>
+		<if test="albumName!=null">
+			and ia.name_cn like CONCAT('%',#{albumName},'%')
+		</if>
+		<if test="codeVersion!=null">
+			and 1=1 and
+			<foreach collection="codeVersion" index="index" item="stream"
+				open="(" close=")" separator="or">
+				CONCAT(',',vi.play_streams,',') like
+				CONCAT('%,', #{stream}, ',%')
+			</foreach>
+		</if>
+		<if test="name!=null">
+			and vi.name_cn like CONCAT('%',#{name},'%')
+		</if>
+	</select>
+	<select id="getAlbumAllStreams" resultType="string">
+		select play_streams
+		from iptv.IPTV_VIDEO_INFO where pid = #{pid}
+	</select>
+	<select id="getAlbumPositiveStreams" resultType="string">
+		select play_streams
+		from iptv.IPTV_VIDEO_INFO where pid = #{pid} and video_attr = 1
+	</select>
+	<select id="getAllIdByPid" resultType="long">
+		select id from
+		iptv.IPTV_VIDEO_INFO where pid = #{pid}
+	</select>
+	<select id="getVideoList4Admin" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select vi.* from iptv.IPTV_VIDEO_INFO vi force index(first_play_time)
+		LEFT JOIN iptv.IPTV_ALBUM_INFO ia on vi.pid=ia.id where 1=1
+		<if test="category!=null">
+			and vi.category_all = #{category}
+		</if>
+		<if test="videoId!=null and videoId!=''">
+			and vi.id=#{videoId}
+		</if>
+		<if test="videoName!=null and videoName!=''">
+			and vi.name_cn like CONCAT('%',#{videoName},'%')
+		</if>
+		<if test="albumId!=null and albumId!=''">
+			and ia.id=#{albumId}
+		</if>
+		<if test="albumTitle!=null and albumTitle!=''">
+			and ia.name_cn like CONCAT('%',#{albumTitle},'%')
+		</if>
+		<if test="albumType!=null and albumType!=''">
+			and ia.album_type=#{albumType}
+		</if>
+		<if test="vType!=null and vType!=''">
+			and vi.video_type=#{vType}
+		</if>
+		<if test="codeList!=null">
+			and 1=1 and
+			<foreach collection="codeList" index="index" item="stream"
+				open="(" close=")" separator="or">
+				CONCAT(',',vi.play_streams,',') like
+				CONCAT('%,', #{stream}, ',%')
+			</foreach>
+		</if>
+		order by vi.first_play_time desc limit #{page},#{maxNum}
+	</select>
+	<select id="getVideoList4AdminCount" resultType="Long">
+		select COUNT(*) from iptv.IPTV_VIDEO_INFO vi LEFT JOIN
+		iptv.IPTV_ALBUM_INFO ia on vi.pid=ia.id where 1=1
+		<if test="category!=null">
+			and vi.category_all = #{category}
+		</if>
+		<if test="videoId!=null and videoId!=''">
+			and vi.id=#{videoId}
+		</if>
+		<if test="videoName!=null and videoName!=''">
+			and vi.name_cn like CONCAT('%',#{videoName},'%')
+		</if>
+		<if test="albumId!=null and albumId!=''">
+			and ia.id=#{albumId}
+		</if>
+		<if test="albumTitle!=null and albumTitle!=''">
+			and ia.name_cn like CONCAT('%',#{albumTitle},'%')
+		</if>
+		<if test="albumType!=null and albumType!=''">
+			and ia.album_type=#{albumType}
+		</if>
+		<if test="vType!=null and vType!=''">
+			and vi.video_type=#{vType}
+		</if>
+		<if test="codeList!=null">
+			and 1=1 and
+			<foreach collection="codeList" index="index" item="stream"
+				open="(" close=")" separator="or">
+				CONCAT(',',vi.play_streams,',') like
+				CONCAT('%,', #{stream}, ',%')
+			</foreach>
+		</if>
+	</select>
+	<select id="getVideoListByUpdateTime" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where pid = #{pid}
+		<choose>
+			<when test="vtype==0">
+
+			</when>
+			<when test="vtype==1">
+				and video_attr = 1
+			</when>
+			<when test="vtype==2">
+			<![CDATA[
+  				and video_attr <> 1 
+ 				]]>
+			</when>
+		</choose>
+	<![CDATA[
+		order by update_time
+	]]>
+	</select>
+	<!-- broadcast start -->
+	<sql id="broadcastVideoConf">
+		<where>
+			<choose>
+				<when
+					test="searchFields.broadcastId!=null and searchFields.broadcastId == 1">
+					ivi.cntv in
+					<foreach collection="searchFields.statusScope" index="index"
+						item="o" open="(" close=")" separator=",">
+						#{o}
+					</foreach>
+				</when>
+				<when
+					test="searchFields.broadcastId!=null and searchFields.broadcastId == 2">
+					ivi.cibn in
+					<foreach collection="searchFields.statusScope" index="index"
+						item="o" open="(" close=")" separator=",">
+						#{o}
+					</foreach>
+				</when>
+				<when
+					test="searchFields.broadcastId!=null and searchFields.broadcastId == 3">
+					ivi.wasu in
+					<foreach collection="searchFields.statusScope" index="index"
+						item="o" open="(" close=")" separator=",">
+						#{o}
+					</foreach>
+				</when>
+			</choose>
+			<if test="firstLetters != null and firstLetters != ''">
+				and ivi.name_pinyin_abb like CONCAT('', #{firstLetters},
+				'%')
+			</if>
+			<if test="sDate != null">
+				and ivi.create_time &lt;= #{sDate}
+			</if>
+			<if test="eDate != null">
+				and ivi.create_time &gt;= #{eDate}
+			</if>
+			<if test="searchFields.name != null and searchFields.name != ''">
+				and ivi.name_cn like CONCAT('%', #{searchFields.name},
+				'%')
+			</if>
+			<if test="searchFields.actor != null and searchFields.actor != ''">
+				and ivi.actor like CONCAT('%', #{searchFields.actor},
+				'%')
+			</if>
+			<if
+				test="searchFields.releaseDate != null and searchFields.releaseDate != ''">
+				and ivi.release_date = #{searchFields.releaseDate}
+			</if>
+			<if test="searchFields.channel != null ">
+				and ivi.category =#{searchFields.channel}
+			</if>
+			<if test="searchFields.director != null and searchFields.director != ''">
+				and ivi.director like CONCAT('%',
+				#{searchFields.director}, '%')
+			</if>
+			<if test="searchFields.status != null">
+				<choose>
+					<when
+						test="searchFields.broadcastId!=null and searchFields.broadcastId == 1">
+						and ivi.cntv = #{searchFields.status}
+					</when>
+					<when
+						test="searchFields.broadcastId!=null and searchFields.broadcastId == 2">
+						and ivi.cibn = #{searchFields.status}
+					</when>
+					<when
+						test="searchFields.broadcastId!=null and searchFields.broadcastId == 3">
+						and ivi.wasu = #{searchFields.status}
+					</when>
+				</choose>
+			</if>
+			<if test="searchFields.type != null">
+				and ivi.sub_category like CONCAT('%',
+				#{searchFields.type}, '%')
+			</if>
+			<if test="is3D == true">
+				and ivi.play_streams like '%3d%'
+			</if>
+			<if test="searchFields.albumId != null and searchFields.albumId > 0">
+				and ivi.pid = #{searchFields.albumId}
+			</if>
+		</where>
+	</sql>
+	<select id="listBroadcastVideo" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO ivi
+		<include refid="broadcastVideoConf" />
+		order by ivi.create_time desc limit #{page},#{pageSize}
+	</select>
+	<select id="getBroadcastVideoCount" resultType="integer">
+		select count(ivi.id) from iptv.IPTV_VIDEO_INFO ivi
+		<include refid="broadcastVideoConf" />
+	</select>
+
+	<select id="listBrotherBroadcastVidoesByPId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO ivi where ivi.pId=#{pid}
+		<if test="videoType == true">
+			and (ivi.video_type=1 or ivi.video_type =(select
+			iai.album_type from iptv.IPTV_ALBUM_INFO iai where iai.id=ivi.pid))
+		</if>
+	</select>
+	
+	<select id="getFirstPositiveVideoTvFirstOnTimeByPid" resultType="string">
+        select tvFirstOnTime from iptv.IPTV_VIDEO_INFO ivi 
+          where ivi.pid=#{pid} and ivi.porder = 1 and ivi.video_attr = 1 and ivi.tvFirstOnTime is not null 
+            order by create_time, update_time, tvFirstOnTime 
+    </select>
+    
+    <select id="getFirstPositiveVideoByPid" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+        select * from iptv.IPTV_VIDEO_INFO ivi 
+          where ivi.pid=#{pid} and ivi.video_attr = 1 
+          <if test="broadcastId!=null and broadcastId > 0">
+			<choose>
+				<when test="broadcastId==1">
+					and cntv = 1
+				</when>
+				<when test="broadcastId==2">
+					and cibn = 1
+				</when>
+				<when test="broadcastId==3">
+					and wasu = 1
+				</when>
+			</choose>
+		</if>
+          order by ivi.porder limit 1
+    </select>
+    <select id="getFirstPositiveVideoIdByPid" resultType="long">
+        select id from iptv.IPTV_VIDEO_INFO ivi 
+          where ivi.pid=#{pid} and ivi.video_attr = 1 and isPushChild=#{isPushChild}
+          <if test="broadcastId!=null and broadcastId > 0">
+			<choose>
+				<when test="broadcastId==1">
+					and cntv = 1
+				</when>
+				<when test="broadcastId==2">
+					and cibn = 1
+				</when>
+				<when test="broadcastId==3">
+					and wasu = 1
+				</when>
+			</choose>
+		</if>
+          order by ivi.porder asc limit 1
+    </select>
+    <select id="getEndPositiveVideoIdByPid" resultType="long">
+        select id from iptv.IPTV_VIDEO_INFO ivi 
+          where ivi.pid=#{pid} and ivi.video_attr = 1 and isPushChild=#{isPushChild}
+          <if test="broadcastId!=null and broadcastId > 0">
+			<choose>
+				<when test="broadcastId==1">
+					and cntv = 1
+				</when>
+				<when test="broadcastId==2">
+					and cibn = 1
+				</when>
+				<when test="broadcastId==3">
+					and wasu = 1
+				</when>
+			</choose>
+		</if>
+          order by ivi.porder desc limit 1
+    </select>
+    <select id="getIptvVideoInfoByVideoInfoId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+        select * from iptv.IPTV_VIDEO_INFO 
+          where video_info_id = #{videoInfoId}
+    </select>
+    
+    <select id="getLastPositiveVideoByPid" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+        select * from iptv.IPTV_VIDEO_INFO ivi 
+          where ivi.pid=#{pid} and ivi.video_attr = 1 and ivi.porder = 
+          	(select max(porder) from iptv.IPTV_VIDEO_INFO ivi2 where ivi2.pid=#{pid} and ivi2.video_attr = 1) 
+    </select>
+
+	<select id="getMinChargeVideoByPid" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select id,name_cn,episode,pay_platform,play_platform,porder from iptv.IPTV_VIDEO_INFO ivi where(ivi.pid=#{pid} AND video_type ='180001' AND (INSTR(`pay_platform`, CONCAT(#{pay_platform},':1;')) >0 or (INSTR(`pay_platform`, #{pay_platform}) >0 AND ((INSTR(`pay_platform`, ':') = 0 AND INSTR(`pay_platform`, ';1;') >0 ) or INSTR(`pay_platform`, ';') = 0))) ) order by porder LIMIT 1;
+    </select>
+
+	<select id="getVideoByPidAndPorder" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select id,episode,pay_platform,play_platform from iptv.IPTV_VIDEO_INFO ivi where ivi.pid=#{pid} AND video_type =#{video_type} AND porder =#{porder} AND deleted = 0;
+	</select>
+
+	<select id="getVideoByIds" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where id in
+		<foreach collection="ids" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+	</select>
+
+	<select id="getVideoListByIds" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.VideoMysqlTable">
+		select * from iptv.IPTV_VIDEO_INFO where id in
+		<foreach collection="ids" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+	</select>
+</mapper>

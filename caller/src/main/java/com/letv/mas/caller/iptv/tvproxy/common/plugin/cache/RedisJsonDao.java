@@ -443,7 +443,7 @@ public class RedisJsonDao implements ICacheTemplate {
         return resultData;
     }
 
-    @Override
+    /*@Override
     public <T> Map<String, T> mget(List<String> keys, Class<T> c) {
         String logPrefix = CacheConstants.CACHE_INSTANCE_REDIS_JSON + "|mget";
         Map<String, T> jsonValues = null;
@@ -455,11 +455,11 @@ public class RedisJsonDao implements ICacheTemplate {
             try {
                 jedis = jedisPoolConnector.getSlaveJedis();
                 long getPoolTime = System.currentTimeMillis() - begin;
-                /*String temp = "";
+                *//*String temp = "";
                 if (getPoolTime > 100) {
                     temp = "-getSlaveJedisCount-active=" + jedisPoolConnector.getSlavePoolNumActive() + "-waiter=" + jedisPoolConnector.getSlavePoolNumWaiters();
                 }
-                CACHE_DATA_LOGGER.info(logPrefix + "|result=3"+temp+"|timeCost=" + (getPoolTime));*/
+                CACHE_DATA_LOGGER.info(logPrefix + "|result=3"+temp+"|timeCost=" + (getPoolTime));*//*
                 CACHE_DATA_LOGGER.info(logPrefix + "|result=3|timeCost=" + (getPoolTime));
                 long begin1 = System.currentTimeMillis();
                 List<String> values = jedis.mget(keys.toArray(new String[keys.size()]));
@@ -493,6 +493,142 @@ public class RedisJsonDao implements ICacheTemplate {
             } catch (Exception e) {
                 String logInfo = logPrefix + "|result=0|timeCost="
                         + (System.currentTimeMillis() - begin) + "|errMsg=set error.";
+                if (null != SessionCache.getSession()) {
+                    SessionCache.getSession().setResponse("redis://", null, logInfo);
+                }
+                CACHE_DATA_LOGGER.error(logInfo, e);
+
+                if (jedis != null) {
+                    try {
+                        jedisPoolConnector.returnSlaveBrokenResourceObject(jedis);
+                    } catch (Exception e1) {
+                        CACHE_DATA_LOGGER.info(logPrefix + "|errMsg=return slave broken resource error.", e1);
+                    }
+
+                    if (e instanceof JedisConnectionException) {
+                        if (!jedisPoolConnector.checkPoolIsAlive(jedisPoolConnector.POOL_TYPE_SLAVE)) {
+                            jedisPoolConnector.restartSlave();
+                        }
+                    }
+
+                    jedis = null;
+                }
+            } finally {
+                if (jedis != null && result == CacheConstants.SUCCESS) {
+                    try {
+                        jedisPoolConnector.returnSlaveResource(jedis);
+                    } catch (Exception e) {
+                        CACHE_DATA_LOGGER.info(logPrefix + "|errMsg=return slave resource error.", e);
+                    }
+                }
+            }
+        } else {
+            CACHE_DATA_LOGGER.info(logPrefix + "|result=0|errMsg=illegal parameter.");
+        }
+
+        return jsonValues;
+    }*/
+
+    @Override
+    public <T> Map<String, T> mget(List<String> keys, Class<T> c) {
+        return mget(keys, c, 0);
+    }
+
+    @Override
+    public <T> Map<String, T> mget(List<String> keys, Class<T> c, int batchSize) {
+        String logPrefix = CacheConstants.CACHE_INSTANCE_REDIS_JSON + "|mget";
+        Map<String, T> jsonValues = null;
+        if (!CollectionUtils.isEmpty(keys) && c != null) {
+            logPrefix = logPrefix + "|key=" + StringUtils.join(keys, ",");
+            long begin = System.currentTimeMillis();
+            Jedis jedis = null;
+            int result = CacheConstants.FAIL;
+            try {
+                jedis = jedisPoolConnector.getSlaveJedis();
+                Pipeline pipeline = null;
+                long getPoolTime = System.currentTimeMillis() - begin;
+
+                if (batchSize > 0) {
+                    pipeline = jedis.pipelined();
+                }
+                /*
+                 * String temp = "";
+                 * if (getPoolTime > 100) {
+                 * temp = "-getSlaveJedisCount-active=" +
+                 * jedisPoolConnector.getSlavePoolNumActive() + "-waiter=" +
+                 * jedisPoolConnector.getSlavePoolNumWaiters();
+                 * }
+                 * CACHE_DATA_LOGGER.info(logPrefix +
+                 * "|result=3"+temp+"|timeCost=" + (getPoolTime));
+                 */
+                CACHE_DATA_LOGGER.info(logPrefix + "|result=3|timeCost=" + (getPoolTime));
+                long begin1 = System.currentTimeMillis();
+                List<String> values = null, tmpList = null;
+                if (batchSize > 0) {
+                    int pageNumber = batchSize; // 每页记录数
+                    int totalCount = keys.size(); // 总记录数
+                    int totalPage = totalCount / pageNumber; // 总页数
+                    if ((totalCount % pageNumber) > 0) {
+                        totalPage += 1;
+                    }
+                    int fromIndex = 0; // 起始位置
+                    int toIndex = 0; // 结束位置
+                    for (int pageNo = 0; pageNo < totalPage; pageNo++) {
+                        fromIndex = pageNo * pageNumber;
+                        toIndex = ((pageNo + 1) * pageNumber);
+                        if (toIndex > totalCount) {
+                            toIndex = totalCount;
+                        }
+                        tmpList = keys.subList(fromIndex, toIndex);
+                        if (null != tmpList && tmpList.size() > 0) {
+                            pipeline.mget(tmpList.toArray(new String[tmpList.size()]));
+                            tmpList = null;
+                        }
+                        if (pageNo == totalPage - 1) {
+                            for (Object ret : pipeline.syncAndReturnAll()) {
+                                if (null != ret) {
+                                    if (null == values) {
+                                        values = (List<String>) ret;
+                                    } else {
+                                        values.addAll((List<String>) (List) (ret));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    values = jedis.mget(keys.toArray(new String[keys.size()]));
+                }
+                CACHE_DATA_LOGGER.info(logPrefix + "|result=2|timeCost=" + (System.currentTimeMillis() - begin1));
+                if (values != null) {
+                    jsonValues = new HashMap<String, T>();
+                    for (int i = 0; i < keys.size(); i++) {
+                        String key = keys.get(i);
+                        String value = values.get(i);
+
+                        T jsonValue = null;
+
+                        if (value != null) {
+                            if (c == String.class) {
+                                jsonValue = (T) value;
+                            } else {
+                                jsonValue = CacheConstants.OBJECT_MAPPER.readValue(value, c);
+                            }
+                        }
+
+                        jsonValues.put(key, jsonValue);
+                    }
+                }
+                result = CacheConstants.SUCCESS;
+
+                String logInfo = logPrefix + "|result=1|timeCost=" + (System.currentTimeMillis() - begin);
+                if (null != SessionCache.getSession()) {
+                    SessionCache.getSession().setResponse("redis://", jsonValues, logInfo);
+                }
+                CACHE_DATA_LOGGER.info(logInfo);
+            } catch (Exception e) {
+                String logInfo = logPrefix + "|result=0|timeCost=" + (System.currentTimeMillis() - begin)
+                        + "|errMsg=set error.";
                 if (null != SessionCache.getSession()) {
                     SessionCache.getSession().setResponse("redis://", null, logInfo);
                 }

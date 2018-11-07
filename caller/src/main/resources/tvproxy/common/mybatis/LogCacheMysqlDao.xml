@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.LogCacheMysqlDao">
+    <insert id="saveLog" parameterType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.MmsChangeLog">
+        insert into
+        iptv.MMS_CACHE_CHANGE_LOG(id,object_id,action_type,process_status,create_time,data_status,p_level)
+        values(UUID(),#{object_id},#{action_type},#{process_status},now(),#{data_status},#{p_level})
+    </insert>
+
+    <select id="getMmsChangeLogsByTypes" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.MmsChangeLog">
+        select * from iptv.MMS_CACHE_CHANGE_LOG where action_type in
+        <foreach collection="types" item="type" open="(" separator=","
+            close=")">
+            #{type}
+        </foreach>
+        and process_status = 0 order by p_level desc,create_time asc limit 1000
+    </select>
+    <select id="findByObjectId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.MmsChangeLog">
+        select * from iptv.MMS_CACHE_CHANGE_LOG where object_id=#{object_id} and process_status = 0 
+    </select>
+    <select id="getCount" resultType="Long">
+        select count(*) from
+        iptv.MMS_CACHE_CHANGE_LOG where process_status = 0
+    </select>
+    <update id="initMmsChangeLogStatusByTypes">
+        update iptv.MMS_CACHE_CHANGE_LOG set process_status=#{new_status} where
+        process_status=#{old_status} and action_type in
+        <foreach collection="types" item="type" open="(" separator="," close=")">
+            #{type}
+        </foreach>
+    </update>
+    <update id="updateMmsChangeLogStatusById">
+        update iptv.MMS_CACHE_CHANGE_LOG set
+        process_status=#{status} where id = #{id}
+    </update>
+
+    <delete id="deleteMmsChangeLogById">
+        delete from iptv.MMS_CACHE_CHANGE_LOG where id = #{id}
+    </delete>
+</mapper>

@@ -68,8 +68,8 @@ spring:
           result-set-close-after-log-enabled: false
 
 mybatis:
-    type-aliases-package: com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.pojo
+    type-aliases-package: com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table
     mapper-locations: classpath:mybatis/*.xml
-    config-location: classpath:config/mybatis_config.xml
+    config-location: classpath:mybatis-config.xml
 
 

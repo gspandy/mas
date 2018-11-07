@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.TpVersionMysqlDao">
+    <select id="getVersionInfoBySAPPIdAndName" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.TpSeriesAppVersionInfoMysqlTable">
+        select * from terminal.SERIES_APP_VERSION as sv join terminal.VERSION as v on sv.version_id = v.id
+        where sv.enable=1 and sv.series_app_id = #{series_app_id} and v.version_name = #{version_name}
+    </select>
+    <select id="getVersionInfoByName" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.TpSeriesAppVersionInfoMysqlTable">
+      select * from terminal.VERSION as v   where  v.version_name = #{version_name} and is_common=1 limit 1
+    </select>
+    <select id="getAllVersionBySAPPId" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.TpSeriesAppVersionInfoMysqlTable">
+        select * from terminal.SERIES_APP_VERSION as sv join terminal.VERSION as v on sv.version_id = v.id
+        where sv.enable=1 and sv.series_app_id = #{series_app_id} order by v.version_code desc
+    </select>
+    <select id="getCanAllVersionBySAPPIdAndCode" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.TpSeriesAppVersionInfoMysqlTable">
+        select * from terminal.SERIES_APP_VERSION as sv join terminal.VERSION as v on sv.version_id = v.id
+        where sv.enable=1 and sv.series_app_id = #{series_app_id} and v.version_code > #{version_code} order by v.version_code desc
+    </select>
+    <select id="getCommonVersionByCode" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.TpSeriesAppVersionInfoMysqlTable">
+        select * from  terminal.VERSION as v
+        
+        where is_common=1 and   v.version_code >
+        #{version_code} order by v.version_code desc
+    </select>
+    <select id="getHighVersionList" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.TpSeriesAppVersionInfoMysqlTable">
+            SELECT
+                v.version_name AS version_name,
+                v.description AS description,
+                v.create_time AS create_time,
+                v.download_url AS download_url,
+                v.type AS type,
+                a.rom_minimum AS rom_minimum,
+                a.enforce_up_id AS enforce_up_id
+            FROM
+                terminal.SERIES_APP_VERSION AS sv,
+                terminal.VERSION AS v,
+                (
+                    SELECT
+                        version_code AS version_code,
+                        no_up_id AS no_up_id,
+                        rom_minimum AS rom_minimum,
+                        enforce_up_id AS enforce_up_id,
+                        series_app_id AS series_app_id
+                    FROM
+                        terminal.SERIES_APP_VERSION AS sv
+                    INNER JOIN terminal.VERSION AS v ON sv.version_id = v.id
+                    WHERE
+                        sv. ENABLE = 1
+                    AND sv.series_app_id = #{series_app_id}
+                    AND v.version_name = #{version_name}
+                ) AS a
+            WHERE
+                sv.version_id = v.id
+            AND sv. ENABLE = 1
+            AND v.type <![CDATA[<]]> 3
+            AND sv.series_app_id = a.series_app_id
+            AND v.version_code > a.version_code
+            AND sv.id <![CDATA[<>]]> a.no_up_id
+            ORDER BY
+                v.version_code DESC
+    </select>
+    
+    <select id="getVersionList" resultType="com.letv.mas.caller.iptv.tvproxy.common.model.dao.db.table.SeriesAppVersionInfo">
+    SELECT v.version_name, v.version_code
+    FROM terminal.VERSION v
+    LEFT JOIN terminal.SERIES_APP_VERSION s ON s.version_id = v.id
+    WHERE
+       v.version_name = #{version_name}
+    AND s.series_app_id = #{series_app_id} LIMIT 1
+    </select>
+</mapper>
