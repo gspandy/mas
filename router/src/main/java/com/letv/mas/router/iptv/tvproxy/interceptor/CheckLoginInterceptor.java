@@ -1,14 +1,15 @@
 package com.letv.mas.router.iptv.tvproxy.interceptor;
 
 import com.letv.mas.router.iptv.tvproxy.constant.ErrorConsts;
-import com.letv.mas.router.iptv.tvproxy.model.dao.db.mysql.UserDao;
-import com.letv.mas.router.iptv.tvproxy.model.xdo.UserDo;
+import com.letv.mas.router.iptv.tvproxy.service.AuthService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,11 +20,12 @@ import java.util.Map;
 /**
  * Created by leeco on 18/11/6.
  */
-public class CheckLoginInterceptor extends HandlerInterceptorAdapter {
+@Component
+public class CheckLoginInterceptor implements HandlerInterceptor {
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckLoginInterceptor.class);
 
     @Autowired
-    private UserDao userDao;
+    private AuthService authService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -37,14 +39,21 @@ public class CheckLoginInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+
+    }
+
     private boolean isLogin(HttpServletRequest request) {
         boolean ret = false;
         String uuid = request.getHeader("uuid");
         if (StringUtils.isNotBlank(uuid)) {
-            UserDo userDo = userDao.getUserById(uuid);
-            if (null != userDo) {
-                ret = 0 == userDo.getIs_del() && 0 == userDo.getStatus();
-            }
+            ret = authService.checkLogin(uuid);
         }
         return ret;
     }

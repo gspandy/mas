@@ -38,8 +38,8 @@ eureka:
       # [HA配置]-默认zone内注册中心地址列表
       #testDefaultZone: ${EUREKA_SERVER_LIST:http://letvMasManager:admin20180605@10.112.34.124:8015/eureka}
 #      sjs-1: http://letvMasManager:admin20180605@10.129.29.86:8015/eureka,http://letvMasManager:admin20180605@10.129.29.90:8015/eureka
-#      dx-1: http://letvMasManager:admin20180605@10.112.34.124:8015/eureka,http://letvMasManager:admin20180605@10.112.34.127:8015/eureka
-#      dx-2: http://letvMasManager:admin20180605@10.124.65.232:8015/eureka,http://letvMasManager:admin20180605@10.124.65.232:8015/eureka
+#      cy-1: http://letvMasManager:admin20180605@10.112.34.124:8015/eureka,http://letvMasManager:admin20180605@10.112.34.127:8015/eureka
+#      dx-1: http://letvMasManager:admin20180605@10.124.65.232:8015/eureka,http://letvMasManager:admin20180605@10.124.65.232:8015/eureka
       cy-1: http://letvMasManager:admin20180605@10.124.65.227:8015/eureka
       defaultZone: ''
     # [服务续约]-当前服务实例更新注册服务缓存清单的更新间隔时间，默认为30s，一般和lease-renewal-interval-in-seconds保持一致！

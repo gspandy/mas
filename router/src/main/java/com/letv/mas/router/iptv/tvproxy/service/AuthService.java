@@ -35,15 +35,7 @@ public class AuthService {
 
         if (null != model) {
             if ("user".equals(model)) {
-                ret = userDao.getUserById(param);
-                if (null != ret) {
-                    BaseResponseDto<UserDo> baseResponseDto = new BaseResponseDto<>();
-                    baseResponseDto.setData((UserDo) ret);
-                    baseResponseDto.setCode(ErrorConsts.COM_OK);
-                    baseResponseDto.setMsg(ErrorConsts.getMessage(ErrorConsts.COM_OK));
-                    LOGGER.info(((UserDo) ret).toString());
-                    ret = baseResponseDto;
-                }
+                ret = getUser(param);
             } else if ("client".equals(model)) {
                 ret = clientDao.getClientById(param);
                 if (null != ret) {
@@ -82,6 +74,7 @@ public class AuthService {
             baseResponseDto.setData(userDo);
             baseResponseDto.setCode(ErrorConsts.COM_OK);
             baseResponseDto.setMsg(ErrorConsts.getMessage(ErrorConsts.COM_OK));
+            LOGGER.info(userDo.toString());
         }
 
         return baseResponseDto;

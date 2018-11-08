@@ -20,6 +20,8 @@ apollo:
   bootstrap:
     enabled: true
     # 该配置文件指定多namespaces 或通过 @EnabledApolloConfig({"application","operation-config"}) 激活
+    # 查看: {APOLLO_SERVER_DOMAIN}/configs/{appId}/{cluster}/{application-config}?ip={endpoint}
+    # eg. http://10.112.33.35:8080/configs/letv-mas-tvproxy/caller/dpms.application-manager?ip=10.58.92.94
     namespaces: application-tvproxy,dpms.application-manager,dpms.application-trace,dpms.application-omp
   cluster: router
   meta: ${APOLLO_SERVER_DOMAIN:http://10.112.33.35:8080}

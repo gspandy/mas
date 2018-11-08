@@ -1,11 +1,14 @@
 spring:
+  mvc:
+    favicon:
+      enabled: false
   http:
     converters:
       preferred-json-mapper: fastjson
     encoding:
       force: true
   application:
-    name: letv-mas-caller-tvproxy
+    #name: letv-mas-caller-tvproxy
     index: ${SERVER_IP:127.0.0.1}:${CALLER_SERVER_PORT:5555}
   #profiles:
     #include: app,redis,db,hystrix,stream,manager,omp,trace,thrift
