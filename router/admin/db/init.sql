@@ -117,5 +117,6 @@ CREATE TABLE `oauth_token` (
   `is_del` tinyint(4) NOT NULL DEFAULT 0 COMMENT '删除标记(0未删除 1删除)',
   PRIMARY KEY  (`id`),
   KEY `idx_user_id` (`user_id`),
-  KEY `idx_client_id` (`client_id`)
+  KEY `idx_client_id` (`client_id`),
+  KEY `idx_access_token` (`access_token`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='oauth授权token信息表';

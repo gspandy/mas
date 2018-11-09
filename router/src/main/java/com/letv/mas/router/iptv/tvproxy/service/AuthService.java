@@ -91,6 +91,11 @@ public class AuthService {
         return ret;
     }
 
+    public boolean verifyToken(String code, String token) {
+        boolean ret = jwtTokenUtil.validateToken(token, code);
+        return ret;
+    }
+
     public String getToken(String code) {
         String token = jwtTokenUtil.genToken(code);
         return token;

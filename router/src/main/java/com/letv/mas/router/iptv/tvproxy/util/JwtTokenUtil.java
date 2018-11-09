@@ -35,6 +35,7 @@ public class JwtTokenUtil {
 
     /**
      * 根据appCode生成签名
+     *
      * @param code
      * @return
      */
@@ -43,7 +44,7 @@ public class JwtTokenUtil {
         Date expiration = new Date(now.getTime() + expireTime * 1000);
         Map<String, Object> claims = new HashMap<String, Object>();
         claims.put(CLAIM_KEY_CODE, code);
-        claims.put(CLAIM_KEY_DATE, expiration);
+        claims.put(CLAIM_KEY_DATE, now);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
@@ -71,10 +72,16 @@ public class JwtTokenUtil {
         }
         Claims claims = this.getClaimsFromToken(token);
         if (null != claims) {
-            if (StringUtils.isNotBlank(code)) {
-                ret = claims.get(CLAIM_KEY_CODE).equals(code);
+            Date date = null;
+            if (null != claims.getExpiration()) {
+                date = claims.getExpiration();
             } else {
-                ret = true;
+                date = new Date();
+            }
+            if (StringUtils.isNotBlank(code)) {
+                ret = claims.get(CLAIM_KEY_CODE).equals(code) && date.after(new Date());
+            } else {
+                ret = date.after(new Date());
             }
         }
 

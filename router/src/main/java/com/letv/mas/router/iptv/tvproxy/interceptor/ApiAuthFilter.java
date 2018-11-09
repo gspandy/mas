@@ -1,6 +1,8 @@
 package com.letv.mas.router.iptv.tvproxy.interceptor;
 
-import com.letv.mas.router.iptv.tvproxy.util.JwtTokenUtil;
+import com.letv.mas.router.iptv.tvproxy.config.BizConfig;
+import com.letv.mas.router.iptv.tvproxy.service.AuthService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.stereotype.Component;
@@ -22,10 +24,13 @@ public class ApiAuthFilter extends OncePerRequestFilter {
     private static final PathMatcher pathMatcher = new AntPathMatcher();
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    private AuthService authService;
 
     @Autowired
-    ZuulProperties zuulProperties;
+    private ZuulProperties zuulProperties;
+
+    @Autowired
+    private BizConfig bizConfig;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
@@ -36,7 +41,7 @@ public class ApiAuthFilter extends OncePerRequestFilter {
                 if (null == token) {
                     token = "null";
                 }
-                if ("null".equals(token) || !jwtTokenUtil.validateToken(token, null)) {
+                if ("null".equals(token) || !authService.verifyToken(null, token)) {
                     throw new IllegalStateException("Invalid Token[" + token + "]");
                 }
             }
@@ -50,17 +55,20 @@ public class ApiAuthFilter extends OncePerRequestFilter {
 
     private boolean isProtectedUrl(HttpServletRequest request) {
         boolean ret = false;
-
-        if (null != this.zuulProperties) {
+        String path = null;
+        if (null != this.zuulProperties && null != bizConfig
+                && null != bizConfig.getAuthUrls() && bizConfig.getAuthUrls().size() > 0) {
             for (ZuulProperties.ZuulRoute route : this.zuulProperties.getRoutes().values()) {
+                path = bizConfig.getAuthUrls().get(route.getUrl());
+                if (StringUtils.isBlank(path)) {
+                    path = bizConfig.getAuthUrls().get(route.getServiceId());
+                }
                 if (pathMatcher.match(route.getPath(), request.getServletPath())) {
-//                    ret = true;
+                    ret = StringUtils.isNotBlank(path) ? pathMatcher.match(path, request.getServletPath()) : false;
                     break;
                 }
             }
         }
-
-        // ret = pathMatcher.match("/api/**", request.getServletPath());
 
         return ret;
     }

@@ -1,5 +1,7 @@
 package com.letv.mas.caller.iptv.tvproxy.common.util;
 
+import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.spring.annotation.ApolloConfig;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 
@@ -20,11 +22,11 @@ public final class ApplicationUtils {
     private static final Logger logger = Logger.getLogger(ApplicationUtils.class);
     private static Properties bundle = new Properties();// 防止异常空取。
 
-    /*@ApolloConfig("config.properties")
+    @ApolloConfig("config.properties")
     private static Config config;
 
     @ApolloConfig("httpurl.properties")
-    private static Config httpurl;*/
+    private static Config httpurl;
 
     static {
         initApplicationCache();
@@ -44,7 +46,7 @@ public final class ApplicationUtils {
 
     public static String getProperty(String key) {
         String value = null;
-        /*if (config != null) {
+        if (config != null) {
             value = config.getProperty(key, null);
         }
         if (value != null) {
@@ -55,7 +57,7 @@ public final class ApplicationUtils {
         }
         if (value != null) {
             return value;
-        }*/
+        }
         value = bundle.getProperty(key);
         return value;
     }

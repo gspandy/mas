@@ -58,8 +58,8 @@ public class FastJsonHttpMessageConvertersConfiguration {
             FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
 
             FastJsonConfig fastJsonConfig = new FastJsonConfig();
+            //SerializerFeature.PrettyFormat
             fastJsonConfig.setSerializerFeatures(
-                    SerializerFeature.PrettyFormat,
                     SerializerFeature.DisableCircularReferenceDetect
             );
             /*ValueFilter valueFilter = new ValueFilter() {

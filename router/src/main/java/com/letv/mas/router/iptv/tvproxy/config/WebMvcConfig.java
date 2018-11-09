@@ -1,19 +1,21 @@
 package com.letv.mas.router.iptv.tvproxy.config;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.letv.mas.router.iptv.tvproxy.interceptor.CheckLoginInterceptor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.async.DeferredResult;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import springfox.documentation.builders.*;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
@@ -35,10 +37,11 @@ import java.util.List;
 /**
  * refer: http://springfox.github.io/springfox/docs/current/
  */
-@ConditionalOnProperty(value = "iptv.doc.enabled", havingValue = "true", matchIfMissing = false)
+@ComponentScan(basePackages = "com.letv.mas.router.iptv.tvproxy.*", excludeFilters = {@ComponentScan.Filter(Configuration.class)})
 @Configuration
 @EnableSwagger2
-public class Swagger2Config extends WebMvcConfigurerAdapter implements EnvironmentAware {
+@EnableWebMvc
+public class WebMvcConfig extends WebMvcConfigurerAdapter implements EnvironmentAware {
 
     @Autowired
     private TypeResolver typeResolver;
@@ -46,6 +49,36 @@ public class Swagger2Config extends WebMvcConfigurerAdapter implements Environme
     @Autowired
     ZuulProperties zuulProperties;
 
+    @Bean
+    public CheckLoginInterceptor checkLoginInterceptor() {
+        return new CheckLoginInterceptor();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(checkLoginInterceptor()).addPathPatterns(new String[]{"/i/auth/**"});
+        super.addInterceptors(registry);
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        super.addResourceHandlers(registry);
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/null", "/");
+//        registry.addRedirectViewController("/null/swagger-resources", "/swagger-resources");
+//        registry.addRedirectViewController("/null/swagger-resources/configuration/ui", "/swagger-resources/configuration/ui");
+//        registry.addRedirectViewController("/null/swagger-resources/configuration/security","/swagger-resources/configuration/security");
+        super.addViewControllers(registry);
+    }
+
+    @ConditionalOnProperty(value = "iptv.doc.enabled", havingValue = "true", matchIfMissing = false)
     @Bean
     public Docket proxyApi() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -78,6 +111,7 @@ public class Swagger2Config extends WebMvcConfigurerAdapter implements Environme
      *
      * @return
      */
+    @ConditionalOnProperty(value = "iptv.doc.enabled", havingValue = "true", matchIfMissing = false)
     @Primary
     @Bean
     public SwaggerResourcesProvider swaggerResourcesProvider(InMemorySwaggerResourcesProvider defaultResourcesProvider) {
@@ -113,6 +147,7 @@ public class Swagger2Config extends WebMvcConfigurerAdapter implements Environme
      *
      * @return
      */
+    @ConditionalOnProperty(value = "iptv.doc.enabled", havingValue = "true", matchIfMissing = false)
     @Bean
     UiConfiguration uiConfig() {
         return UiConfigurationBuilder.builder()

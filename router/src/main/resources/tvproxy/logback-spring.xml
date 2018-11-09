@@ -100,19 +100,19 @@
         <append>true</append>
     </appender>
 
-    <appender name="SYSTEM_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000000" discardingThreshold="0" includeCallerData="false">
+    <appender name="SYSTEM_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000" discardingThreshold="0" includeCallerData="false">
         <appender-ref ref="SYSTEM_ROLLING_FILE" />
     </appender>
 
-    <appender name="ROUTER_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000000" discardingThreshold="0" includeCallerData="false">
+    <appender name="ROUTER_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="10000" discardingThreshold="0" includeCallerData="false">
         <appender-ref ref="ROUTER_ROLLING_FILE" />
     </appender>
 
-    <appender name="HTTPCLIENT_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000000" discardingThreshold="0" includeCallerData="false">
+    <appender name="HTTPCLIENT_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000" discardingThreshold="0" includeCallerData="false">
         <appender-ref ref="HTTPCLIENT_ROLLING_FILE" />
     </appender>
 
-    <appender name="MYSQL_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000000" discardingThreshold="0" includeCallerData="false">
+    <appender name="MYSQL_ROLLING_FILE_ASYNC" class="ch.qos.logback.classic.AsyncAppender" queueSize="1000" discardingThreshold="0" includeCallerData="false">
         <appender-ref ref="MYSQL_ROLLING_FILE" />
     </appender>
 
@@ -128,7 +128,7 @@
     </logger>
 
     <!-- 全局控制台遇到INFO及以上级别就进行输出 -->
-    <root level="INFO">
+    <root level="ERROR">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="SYSTEM_ROLLING_FILE"/>
     </root>

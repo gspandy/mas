@@ -1,10 +1,9 @@
 package com.letv.mas.caller.iptv.tvproxy.apicommon.interceptor;
 
-import com.letv.mas.caller.iptv.tvproxy.apicommon.model.dto.HsResponseWrapper;
+import com.letv.mas.caller.iptv.tvproxy.common.plugin.HsResponseWrapper;
 import com.letv.mas.caller.iptv.tvproxy.common.plugin.SessionCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -18,8 +17,8 @@ import java.util.Map;
  */
 public class HttpResponseInterceptor extends HandlerInterceptorAdapter {
 
-    @Autowired(required = false)
-    private SessionCache sessionCache;
+    /*@Autowired(required = false)
+    private SessionCache sessionCache;*/
 
     // private static final Logger log =
     // LoggerFactory.getLogger("requestTimeLog");
@@ -86,7 +85,7 @@ public class HttpResponseInterceptor extends HandlerInterceptorAdapter {
             }
         }
 
-        if (null != this.sessionCache) {
+        if (null != SessionCache.getSession()) {
             StringBuilder logInfo = new StringBuilder();
             logInfo.append("|200");
             if (null != response && response instanceof HsResponseWrapper
@@ -97,7 +96,7 @@ public class HttpResponseInterceptor extends HandlerInterceptorAdapter {
             }
             logInfo.append("|").append(System.currentTimeMillis() - requestStartTime);
             logInfo.append("|0");
-            this.sessionCache.setResponse(request.getRequestURI() + sb.toString(), "", logInfo.toString());
+            SessionCache.getSession().setResponse(request.getRequestURI() + sb.toString(), "", logInfo.toString());
         }
 
         // log.info(getIP(request) + "," + request.getRequestURI() +

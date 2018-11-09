@@ -1,7 +1,8 @@
 spring:
   mvc:
-    favicon:
-      enabled: false
+   favicon:
+     # 禁止默认springboot的ico下发
+     enabled: false
   http:
     converters:
       preferred-json-mapper: fastjson

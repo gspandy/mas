@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Order(2)
-@WebFilter(filterName = "broadcast", urlPatterns = "/api/*")
+@WebFilter(filterName = "broadcast", urlPatterns = "/iptv/api/*")
 public class BroadcastFilter implements Filter {
 
     @Override

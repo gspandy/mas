@@ -1,4 +1,4 @@
-package com.letv.mas.caller.iptv.tvproxy.common.interceptor;
+package com.letv.mas.caller.iptv.tvproxy.apicommon.interceptor;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -21,13 +21,11 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Order(1)
-@WebFilter(filterName = "rewrite", urlPatterns = "/api/*")
-public class DRewriteFilter implements Filter {
+@WebFilter(filterName = "rewrite", urlPatterns = "/iptv/api/*")
+public class RewriteFilter implements Filter {
     private final static ArrayList<String> DEBUG_IP_WHITELIST = new ArrayList<String>(
             Arrays.asList("10.58.*.*", "10.124.66.210", "10.124.66.211"));
     private static final Logger slowLog = LoggerFactory.getLogger("slowLog");

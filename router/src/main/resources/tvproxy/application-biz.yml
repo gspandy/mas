@@ -1,6 +1,11 @@
 biz:
   ex-urls:
     ali.dingding.robot.webhook: https://oapi.dingtalk.com/robot/send?access_token=b17826941792acdaa7f5b5b2ea0070585eabce931b4c943363a80993a9146b1f
+  #host/service-id: path
+  auth-urls:
+    letv-mas-caller-tvproxy-user: /**/cgi/**
+    letv-mas-caller-tvproxy-video: /**/cgi/**
+    letv-mas-caller-tvproxy-vip: /**/cgi/**
 
 iptv:
   doc.enabled: true

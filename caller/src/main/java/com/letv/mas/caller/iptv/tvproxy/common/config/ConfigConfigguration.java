@@ -37,12 +37,12 @@ import java.util.Set;
 public class ConfigConfigguration {
     private static final Logger logger = Logger.getLogger(ConfigConfigguration.class);
 
-    /*@Bean
+    @Bean
     ApplicationUtils getConfigOperationUtil() {
         logger.info(" ConfigBean init .... ");
         ApplicationUtils configOperationUtil = new ApplicationUtils();
         return configOperationUtil;
-    }*/
+    }
 
     @Bean
     LetvExceptionResolver getLetvExceptionResolver(){
@@ -75,7 +75,7 @@ public class ConfigConfigguration {
          return new AlbumVideoAccessAdapter();
     }
 
-    @ApolloConfigChangeListener(value = "config.properties")
+    /*@ApolloConfigChangeListener(value = "config.properties")
     public void onChangePubConfig(ConfigChangeEvent changeEvent) {
         for (String changedKey : changeEvent.changedKeys()) {
             logger.info(" ---onChangePubConfig--- "+changeEvent.getChange(changedKey));
@@ -88,7 +88,7 @@ public class ConfigConfigguration {
             logger.info(" ---onChangePubHttpUrl--- "+changeEvent.getChange(changedKey));
             ApplicationUtils.changeValue(changedKey,changeEvent.getChange(changedKey).getNewValue());
         }
-    }
+    }*/
 
 
     @ApolloConfigChangeListener(value = "guanxing.properties")
@@ -99,45 +99,8 @@ public class ConfigConfigguration {
         }
     }
 
-    /*@Bean
-    public MappingJackson2HttpMessageConverter getMappingJackson2HttpMessageConverter() {
-        MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
-        //设置日期格式
-        ObjectMapper objectMapper = new ObjectMapper();
-        SimpleDateFormat smt = new SimpleDateFormat("yyyy-MM-dd");
-        objectMapper.setDateFormat(smt);
-        mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);
-        //设置中文编码格式
-        List<MediaType> list = new ArrayList<MediaType>();
-        list.add(MediaType.APPLICATION_JSON_UTF8);
-        mappingJackson2HttpMessageConverter.setSupportedMediaTypes(list);
-        return mappingJackson2HttpMessageConverter;
-    }*/
-
-    /*@Bean
-    @Primary
-    public ContentNegotiationManagerFactoryBean getContentNegotiationManagerFactoryBean(){
-        ContentNegotiationManagerFactoryBean factoryBean = new ContentNegotiationManagerFactoryBean();
-        factoryBean.setDefaultContentType(MediaType.APPLICATION_JSON);
-        factoryBean.addMediaType("json",MediaType.APPLICATION_JSON);
-        //factoryBean.addMediaType("jsonp",new MediaType("application/javascript"));
-        factoryBean.addMediaType("xml",MediaType.APPLICATION_XML);
-        return new ContentNegotiationManagerFactoryBean();
-    }
-
-    @Bean
-    @Primary
-    public ContentNegotiatingViewResolver initContentNegotiatingViewResolver(ContentNegotiationManager contentNegotiationManager){
-        ContentNegotiatingViewResolver resolver = new ContentNegotiatingViewResolver();
-        List<View> list = new ArrayList();
-        list.add(new MappingJackson2JsonView());
-        resolver.setDefaultViews(list);
-        resolver.setContentNegotiationManager(contentNegotiationManager);
-        return resolver;
-    }*/
-
     public static void init() {
-        Config config = ConfigService.getConfig("config");
+        /*Config config = ConfigService.getConfig("config");
         Set<String> keys = config.getPropertyNames();
         for (String changedKey : keys) {
             ApplicationUtils.changeValue(changedKey, config.getProperty(changedKey, null));
@@ -146,9 +109,9 @@ public class ConfigConfigguration {
         keys = config.getPropertyNames();
         for (String changedKey : keys) {
             ApplicationUtils.changeValue(changedKey, config.getProperty(changedKey, null));
-        }
-        config = ConfigService.getConfig("guanxing");
-        keys = config.getPropertyNames();
+        }*/
+        Config config = ConfigService.getConfig("guanxing");
+        Set<String> keys = config.getPropertyNames();
         for (String changedKey : keys) {
             ActivityTpConstant.changeValue(changedKey, config.getProperty(changedKey, null));
         }

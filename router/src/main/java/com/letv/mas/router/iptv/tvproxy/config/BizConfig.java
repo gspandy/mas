@@ -1,5 +1,6 @@
 package com.letv.mas.router.iptv.tvproxy.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import java.util.Map;
 @RefreshScope
 @Component
 @ConfigurationProperties(ignoreUnknownFields = false, prefix = "biz")
+@Data
 public class BizConfig {
 
     /**
@@ -21,11 +23,8 @@ public class BizConfig {
      */
     private Map<String, String> exUrls = new HashMap<>();
 
-    public Map<String, String> getExUrls() {
-        return exUrls;
-    }
-
-    public void setExUrls(Map<String, String> exUrls) {
-        this.exUrls = exUrls;
-    }
+    /**
+     * 需授权认证的开发接口集合
+     */
+    private Map<String, String> authUrls = new HashMap<>();
 }

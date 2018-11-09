@@ -1,6 +1,7 @@
 package com.letv.mas.caller.iptv.tvproxy.common;
 
 import com.letv.mas.caller.iptv.tvproxy.common.config.ConfigConfigguration;
+import com.letv.mas.caller.iptv.tvproxy.common.util.ApplicationUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

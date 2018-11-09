@@ -41,6 +41,16 @@ zuul:
       strip-prefix: false
       # 路由是否支持失败重试 （需要 spring retry 和 ribbon 支持）
       retryable: false
+    r-letv-mas-caller-tvproxy-cgi-user:
+      # 需要转发的目的 service id，上游注册在 Eureka 中的 serivice id
+      service-id: letv-mas-caller-tvproxy-user
+      # 匹配请求路由的 pattern（如果与其他 route 的 path 有包含关系，应确保约束性强的 route 配置块在前）
+      #path: '/api/tv/user/**'
+      path: '/cgi/**/iptv/api/new/user/**'
+      # 转发请求时是否忽略前缀: （http://$host1/api/user/list -> http://$host2/user/list）
+      strip-prefix: true
+      # 路由是否支持失败重试 （需要 spring retry 和 ribbon 支持）
+      retryable: false
     r-letv-mas-caller-tvproxy-vip:
       # 需要转发的目的 service id，上游注册在 Eureka 中的 serivice id
       service-id: letv-mas-caller-tvproxy-vip
