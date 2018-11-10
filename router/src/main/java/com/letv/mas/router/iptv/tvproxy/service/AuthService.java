@@ -85,7 +85,7 @@ public class AuthService {
 
         UserDo userDo = userDao.getUserById(uuid);
         if (null != userDo) {
-            ret = 0 == userDo.getIs_del() && 0 == userDo.getStatus();
+            ret = 0 == userDo.is_del && 0 == userDo.status;
         }
 
         return ret;
